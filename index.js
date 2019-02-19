@@ -34,17 +34,27 @@ function escapeIdentifier(identifier) {
   return `"${identifier.replace(/"/g, '""')}"`
 }
 
-sql.identifiers = identifiers => ({
-  text: identifiers.map(escapeIdentifier).join(', '),
-  parameters: []
-})
+sql.identifiers = identifiers => {
+  if (!Array.isArray(identifiers)) {
+    identifiers = Object.keys(identifiers)
+  }
+  return {
+    text: identifiers.map(escapeIdentifier).join(', '),
+    parameters: []
+  }
+}
 
 sql.identifier = identifier => sql.identifiers([identifier])
 
-sql.values = values => ({
-  text: Array.apply(null, { length: values.length }).map(() => '$').join(', '),
-  parameters: values
-})
+sql.values = values => {
+  if (!Array.isArray(values)) {
+    values = Object.values(values)
+  }
+  return {
+    text: Array.apply(null, { length: values.length }).map(() => '$').join(', '),
+    parameters: values
+  }
+}
 
 sql.value = value => sql.values([value])
 
