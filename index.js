@@ -58,11 +58,15 @@ sql.values = values => {
 
 sql.value = value => sql.values([value])
 
-sql.valuesList = rows => {
-  rows = rows.map(row => sql`(${sql.values(row)})`)
+sql.valuesList = valuesList => {
+  valuesList = valuesList.map(values => sql`(${sql.values(values)})`)
   return {
-    text: rows.map(row => row.text).join(', '),
-    parameters: rows.map(row => row.parameters).reduce((rowA, rowB) => rowA.concat(rowB), [])
+    text: valuesList
+      .map(values => values.text)
+      .join(', '),
+    parameters: valuesList
+      .map(values => values.parameters)
+      .reduce((valuesA, valuesB) => valuesA.concat(valuesB), [])
   }
 }
 

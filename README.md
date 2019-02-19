@@ -15,7 +15,7 @@ const valueA = 'valueA'
 const valueB = 'valueB'
 const valueC = 'valueC'
 
-client.query(sql`
+const result = client.query(sql`
   SELECT * FROM tableA
     INNER JOIN tableB USING(id)
     WHERE
@@ -46,13 +46,13 @@ Parameters:
 ['valueA', 'valueB', 'valueC']
 ```
 
-## Identifiers for tables and columns needs to be defined
+## Identifiers for tables and columns
 
 ```javascript
 const tableA = 'tableA'
 const columns = ['columnA', 'columnB', 'columnC']
 
-client.query(sql`
+const result = client.query(sql`
   SELECT ${sql.identifiers(columns)} FROM ${sql.identifier(tableA)}
     INNER JOIN ${sql.identifier(tableB)} USING(id)
 `)
@@ -71,12 +71,14 @@ Parameters:
 []
 ```
 
-## List of values can also be defined
+If the `columns` parameter is an object (e.g. a row) the keys of the object will be used.
+
+## Multiple values
 
 ```javascript
 const values = ['valueA', 'valueB', 'valueC']
 
-client.query(sql`
+const result = client.query(sql`
   INSERT INTO table VALUES (${sql.values(values)})
 `)
 ```
@@ -93,12 +95,40 @@ Parameters:
 ['valueA', 'valueB', 'valueC']
 ```
 
-## Also pairs of column identifiers and values can be defined using as set of updates
+If the `values` parameter is an object (e.g. a row) the values of the object will be used.
+
+## List of multiple values
+
+```javascript
+const values = {
+  ['valueA1', 'valueB1', 'valueC1'],
+  ['valueA2', 'valueB2', 'valueC2'],
+  ['valueA3', 'valueB3', 'valueC3']
+}
+
+const result = client.query(sql`INSERT INTO table VALUES ${sql.values(values)}`)
+```
+
+Text:
+
+```sql
+INSERT INTO table VALUES ($1, $2, $3), ($4, $5, $6), ($7, $8, $9)
+```
+
+Parameters:
+
+```javascript
+['valueA1', 'valueB1', 'valueC1', 'valueA2', 'valueB2', 'valueC2', 'valueA3', 'valueB3', 'valueC3']
+```
+
+If the `valuesList` parameter is an array of objects (e.g. list of rows) the values of the objects will be used.
+
+## Pairs of column identifiers and values using as set of updates
 
 ```javascript
 const updates = { columnA: 'new valueA', columnB: 'new valueB', columnC: 'new valueC' }
 
-client.query(sql`
+const result = client.query(sql`
   UPDATE table SET ${sql.pairs(updates, ', ')} WHERE value = 'value'
 `)
 ```
@@ -115,12 +145,12 @@ Parameters:
 ['new valueA', 'new valueB', 'new valueC']
 ```
 
-## Also pairs of column identifiers and values can be defined using as set of conditions
+## Pairs of column identifiers and values using as set of conditions
 
 ```javascript
 const conditions = { columnA: 'old valueA', columnB: 'old valueB', columnC: 'old valueC' }
 
-client.query(sql`
+const result = client.query(sql`
   UPDATE table SET column = 'new value' WHERE ${sql.pairs(conditions, ' AND ')}
 `)
 ```
