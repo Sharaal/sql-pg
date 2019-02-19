@@ -71,6 +71,28 @@ Parameters:
 []
 ```
 
+## List of values can also be defined
+
+```javascript
+const values = ['valueA', 'valueB', 'valueC']
+
+client.query(sql`
+  INSERT INTO table VALUES (${sql.values(values)})
+`)
+```
+
+Text:
+
+```sql
+INSERT INTO table VALUES ($1, $2, $3)
+```
+
+Parameters:
+
+```javascript
+['valueA', 'valueB', 'valueC']
+```
+
 ## Also pairs of column identifiers and values can be defined
 
 ```javascript
