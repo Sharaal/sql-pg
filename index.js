@@ -1,4 +1,4 @@
-function sql(textFragments, ...valueFragments) {
+function sql (textFragments, ...valueFragments) {
   textFragments = JSON.parse(JSON.stringify(textFragments))
 
   let text = textFragments.shift()
@@ -30,7 +30,7 @@ function sql(textFragments, ...valueFragments) {
   return { text, parameters }
 }
 
-function escapeIdentifier(identifier) {
+function escapeIdentifier (identifier) {
   return `"${identifier.replace(/"/g, '""')}"`
 }
 
