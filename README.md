@@ -78,9 +78,7 @@ If the `columns` parameter is an object (e.g. a row) the keys of the object will
 ```javascript
 const values = ['valueA', 'valueB', 'valueC']
 
-const result = client.query(sql`
-  INSERT INTO table VALUES (${sql.values(values)})
-`)
+const result = client.query(sql`INSERT INTO table VALUES (${sql.values(values)})`)
 ```
 
 Text:
@@ -128,9 +126,7 @@ If the `valuesList` parameter is an array of objects (e.g. list of rows) the val
 ```javascript
 const updates = { columnA: 'new valueA', columnB: 'new valueB', columnC: 'new valueC' }
 
-const result = client.query(sql`
-  UPDATE table SET ${sql.pairs(updates, ', ')} WHERE value = 'value'
-`)
+const result = client.query(sql`UPDATE table SET ${sql.pairs(updates, ', ')} WHERE value = 'value'`)
 ```
 
 Text:
@@ -150,9 +146,7 @@ Parameters:
 ```javascript
 const conditions = { columnA: 'old valueA', columnB: 'old valueB', columnC: 'old valueC' }
 
-const result = client.query(sql`
-  UPDATE table SET column = 'new value' WHERE ${sql.pairs(conditions, ' AND ')}
-`)
+const result = client.query(sql`UPDATE table SET column = 'new value' WHERE ${sql.pairs(conditions, ' AND ')}`)
 ```
 
 Text:
