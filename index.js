@@ -58,6 +58,14 @@ sql.values = values => {
 
 sql.value = value => sql.values([value])
 
+sql.valuesList = rows => {
+  rows = rows.map(row => sql`(${sql.values(row)})`)
+  return {
+    text: rows.map(row => row.text).join(', '),
+    parameters: rows.map(row => row.parameters).reduce((rowA, rowB) => rowA.concat(rowB), [])
+  }
+}
+
 sql.pairs = (pairs, separator) => {
   const texts = []
   const parameters = []
