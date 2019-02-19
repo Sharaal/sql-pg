@@ -93,13 +93,13 @@ Parameters:
 ['valueA', 'valueB', 'valueC']
 ```
 
-## Also pairs of column identifiers and values can be defined
+## Also pairs of column identifiers and values can be defined using as set of updates
 
 ```javascript
 const updates = { columnA: 'new valueA', columnB: 'new valueB', columnC: 'new valueC' }
 
 client.query(sql`
-  UPDATE table SET ${sql.pairs(updates)} WHERE value = 'value'
+  UPDATE table SET ${sql.pairs(updates, ', ')} WHERE value = 'value'
 `)
 ```
 
@@ -113,6 +113,28 @@ Parameters:
 
 ```javascript
 ['new valueA', 'new valueB', 'new valueC']
+```
+
+## Also pairs of column identifiers and values can be defined using as set of conditions
+
+```javascript
+const conditions = { columnA: 'old valueA', columnB: 'old valueB', columnC: 'old valueC' }
+
+client.query(sql`
+  UPDATE table SET column = 'new value' WHERE ${sql.pairs(conditions, ' AND ')}
+`)
+```
+
+Text:
+
+```sql
+UPDATE table SET column = 'new value' WHERE "columnA" = $1 AND "columnB" = $2 AND "columnC" = $3
+```
+
+Parameters:
+
+```javascript
+['old valueA', 'old valueB', 'old valueC']
 ```
 
 # Syntax Highlighting

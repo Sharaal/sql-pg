@@ -48,7 +48,7 @@ sql.values = values => ({
 
 sql.value = value => sql.values([value])
 
-sql.pairs = (pairs, separator = ', ') => {
+sql.pairs = (pairs, separator) => {
   const texts = []
   const parameters = []
   for (const key of Object.keys(pairs)) {
