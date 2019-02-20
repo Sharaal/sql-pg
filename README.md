@@ -73,7 +73,7 @@ Parameters:
 
 If the `columns` parameter is an object (e.g. a row) the keys of the object will be used.
 
-## Extract and bind value lists
+## Extract and bind list of values
 
 ```javascript
 const values = ['valueA', 'valueB', 'valueC']
