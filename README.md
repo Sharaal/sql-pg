@@ -73,7 +73,7 @@ Parameters:
 
 If the `columns` parameter is an object (e.g. a row) the keys of the object will be used.
 
-## Extract and bind multiple values
+## Extract and bind value lists
 
 ```javascript
 const values = ['valueA', 'valueB', 'valueC']
@@ -97,14 +97,14 @@ Parameters:
 
 If the `values` parameter is an object (e.g. a row) the values of the object will be used.
 
-## Extract and bind list of multiple values
+## Extract and bind multiple value lists
 
 ```javascript
-const values = {
+const values = [
   ['valueA1', 'valueB1', 'valueC1'],
   ['valueA2', 'valueB2', 'valueC2'],
   ['valueA3', 'valueB3', 'valueC3']
-}
+]
 
 const result = client.query(sql`
   INSERT INTO table VALUES ${sql.values(values)}
