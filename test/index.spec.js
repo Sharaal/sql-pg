@@ -3,15 +3,15 @@ const assert = require('power-assert')
 const sql = require('../')
 
 describe('sql', () => {
-  descripe('Extract and bind values', () => {})
+  describe('Extract and bind values', () => {})
 
-  descripe('Escape keys for tables and columns', () => {})
+  describe('Escape keys for tables and columns', () => {})
 
-  descripe('Extract and bind multiple values', () => {})
+  describe('Extract and bind multiple values', () => {})
 
-  descripe('Extract and bind list of multiple values', () => {})
+  describe('Extract and bind list of multiple values', () => {})
 
-  descripe('Support pairs of column keys and values using as set of updates', () => {})
+  describe('Support pairs of column keys and values using as set of updates', () => {})
 
-  descripe('Support pairs of column keys and values using as set of conditions', () => {})
+  describe('Support pairs of column keys and values using as set of conditions', () => {})
 })
