@@ -8,7 +8,7 @@ const sql = require('@sharaal/sql')
 
 # Examples
 
-## Values will be automatically extracted and bound
+## Extract and bind values
 
 ```javascript
 const valueA = 'valueA'
@@ -46,7 +46,7 @@ Parameters:
 ['valueA', 'valueB', 'valueC']
 ```
 
-## Keys for tables and columns
+## Escape keys for tables and columns
 
 ```javascript
 const tableA = 'tableA'
@@ -73,7 +73,7 @@ Parameters:
 
 If the `columns` parameter is an object (e.g. a row) the keys of the object will be used.
 
-## Multiple values
+## Extract and bind multiple values
 
 ```javascript
 const values = ['valueA', 'valueB', 'valueC']
@@ -97,7 +97,7 @@ Parameters:
 
 If the `values` parameter is an object (e.g. a row) the values of the object will be used.
 
-## List of multiple values
+## Extract and bind list of multiple values
 
 ```javascript
 const values = {
@@ -125,7 +125,7 @@ Parameters:
 
 If the `valuesList` parameter is an array of objects (e.g. list of rows) the values of the objects will be used.
 
-## Pairs of column keys and values using as set of updates
+## Support pairs of column keys and values using as set of updates
 
 ```javascript
 const updates = { columnA: 'new valueA', columnB: 'new valueB', columnC: 'new valueC' }
@@ -147,7 +147,7 @@ Parameters:
 ['new valueA', 'new valueB', 'new valueC']
 ```
 
-## Pairs of column keys and values using as set of conditions
+## Support pairs of column keys and values using as set of conditions
 
 ```javascript
 const conditions = { columnA: 'old valueA', columnB: 'old valueB', columnC: 'old valueC' }
