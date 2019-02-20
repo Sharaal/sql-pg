@@ -30,21 +30,21 @@ function sql (textFragments, ...valueFragments) {
   return { text, parameters }
 }
 
-function escapeIdentifier (identifier) {
-  return `"${identifier.replace(/"/g, '""')}"`
+function escapeKey (key) {
+  return `"${key.replace(/"/g, '""')}"`
 }
 
-sql.identifiers = identifiers => {
-  if (!Array.isArray(identifiers)) {
-    identifiers = Object.keys(identifiers)
+sql.keys = keys => {
+  if (!Array.isArray(keys)) {
+    keys = Object.keys(keys)
   }
   return {
-    text: identifiers.map(escapeIdentifier).join(', '),
+    text: keys.map(escapeKey).join(', '),
     parameters: []
   }
 }
 
-sql.identifier = identifier => sql.identifiers([identifier])
+sql.key = key => sql.keys([key])
 
 sql.values = values => {
   if (!Array.isArray(values)) {
@@ -75,7 +75,7 @@ sql.pairs = (pairs, separator) => {
   const parameters = []
   for (const key of Object.keys(pairs)) {
     const value = pairs[key]
-    texts.push(`${escapeIdentifier(key)} = $`)
+    texts.push(`${escapeKey(key)} = $`)
     parameters.push(value)
   }
   return {

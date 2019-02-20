@@ -46,15 +46,15 @@ Parameters:
 ['valueA', 'valueB', 'valueC']
 ```
 
-## Identifiers for tables and columns
+## Keys for tables and columns
 
 ```javascript
 const tableA = 'tableA'
 const columns = ['columnA', 'columnB', 'columnC']
 
 const result = client.query(sql`
-  SELECT ${sql.identifiers(columns)} FROM ${sql.identifier(tableA)}
-    INNER JOIN ${sql.identifier(tableB)} USING(id)
+  SELECT ${sql.keys(columns)} FROM ${sql.key(tableA)}
+    INNER JOIN ${sql.key(tableB)} USING(id)
 `)
 ```
 
@@ -125,7 +125,7 @@ Parameters:
 
 If the `valuesList` parameter is an array of objects (e.g. list of rows) the values of the objects will be used.
 
-## Pairs of column identifiers and values using as set of updates
+## Pairs of column keys and values using as set of updates
 
 ```javascript
 const updates = { columnA: 'new valueA', columnB: 'new valueB', columnC: 'new valueC' }
@@ -147,7 +147,7 @@ Parameters:
 ['new valueA', 'new valueB', 'new valueC']
 ```
 
-## Pairs of column identifiers and values using as set of conditions
+## Pairs of column keys and values using as set of conditions
 
 ```javascript
 const conditions = { columnA: 'old valueA', columnB: 'old valueB', columnC: 'old valueC' }
