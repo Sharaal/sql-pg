@@ -1,6 +1,6 @@
-const assert = require('power-assert')
+// const assert = require('power-assert')
 
-const sql = require('../')
+// const sql = require('../')
 
 describe('sql', () => {
   describe('Extract and bind values', () => {
