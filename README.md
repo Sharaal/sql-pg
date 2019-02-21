@@ -50,6 +50,7 @@ Parameters:
 
 ```javascript
 const tableA = 'tableA'
+const tableB = 'tableB'
 const columns = ['columnA', 'columnB', 'columnC']
 
 const result = client.query(sql`
