@@ -204,4 +204,19 @@ describe('sql', () => {
       assert.deepEqual(actual, expected)
     })
   })
+
+  describe('Support for nested queries', () => {
+    it('should work, especially the renumbering of the binds', () => {
+      const expected = {
+        text: 'SELECT * FROM users WHERE email = $1 AND id = (SELECT id FROM users WHERE passwordhash = $2)',
+        parameters: ['email', 'passwordhash']
+      }
+
+      const email = 'email'
+      const passwordhash = 'passwordhash'
+      const actual = sql`SELECT * FROM users WHERE email = ${email} AND id = (${sql`SELECT id FROM users WHERE passwordhash = ${passwordhash}`})`
+
+      assert.deepEqual(actual, expected)
+    })
+  })
 })

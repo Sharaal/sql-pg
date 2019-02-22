@@ -170,6 +170,35 @@ Parameters:
 ['old valueA', 'old valueB', 'old valueC']
 ```
 
+# Support for nested queries
+
+```javascript
+const email = 'email'
+const passwordhash = 'passwordhash'
+
+const result = client.query(sql`
+  SELECT * FROM users WHERE
+    email = ${email}
+    AND
+    id = (${sql`SELECT id FROM users WHERE passwordhash = ${passwordhash}`})
+`)
+```
+
+Text:
+
+```sql
+SELECT * FROM users WHERE
+  email = $1
+  AND
+  id = (SELECT id FROM users WHERE passwordhash = $2)
+```
+
+Parameters:
+
+```javascript
+['email', 'passwordhash']
+```
+
 # Syntax Highlighting
 
 ## Atom
