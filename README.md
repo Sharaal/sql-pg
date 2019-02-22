@@ -15,7 +15,7 @@ const valueA = 'valueA'
 const valueB = 'valueB'
 const valueC = 'valueC'
 
-const result = client.query(sql`
+const result = await client.query(sql`
   SELECT * FROM tableA
     INNER JOIN tableB USING(id)
     WHERE
@@ -53,7 +53,7 @@ const tableA = 'tableA'
 const tableB = 'tableB'
 const columns = ['columnA', 'columnB', 'columnC']
 
-const result = client.query(sql`
+const result = await client.query(sql`
   SELECT ${sql.keys(columns)} FROM ${sql.key(tableA)}
     INNER JOIN ${sql.key(tableB)} USING(id)
 `)
@@ -79,7 +79,7 @@ If the `columns` parameter is an object (e.g. a row) the keys of the object will
 ```javascript
 const values = ['valueA', 'valueB', 'valueC']
 
-const result = client.query(sql`
+const result = await client.query(sql`
   INSERT INTO table VALUES (${sql.values(values)})
 `)
 ```
@@ -107,7 +107,7 @@ const values = [
   ['valueA3', 'valueB3', 'valueC3']
 ]
 
-const result = client.query(sql`
+const result = await client.query(sql`
   INSERT INTO table VALUES ${sql.values(values)}
 `)
 ```
@@ -131,7 +131,7 @@ If the `valuesList` parameter is an array of objects (e.g. list of rows) the val
 ```javascript
 const updates = { columnA: 'new valueA', columnB: 'new valueB', columnC: 'new valueC' }
 
-const result = client.query(sql`
+const result = await client.query(sql`
   UPDATE table SET ${sql.pairs(updates, ', ')} WHERE value = 'value'
 `)
 ```
@@ -153,7 +153,7 @@ Parameters:
 ```javascript
 const conditions = { columnA: 'old valueA', columnB: 'old valueB', columnC: 'old valueC' }
 
-const result = client.query(sql`
+const result = await client.query(sql`
   UPDATE table SET column = 'new value' WHERE ${sql.pairs(conditions, ' AND ')}
 `)
 ```
@@ -176,7 +176,7 @@ Parameters:
 const email = 'email'
 const passwordhash = 'passwordhash'
 
-const result = client.query(sql`
+const result = await client.query(sql`
   SELECT * FROM users WHERE
     email = ${email}
     AND
