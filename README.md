@@ -3,7 +3,7 @@ Complex queries can be written with normal SQL, including the values needs to be
 # Initialization
 
 ```javascript
-const sql = require('@sharaal/sql')
+const sql = require('@sharaal/sql-pg')
 ```
 
 # Examples
