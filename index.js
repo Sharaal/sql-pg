@@ -23,7 +23,7 @@ function sql (textFragments, ...valueFragments) {
 
   let i = 0
   text = text.replace(
-    /(\$[0-9]*)/g,
+    /\$[0-9]*/g,
     () => `$${++i}`
   )
 
