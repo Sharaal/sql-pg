@@ -6,12 +6,13 @@ describe('sql', () => {
   describe('extract and bind values', () => {
     it('should work with one value inside the query', () => {
       const expected = {
-        text: 'SELECT * FROM users WHERE id = $1 AND active = true',
+        text: 'SELECT * FROM users WHERE id = $1 AND state = \'active\'',
         parameters: ['id']
       }
 
       const id = 'id'
-      const actual = sql`SELECT * FROM users WHERE id = ${id} AND active = true`
+
+      const actual = sql`SELECT * FROM users WHERE id = ${id} AND state = 'active'`
 
       assert.deepEqual(actual, expected)
     })
@@ -23,6 +24,7 @@ describe('sql', () => {
       }
 
       const id = 'id'
+
       const actual = sql`SELECT * FROM users WHERE id = ${id}`
 
       assert.deepEqual(actual, expected)
@@ -30,14 +32,14 @@ describe('sql', () => {
 
     it('should work with multiple values', () => {
       const expected = {
-        text: 'SELECT * FROM users WHERE id = $1 AND email = $2 AND passwordhash = $3',
-        parameters: ['id', 'email', 'passwordhash']
+        text: 'SELECT * FROM users WHERE email = $1 AND passwordhash = $2',
+        parameters: ['email', 'passwordhash']
       }
 
-      const id = 'id'
       const email = 'email'
       const passwordhash = 'passwordhash'
-      const actual = sql`SELECT * FROM users WHERE id = ${id} AND email = ${email} AND passwordhash = ${passwordhash}`
+
+      const actual = sql`SELECT * FROM users WHERE email = ${email} AND passwordhash = ${passwordhash}`
 
       assert.deepEqual(actual, expected)
     })
@@ -46,11 +48,12 @@ describe('sql', () => {
   describe('escape keys for tables and columns', () => {
     it('should work with one key', () => {
       const expected = {
-        text: 'SELECT * FROM "table"',
+        text: 'SELECT * FROM "users"',
         parameters: []
       }
 
-      const table = 'table'
+      const table = 'users'
+
       const actual = sql`SELECT * FROM ${sql.key(table)}`
 
       assert.deepEqual(actual, expected)
@@ -58,24 +61,26 @@ describe('sql', () => {
 
     it('should work with a list of keys array based', () => {
       const expected = {
-        text: 'SELECT "id", "email", "passwordhash" FROM table',
+        text: 'SELECT "id", "email" FROM users',
         parameters: []
       }
 
-      const columns = ['id', 'email', 'passwordhash']
-      const actual = sql`SELECT ${sql.keys(columns)} FROM table`
+      const columns = ['id', 'email']
+
+      const actual = sql`SELECT ${sql.keys(columns)} FROM users`
 
       assert.deepEqual(actual, expected)
     })
 
     it('should work with a list of keys object based', () => {
       const expected = {
-        text: 'SELECT "id", "email", "passwordhash" FROM table',
+        text: 'SELECT "id", "email" FROM users',
         parameters: []
       }
 
-      const user = { id: 'id', email: 'email', passwordhash: 'passwordhash' }
-      const actual = sql`SELECT ${sql.keys(user)} FROM table`
+      const user = { id: 'id', email: 'email' }
+
+      const actual = sql`SELECT ${sql.keys(user)} FROM users`
 
       assert.deepEqual(actual, expected)
     })
@@ -84,36 +89,39 @@ describe('sql', () => {
   describe('extract and bind list of values', () => {
     it('should work with one value in the value list', () => {
       const expected = {
-        text: 'INSERT INTO users (id) VALUES ($1)',
-        parameters: ['id']
+        text: 'INSERT INTO users (email) VALUES ($1)',
+        parameters: ['email']
       }
 
-      const value = ['id']
-      const actual = sql`INSERT INTO users (id) VALUES (${sql.values(value)})`
+      const values = ['email']
+
+      const actual = sql`INSERT INTO users (email) VALUES (${sql.values(values)})`
 
       assert.deepEqual(actual, expected)
     })
 
     it('should work with multiple values in the value list array based', () => {
       const expected = {
-        text: 'INSERT INTO users (id, email, passwordhash) VALUES ($1, $2, $3)',
-        parameters: ['id', 'email', 'passwordhash']
+        text: 'INSERT INTO users (email, passwordhash) VALUES ($1, $2)',
+        parameters: ['email', 'passwordhash']
       }
 
-      const values = ['id', 'email', 'passwordhash']
-      const actual = sql`INSERT INTO users (id, email, passwordhash) VALUES (${sql.values(values)})`
+      const values = ['email', 'passwordhash']
+
+      const actual = sql`INSERT INTO users (email, passwordhash) VALUES (${sql.values(values)})`
 
       assert.deepEqual(actual, expected)
     })
 
     it('should work with multiple values in the value list object based', () => {
       const expected = {
-        text: 'INSERT INTO users (id, email, passwordhash) VALUES ($1, $2, $3)',
-        parameters: ['id', 'email', 'passwordhash']
+        text: 'INSERT INTO users (email, passwordhash) VALUES ($1, $2)',
+        parameters: ['email', 'passwordhash']
       }
 
-      const user = { id: 'id', email: 'email', passwordhash: 'passwordhash' }
-      const actual = sql`INSERT INTO users (id, email, passwordhash) VALUES (${sql.values(user)})`
+      const user = { email: 'email', passwordhash: 'passwordhash' }
+
+      const actual = sql`INSERT INTO users (email, passwordhash) VALUES (${sql.values(user)})`
 
       assert.deepEqual(actual, expected)
     })
@@ -122,32 +130,32 @@ describe('sql', () => {
   describe('extract and bind multiple value lists', () => {
     it('should work with multiple value lists array based', () => {
       const expected = {
-        text: 'INSERT INTO users (id, email, passwordhash) VALUES ($1, $2, $3), ($4, $5, $6), ($7, $8, $9)',
-        parameters: ['idA', 'emailA', 'passwordhashA', 'idB', 'emailB', 'passwordhashB', 'idC', 'emailC', 'passwordhashC']
+        text: 'INSERT INTO users (email, passwordhash) VALUES ($1, $2), ($3, $4)',
+        parameters: ['emailA', 'passwordhashA', 'emailB', 'passwordhashB']
       }
 
       const valuesList = [
-        ['idA', 'emailA', 'passwordhashA'],
-        ['idB', 'emailB', 'passwordhashB'],
-        ['idC', 'emailC', 'passwordhashC']
+        ['emailA', 'passwordhashA'],
+        ['emailB', 'passwordhashB']
       ]
-      const actual = sql`INSERT INTO users (id, email, passwordhash) VALUES ${sql.valuesList(valuesList)}`
+
+      const actual = sql`INSERT INTO users (email, passwordhash) VALUES ${sql.valuesList(valuesList)}`
 
       assert.deepEqual(actual, expected)
     })
 
     it('should work with multiple value lists object based', () => {
       const expected = {
-        text: 'INSERT INTO users (id, email, passwordhash) VALUES ($1, $2, $3), ($4, $5, $6), ($7, $8, $9)',
-        parameters: ['idA', 'emailA', 'passwordhashA', 'idB', 'emailB', 'passwordhashB', 'idC', 'emailC', 'passwordhashC']
+        text: 'INSERT INTO users (email, passwordhash) VALUES ($1, $2), ($3, $4)',
+        parameters: ['emailA', 'passwordhashA', 'emailB', 'passwordhashB']
       }
 
       const users = [
-        { id: 'idA', email: 'emailA', passwordhash: 'passwordhashA' },
-        { id: 'idB', email: 'emailB', passwordhash: 'passwordhashB' },
-        { id: 'idC', email: 'emailC', passwordhash: 'passwordhashC' }
+        { email: 'emailA', passwordhash: 'passwordhashA' },
+        { email: 'emailB', passwordhash: 'passwordhashB' }
       ]
-      const actual = sql`INSERT INTO users (id, email, passwordhash) VALUES ${sql.valuesList(users)}`
+
+      const actual = sql`INSERT INTO users (email, passwordhash) VALUES ${sql.valuesList(users)}`
 
       assert.deepEqual(actual, expected)
     })
@@ -156,11 +164,12 @@ describe('sql', () => {
   describe('Support pairs of column keys and values using as set of updates', () => {
     it('should work with one pair', () => {
       const expected = {
-        text: 'UPDATE users SET "id" = $1 WHERE id = \'id\'',
-        parameters: ['id']
+        text: 'UPDATE users SET "email" = $1 WHERE id = \'id\'',
+        parameters: ['email']
       }
 
-      const user = { id: 'id' }
+      const user = { email: 'email' }
+
       const actual = sql`UPDATE users SET ${sql.pairs(user, ', ')} WHERE id = 'id'`
 
       assert.deepEqual(actual, expected)
@@ -168,11 +177,12 @@ describe('sql', () => {
 
     it('should work with multiple pairs', () => {
       const expected = {
-        text: 'UPDATE users SET "id" = $1, "email" = $2, "passwordhash" = $3 WHERE id = \'id\'',
-        parameters: ['id', 'email', 'passwordhash']
+        text: 'UPDATE users SET "email" = $1, "passwordhash" = $2 WHERE id = \'id\'',
+        parameters: ['email', 'passwordhash']
       }
 
-      const user = { id: 'id', email: 'email', passwordhash: 'passwordhash' }
+      const user = { email: 'email', passwordhash: 'passwordhash' }
+
       const actual = sql`UPDATE users SET ${sql.pairs(user, ', ')} WHERE id = 'id'`
 
       assert.deepEqual(actual, expected)
@@ -182,11 +192,12 @@ describe('sql', () => {
   describe('Support pairs of column keys and values using as set of conditions', () => {
     it('should work with one pair', () => {
       const expected = {
-        text: 'SELECT * FROM users WHERE "id" = $1',
-        parameters: ['id']
+        text: 'SELECT * FROM users WHERE "email" = $1',
+        parameters: ['email']
       }
 
-      const user = { id: 'id' }
+      const user = { email: 'email' }
+
       const actual = sql`SELECT * FROM users WHERE ${sql.pairs(user, ' AND ')}`
 
       assert.deepEqual(actual, expected)
@@ -194,11 +205,12 @@ describe('sql', () => {
 
     it('should work with multiple pairs', () => {
       const expected = {
-        text: 'SELECT * FROM users WHERE "id" = $1 AND "email" = $2 AND "passwordhash" = $3',
-        parameters: ['id', 'email', 'passwordhash']
+        text: 'SELECT * FROM users WHERE "email" = $1 AND "passwordhash" = $2',
+        parameters: ['email', 'passwordhash']
       }
 
-      const user = { id: 'id', email: 'email', passwordhash: 'passwordhash' }
+      const user = { email: 'email', passwordhash: 'passwordhash' }
+
       const actual = sql`SELECT * FROM users WHERE ${sql.pairs(user, ' AND ')}`
 
       assert.deepEqual(actual, expected)
@@ -208,13 +220,15 @@ describe('sql', () => {
   describe('Support for nested queries', () => {
     it('should work, especially the renumbering of the binds', () => {
       const expected = {
-        text: 'SELECT * FROM users WHERE email = $1 AND id = (SELECT id FROM users WHERE passwordhash = $2)',
-        parameters: ['email', 'passwordhash']
+        text: 'SELECT * FROM users WHERE state = $1 AND id = (SELECT id FROM users WHERE email = $2 AND passwordhash = $3)',
+        parameters: ['active', 'email', 'passwordhash']
       }
 
+      const state = 'active'
       const email = 'email'
       const passwordhash = 'passwordhash'
-      const actual = sql`SELECT * FROM users WHERE email = ${email} AND id = (${sql`SELECT id FROM users WHERE passwordhash = ${passwordhash}`})`
+
+      const actual = sql`SELECT * FROM users WHERE state = ${state} AND id = (${sql`SELECT id FROM users WHERE email = ${email} AND passwordhash = ${passwordhash}`})`
 
       assert.deepEqual(actual, expected)
     })

@@ -11,65 +11,29 @@ const sql = require('@sharaal/sql-pg')
 ## Extract and bind values
 
 ```javascript
-const valueA = 'valueA'
-const valueB = 'valueB'
-const valueC = 'valueC'
+const email = 'email'
+const passwordhash = 'passwordhash'
 
 const result = await client.query(sql`
-  SELECT * FROM tableA
-    INNER JOIN tableB USING(id)
-    WHERE
-      columnA = ${valueA}
-      AND
-      columnB = ${valueB}
-      AND
-      columnC = ${valueC}
+  SELECT * FROM users WHERE email = ${email} AND passwordhash = ${passwordhash}
 `)
-```
 
-Text:
-
-```sql
-SELECT * FROM tableA
-  INNER JOIN tableB USING(id)
-  WHERE
-    columnA = $1
-    AND
-    columnB = $2
-    AND
-    columnC = $3
-```
-
-Parameters:
-
-```javascript
-['valueA', 'valueB', 'valueC']
+// text: SELECT * FROM users WHERE email = $1 AND passwordhash = $2
+// parameters: ['email', 'passwordhash']
 ```
 
 ## Escape keys for tables and columns
 
 ```javascript
-const tableA = 'tableA'
-const tableB = 'tableB'
-const columns = ['columnA', 'columnB', 'columnC']
+const table = 'users'
+const columns = ['id', 'email']
 
 const result = await client.query(sql`
-  SELECT ${sql.keys(columns)} FROM ${sql.key(tableA)}
-    INNER JOIN ${sql.key(tableB)} USING(id)
+  SELECT ${sql.keys(columns)} FROM ${sql.key(table)}
 `)
-```
 
-Text:
-
-```sql
-SELECT "columnA", "columnB", "columnC" FROM "tableA"
-  INNER JOIN "tableB" USING(id)
-```
-
-Parameters:
-
-```javascript
-[]
+// text: SELECT "id", "email" FROM "users"
+// parameters: []
 ```
 
 If the `columns` parameter is an object (e.g. a row) the keys of the object will be used.
@@ -77,23 +41,15 @@ If the `columns` parameter is an object (e.g. a row) the keys of the object will
 ## Extract and bind list of values
 
 ```javascript
-const values = ['valueA', 'valueB', 'valueC']
+
+const values = ['email', 'passwordhash']
 
 const result = await client.query(sql`
-  INSERT INTO table VALUES (${sql.values(values)})
+  INSERT INTO users (email, passwordhash) VALUES (${sql.values(values)})
 `)
-```
 
-Text:
-
-```sql
-INSERT INTO table VALUES ($1, $2, $3)
-```
-
-Parameters:
-
-```javascript
-['valueA', 'valueB', 'valueC']
+// text: INSERT INTO users (email, passwordhash) VALUES ($1, $2)
+// parameters: ['email', 'passwordhash']
 ```
 
 If the `values` parameter is an object (e.g. a row) the values of the object will be used.
@@ -101,27 +57,17 @@ If the `values` parameter is an object (e.g. a row) the values of the object wil
 ## Extract and bind multiple value lists
 
 ```javascript
-const values = [
-  ['valueA1', 'valueB1', 'valueC1'],
-  ['valueA2', 'valueB2', 'valueC2'],
-  ['valueA3', 'valueB3', 'valueC3']
+const valuesList = [
+  ['emailA', 'passwordhashA'],
+  ['emailB', 'passwordhashB']
 ]
 
 const result = await client.query(sql`
-  INSERT INTO table VALUES ${sql.values(values)}
+  INSERT INTO users VALUES ${sql.values(valuesList)}
 `)
-```
 
-Text:
-
-```sql
-INSERT INTO table VALUES ($1, $2, $3), ($4, $5, $6), ($7, $8, $9)
-```
-
-Parameters:
-
-```javascript
-['valueA1', 'valueB1', 'valueC1', 'valueA2', 'valueB2', 'valueC2', 'valueA3', 'valueB3', 'valueC3']
+// text: INSERT INTO users VALUES ($1, $2), ($3, $4)
+// parameters: ['emailA', 'passwordhashA', 'emailB', 'passwordhashB']
 ```
 
 If the `valuesList` parameter is an array of objects (e.g. list of rows) the values of the objects will be used.
@@ -129,74 +75,48 @@ If the `valuesList` parameter is an array of objects (e.g. list of rows) the val
 ## Support pairs of column keys and values using as set of updates
 
 ```javascript
-const updates = { columnA: 'new valueA', columnB: 'new valueB', columnC: 'new valueC' }
+const user = { email: 'email', passwordhash: 'passwordhash' }
 
 const result = await client.query(sql`
-  UPDATE table SET ${sql.pairs(updates, ', ')} WHERE value = 'value'
+  UPDATE users SET ${sql.pairs(user, ', ')} WHERE id = 'id'
 `)
-```
 
-Text:
-
-```sql
-UPDATE table SET "columnA" = $1, "columnB" = $2, "columnC" = $3 WHERE value = 'value'
-```
-
-Parameters:
-
-```javascript
-['new valueA', 'new valueB', 'new valueC']
+// text: UPDATE users SET "email" = $1, "passwordhash" = $2 WHERE id = 'id'
+// parameters: ['email', 'passwordhash']
 ```
 
 ## Support pairs of column keys and values using as set of conditions
 
 ```javascript
-const conditions = { columnA: 'old valueA', columnB: 'old valueB', columnC: 'old valueC' }
+const user = { email: 'email', passwordhash: 'passwordhash' }
 
 const result = await client.query(sql`
-  UPDATE table SET column = 'new value' WHERE ${sql.pairs(conditions, ' AND ')}
+  SELECT * FROM users WHERE ${sql.pairs(user, ' AND ')}
 `)
-```
 
-Text:
-
-```sql
-UPDATE table SET column = 'new value' WHERE "columnA" = $1 AND "columnB" = $2 AND "columnC" = $3
-```
-
-Parameters:
-
-```javascript
-['old valueA', 'old valueB', 'old valueC']
+// text: SELECT * FROM users WHERE "email" = $1 AND "passwordhash" = $2
+// parameters: ['email', 'passwordhash']
 ```
 
 # Support for nested queries
 
 ```javascript
+const state = 'active'
 const email = 'email'
 const passwordhash = 'passwordhash'
 
 const result = await client.query(sql`
   SELECT * FROM users WHERE
-    email = ${email}
+    state = ${state}
     AND
-    id = (${sql`SELECT id FROM users WHERE passwordhash = ${passwordhash}`})
+    id = (${sql`SELECT id FROM users WHERE email = ${email} AND passwordhash = ${passwordhash}`})
 `)
-```
 
-Text:
-
-```sql
-SELECT * FROM users WHERE
-  email = $1
-  AND
-  id = (SELECT id FROM users WHERE passwordhash = $2)
-```
-
-Parameters:
-
-```javascript
-['email', 'passwordhash']
+// text: SELECT * FROM users WHERE
+//         state = $1
+//         AND
+//         id = (SELECT id FROM users WHERE email = $2 AND passwordhash = $3)
+// parameters: ['active', 'email', 'passwordhash']
 ```
 
 # Syntax Highlighting
