@@ -3,14 +3,13 @@ function sql (textFragments, ...valueFragments) {
     let text = textFragments[0]
     let parameters = []
     valueFragments.forEach((valueFragment, i) => {
-      if (typeof valueFragment === 'function') {
-        valueFragment = valueFragment(parameterPosition)
+      if (!['function', 'object'].includes(typeof valueFragment)) {
+        valueFragment = sql.value(valueFragment)
       }
-      if (typeof valueFragment !== 'object') {
-        valueFragment = sql.value(valueFragment)(parameterPosition)
+      if (typeof valueFragment === 'function') {
+        valueFragment = valueFragment(parameterPosition + parameters.length)
       }
       text += valueFragment.text + textFragments[i + 1]
-      parameterPosition += valueFragment.parameters.length
       parameters = parameters.concat(valueFragment.parameters)
     })
     return { text, parameters }
