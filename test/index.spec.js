@@ -233,4 +233,52 @@ describe('sql', () => {
       assert.deepEqual(actual, expected)
     })
   })
+
+  describe('Bad handling of "$" in text fragments', () => {
+    it('should accidentally replace "$" with numbered binding in text fragments', () => {
+      const expected = {
+        text: 'SELECT * FROM users WHERE email = "$1"',
+        parameters: []
+      }
+
+      const actual = sql`SELECT * FROM users WHERE email = "$"`
+
+      assert.deepEqual(actual, expected)
+    })
+
+    it('should accidentally replace "$" with numbered binding in nested query text fragments', () => {
+      const expected = {
+        text: 'SELECT * FROM (SELECT * FROM users WHERE email = "$1") tmp',
+        parameters: []
+      }
+
+      const actual = sql`SELECT * FROM (${sql`SELECT * FROM users WHERE email = "$"`}) tmp`
+
+      assert.deepEqual(actual, expected)
+    })
+  })
+
+  describe('Functional workaround for the bad handling of "$" in text fragments', () => {
+    it('should bind reservered "$" correctly if given as binding', () => {
+      const expected = {
+        text: 'SELECT * FROM users WHERE email = $1',
+        parameters: ['$']
+      }
+
+      const actual = sql`SELECT * FROM users WHERE email = ${'$'}`
+
+      assert.deepEqual(actual, expected)
+    })
+
+    it('should bind reservered "$" correctly if given as binding in nested query', () => {
+      const expected = {
+        text: 'SELECT * FROM (SELECT * FROM users WHERE email = $1) tmp',
+        parameters: ['$']
+      }
+
+      const actual = sql`SELECT * FROM (${sql`SELECT * FROM users WHERE email = ${'$'}`}) tmp`
+
+      assert.deepEqual(actual, expected)
+    })
+  })
 })
