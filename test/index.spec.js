@@ -14,13 +14,10 @@ describe('sql', () => {
 
       let actual = sql`SELECT * FROM users WHERE id = ${id} AND state = 'active'`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
 
     it('should work with one value at the end of the query', () => {
@@ -33,13 +30,10 @@ describe('sql', () => {
 
       let actual = sql`SELECT * FROM users WHERE id = ${id}`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
 
     it('should work with multiple values', () => {
@@ -53,13 +47,10 @@ describe('sql', () => {
 
       let actual = sql`SELECT * FROM users WHERE email = ${email} AND passwordhash = ${passwordhash}`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
   })
 
@@ -74,13 +65,10 @@ describe('sql', () => {
 
       let actual = sql`SELECT * FROM ${sql.key(table)}`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
 
     it('should work with a list of keys array based', () => {
@@ -93,13 +81,10 @@ describe('sql', () => {
 
       let actual = sql`SELECT ${sql.keys(columns)} FROM users`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
 
     it('should work with a list of keys object based', () => {
@@ -112,13 +97,10 @@ describe('sql', () => {
 
       let actual = sql`SELECT ${sql.keys(user)} FROM users`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
   })
 
@@ -133,13 +115,10 @@ describe('sql', () => {
 
       let actual = sql`INSERT INTO users (email) VALUES (${sql.values(values)})`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
 
     it('should work with multiple values in the value list array based', () => {
@@ -152,13 +131,10 @@ describe('sql', () => {
 
       let actual = sql`INSERT INTO users (email, passwordhash) VALUES (${sql.values(values)})`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
 
     it('should work with multiple values in the value list object based', () => {
@@ -171,13 +147,10 @@ describe('sql', () => {
 
       let actual = sql`INSERT INTO users (email, passwordhash) VALUES (${sql.values(user)})`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
   })
 
@@ -195,13 +168,10 @@ describe('sql', () => {
 
       let actual = sql`INSERT INTO users (email, passwordhash) VALUES ${sql.valuesList(valuesList)}`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
 
     it('should work with multiple value lists object based', () => {
@@ -217,13 +187,10 @@ describe('sql', () => {
 
       let actual = sql`INSERT INTO users (email, passwordhash) VALUES ${sql.valuesList(users)}`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
   })
 
@@ -238,13 +205,10 @@ describe('sql', () => {
 
       let actual = sql`UPDATE users SET ${sql.pairs(user, ', ')} WHERE id = 'id'`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
 
     it('should work with multiple pairs', () => {
@@ -257,13 +221,10 @@ describe('sql', () => {
 
       let actual = sql`UPDATE users SET ${sql.pairs(user, ', ')} WHERE id = 'id'`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
   })
 
@@ -278,13 +239,10 @@ describe('sql', () => {
 
       let actual = sql`SELECT * FROM users WHERE ${sql.pairs(user, ' AND ')}`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
 
     it('should work with multiple pairs', () => {
@@ -297,13 +255,10 @@ describe('sql', () => {
 
       let actual = sql`SELECT * FROM users WHERE ${sql.pairs(user, ' AND ')}`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
   })
 
@@ -320,13 +275,10 @@ describe('sql', () => {
 
       let actual = sql`SELECT * FROM users WHERE state = ${state} AND id = (${sql`SELECT id FROM users WHERE email = ${email} AND passwordhash = ${passwordhash}`})`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
   })
 
@@ -339,13 +291,10 @@ describe('sql', () => {
 
       let actual = sql`SELECT * FROM users WHERE email = "$1"`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
 
     it('should not accidentally replace "$" with numbered binding in nested query text fragments', () => {
@@ -356,13 +305,10 @@ describe('sql', () => {
 
       let actual = sql`SELECT * FROM (${sql`SELECT * FROM users WHERE email = "$1"`}) tmp`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
   })
 
@@ -375,13 +321,10 @@ describe('sql', () => {
 
       let actual = sql`SELECT * FROM users WHERE email = ${'$'}`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
 
     it('should bind reservered "$" correctly if given as binding in nested query', () => {
@@ -392,13 +335,10 @@ describe('sql', () => {
 
       let actual = sql`SELECT * FROM (${sql`SELECT * FROM users WHERE email = ${'$'}`}) tmp`
 
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
       actual = actual(0)
-
-      assert.equal(actual.text, expected.text)
-      assert.deepEqual(actual.parameters, expected.parameters)
+      assert.deepEqual(actual, expected)
     })
   })
 })
