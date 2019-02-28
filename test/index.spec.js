@@ -12,8 +12,11 @@ describe('sql', () => {
 
       const id = 'id'
 
-      const actual = sql`SELECT * FROM users WHERE id = ${id} AND state = 'active'`
+      let actual = sql`SELECT * FROM users WHERE id = ${id} AND state = 'active'`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
 
@@ -25,8 +28,11 @@ describe('sql', () => {
 
       const id = 'id'
 
-      const actual = sql`SELECT * FROM users WHERE id = ${id}`
+      let actual = sql`SELECT * FROM users WHERE id = ${id}`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
 
@@ -39,8 +45,11 @@ describe('sql', () => {
       const email = 'email'
       const passwordhash = 'passwordhash'
 
-      const actual = sql`SELECT * FROM users WHERE email = ${email} AND passwordhash = ${passwordhash}`
+      let actual = sql`SELECT * FROM users WHERE email = ${email} AND passwordhash = ${passwordhash}`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
   })
@@ -54,8 +63,11 @@ describe('sql', () => {
 
       const table = 'users'
 
-      const actual = sql`SELECT * FROM ${sql.key(table)}`
+      let actual = sql`SELECT * FROM ${sql.key(table)}`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
 
@@ -67,8 +79,11 @@ describe('sql', () => {
 
       const columns = ['id', 'email']
 
-      const actual = sql`SELECT ${sql.keys(columns)} FROM users`
+      let actual = sql`SELECT ${sql.keys(columns)} FROM users`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
 
@@ -80,8 +95,11 @@ describe('sql', () => {
 
       const user = { id: 'id', email: 'email' }
 
-      const actual = sql`SELECT ${sql.keys(user)} FROM users`
+      let actual = sql`SELECT ${sql.keys(user)} FROM users`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
   })
@@ -95,8 +113,11 @@ describe('sql', () => {
 
       const values = ['email']
 
-      const actual = sql`INSERT INTO users (email) VALUES (${sql.values(values)})`
+      let actual = sql`INSERT INTO users (email) VALUES (${sql.values(values)})`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
 
@@ -108,8 +129,11 @@ describe('sql', () => {
 
       const values = ['email', 'passwordhash']
 
-      const actual = sql`INSERT INTO users (email, passwordhash) VALUES (${sql.values(values)})`
+      let actual = sql`INSERT INTO users (email, passwordhash) VALUES (${sql.values(values)})`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
 
@@ -121,8 +145,11 @@ describe('sql', () => {
 
       const user = { email: 'email', passwordhash: 'passwordhash' }
 
-      const actual = sql`INSERT INTO users (email, passwordhash) VALUES (${sql.values(user)})`
+      let actual = sql`INSERT INTO users (email, passwordhash) VALUES (${sql.values(user)})`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
   })
@@ -139,8 +166,11 @@ describe('sql', () => {
         ['emailB', 'passwordhashB']
       ]
 
-      const actual = sql`INSERT INTO users (email, passwordhash) VALUES ${sql.valuesList(valuesList)}`
+      let actual = sql`INSERT INTO users (email, passwordhash) VALUES ${sql.valuesList(valuesList)}`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
 
@@ -155,8 +185,11 @@ describe('sql', () => {
         { email: 'emailB', passwordhash: 'passwordhashB' }
       ]
 
-      const actual = sql`INSERT INTO users (email, passwordhash) VALUES ${sql.valuesList(users)}`
+      let actual = sql`INSERT INTO users (email, passwordhash) VALUES ${sql.valuesList(users)}`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
   })
@@ -170,8 +203,11 @@ describe('sql', () => {
 
       const user = { email: 'email' }
 
-      const actual = sql`UPDATE users SET ${sql.pairs(user, ', ')} WHERE id = 'id'`
+      let actual = sql`UPDATE users SET ${sql.pairs(user, ', ')} WHERE id = 'id'`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
 
@@ -183,8 +219,11 @@ describe('sql', () => {
 
       const user = { email: 'email', passwordhash: 'passwordhash' }
 
-      const actual = sql`UPDATE users SET ${sql.pairs(user, ', ')} WHERE id = 'id'`
+      let actual = sql`UPDATE users SET ${sql.pairs(user, ', ')} WHERE id = 'id'`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
   })
@@ -198,8 +237,11 @@ describe('sql', () => {
 
       const user = { email: 'email' }
 
-      const actual = sql`SELECT * FROM users WHERE ${sql.pairs(user, ' AND ')}`
+      let actual = sql`SELECT * FROM users WHERE ${sql.pairs(user, ' AND ')}`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
 
@@ -211,8 +253,11 @@ describe('sql', () => {
 
       const user = { email: 'email', passwordhash: 'passwordhash' }
 
-      const actual = sql`SELECT * FROM users WHERE ${sql.pairs(user, ' AND ')}`
+      let actual = sql`SELECT * FROM users WHERE ${sql.pairs(user, ' AND ')}`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
   })
@@ -228,45 +273,57 @@ describe('sql', () => {
       const email = 'email'
       const passwordhash = 'passwordhash'
 
-      const actual = sql`SELECT * FROM users WHERE state = ${state} AND id = (${sql`SELECT id FROM users WHERE email = ${email} AND passwordhash = ${passwordhash}`})`
+      let actual = sql`SELECT * FROM users WHERE state = ${state} AND id = (${sql`SELECT id FROM users WHERE email = ${email} AND passwordhash = ${passwordhash}`})`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
   })
 
-  describe('Bad handling of "$" in text fragments', () => {
-    it('should accidentally replace "$" with numbered binding in text fragments', () => {
+  describe('Right handling of "$" in text fragments', () => {
+    it('should not accidentally replace "$" with numbered binding in text fragments', () => {
       const expected = {
-        text: 'SELECT * FROM users WHERE email = "$1"',
+        text: 'SELECT * FROM users WHERE email = "$"',
         parameters: []
       }
 
-      const actual = sql`SELECT * FROM users WHERE email = "$"`
+      let actual = sql`SELECT * FROM users WHERE email = "$"`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
 
-    it('should accidentally replace "$" with numbered binding in nested query text fragments', () => {
+    it('should not accidentally replace "$" with numbered binding in nested query text fragments', () => {
       const expected = {
-        text: 'SELECT * FROM (SELECT * FROM users WHERE email = "$1") tmp',
+        text: 'SELECT * FROM (SELECT * FROM users WHERE email = "$") tmp',
         parameters: []
       }
 
-      const actual = sql`SELECT * FROM (${sql`SELECT * FROM users WHERE email = "$"`}) tmp`
+      let actual = sql`SELECT * FROM (${sql`SELECT * FROM users WHERE email = "$"`}) tmp`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
   })
 
-  describe('Functional workaround for the bad handling of "$" in text fragments', () => {
+  describe('Right handling of "$" in bindings', () => {
     it('should bind reservered "$" correctly if given as binding', () => {
       const expected = {
         text: 'SELECT * FROM users WHERE email = $1',
         parameters: ['$']
       }
 
-      const actual = sql`SELECT * FROM users WHERE email = ${'$'}`
+      let actual = sql`SELECT * FROM users WHERE email = ${'$'}`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
 
@@ -276,8 +333,11 @@ describe('sql', () => {
         parameters: ['$']
       }
 
-      const actual = sql`SELECT * FROM (${sql`SELECT * FROM users WHERE email = ${'$'}`}) tmp`
+      let actual = sql`SELECT * FROM (${sql`SELECT * FROM users WHERE email = ${'$'}`}) tmp`
 
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+
+      actual = actual(0)
       assert.deepEqual(actual, expected)
     })
   })

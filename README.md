@@ -126,21 +126,3 @@ const result = await client.query(sql`
 1. Install `language-babel` package
 2. In the settings of this package search for "JavaScript Tagged Template Literals Grammar Extensions" and add the support for SQL via `sql:source.sql`
 3. If it doesn't work disable "Use Tree Sitter Parsers" in the core settings
-
-# Known issues
-
-:warning: PostgreSQL use numbered `$` in the SQL text to bind values. Because of this `$` is reserved and can't be used in text fragments. If you need this you can bind them as value.
-
-```javascript
-// bad
-const result = await client.query(sql`SELECT * FROM users WHERE email = "$"`)
-
-// text: SELECT * FROM users WHERE email = "$1"
-// parameters: []
-
-// good
-const result = await client.query(sql`SELECT * FROM users WHERE email = ${'$'}`)
-
-// text: SELECT * FROM users WHERE email = $1
-// parameters: ['$']
-```
