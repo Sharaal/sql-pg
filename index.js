@@ -45,21 +45,20 @@ sql.values = values => {
 
 sql.value = value => sql.values([value])
 
-sql.valuesList = valuesList => parameterPosition => {
-  const subValuesList = valuesList.map(values => {
-    values = sql.values(values)(parameterPosition)
-    parameterPosition += values.parameters.length
-    return values
-  })
-  return {
-    text: subValuesList
-      .map(values => `(${values.text})`)
-      .join(', '),
-    parameters: subValuesList
-      .map(values => values.parameters)
-      .reduce((valuesA, valuesB) => valuesA.concat(valuesB), [])
-  }
-}
+sql.valuesList = valuesList => parameterPosition =>
+  valuesList
+    .map(values => {
+      values = sql.values(values)(parameterPosition)
+      parameterPosition += values.parameters.length
+      return values
+    })
+    .reduce(
+      (valuesA, valuesB) => ({
+        text: valuesA.text + (valuesA.text !== '' ? ', ' : '') + `(${valuesB.text})`,
+        parameters: valuesA.parameters.concat(valuesB.parameters)
+      }),
+      { text: '', parameters: [] }
+    )
 
 sql.pairs = (pairs, separator) => parameterPosition => {
   const texts = []
