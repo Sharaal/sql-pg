@@ -285,11 +285,11 @@ describe('sql', () => {
   describe('Right handling of "$" in text fragments', () => {
     it('should not accidentally replace "$" with numbered binding in text fragments', () => {
       const expected = {
-        text: 'SELECT * FROM users WHERE email = "$1"',
+        text: 'SELECT * FROM users WHERE email = "$"',
         parameters: []
       }
 
-      let actual = sql`SELECT * FROM users WHERE email = "$1"`
+      let actual = sql`SELECT * FROM users WHERE email = "$"`
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
@@ -299,11 +299,11 @@ describe('sql', () => {
 
     it('should not accidentally replace "$" with numbered binding in nested query text fragments', () => {
       const expected = {
-        text: 'SELECT * FROM (SELECT * FROM users WHERE email = "$1") tmp',
+        text: 'SELECT * FROM (SELECT * FROM users WHERE email = "$") tmp',
         parameters: []
       }
 
-      let actual = sql`SELECT * FROM (${sql`SELECT * FROM users WHERE email = "$1"`}) tmp`
+      let actual = sql`SELECT * FROM (${sql`SELECT * FROM users WHERE email = "$"`}) tmp`
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
 
@@ -312,7 +312,7 @@ describe('sql', () => {
     })
   })
 
-  describe('Functional workaround for the bad handling of "$" in text fragments', () => {
+  describe('Right handling of "$" in bindings', () => {
     it('should bind reservered "$" correctly if given as binding', () => {
       const expected = {
         text: 'SELECT * FROM users WHERE email = $1',

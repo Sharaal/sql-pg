@@ -54,7 +54,7 @@ sql.valuesList = valuesList => parameterPosition =>
     })
     .reduce(
       (valuesA, valuesB) => ({
-        text: valuesA.text + (valuesA.text !== '' ? ', ' : '') + `(${valuesB.text})`,
+        text: valuesA.text + (valuesA.text ? ', ' : '') + `(${valuesB.text})`,
         parameters: valuesA.parameters.concat(valuesB.parameters)
       }),
       { text: '', parameters: [] }
