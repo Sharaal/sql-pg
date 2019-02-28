@@ -1,33 +1,21 @@
 function sql (textFragments, ...valueFragments) {
-  textFragments = JSON.parse(JSON.stringify(textFragments))
-
-  let text = textFragments.shift()
-  let parameters = []
-
-  let textFragment
-  let valueFragment
-  do {
-    valueFragment = valueFragments.shift()
-    if (valueFragment) {
-      if (typeof valueFragment !== 'object') {
-        valueFragment = sql.value(valueFragment)
+  const build = parameterPosition => {
+    let text = textFragments[0]
+    let parameters = []
+    valueFragments.forEach((valueFragment, i) => {
+      if (typeof valueFragment === 'function') {
+        valueFragment = valueFragment(parameterPosition)
       }
-      text += valueFragment.text
+      if (typeof valueFragment !== 'object') {
+        valueFragment = sql.value(valueFragment)(parameterPosition)
+      }
+      text += valueFragment.text + textFragments[i + 1] || ''
+      parameterPosition += valueFragment.parameters.length
       parameters = parameters.concat(valueFragment.parameters)
-    }
-    textFragment = textFragments.shift()
-    if (textFragment) {
-      text += textFragment
-    }
-  } while (textFragment)
-
-  let i = 0
-  text = text.replace(
-    /\$[0-9]*/g,
-    () => `$${++i}`
-  )
-
-  return { text, parameters }
+    })
+    return { text, parameters }
+  }
+  return Object.assign(build, build(0))
 }
 
 function escapeKey (key) {
@@ -50,32 +38,36 @@ sql.values = values => {
   if (!Array.isArray(values)) {
     values = Object.values(values)
   }
-  return {
-    text: Array.apply(null, { length: values.length }).map(() => '$').join(', '),
+  return parameterPosition => ({
+    text: Array.apply(null, { length: values.length }).map(() => `$${++parameterPosition}`).join(', '),
     parameters: values
-  }
+  })
 }
 
 sql.value = value => sql.values([value])
 
-sql.valuesList = valuesList => {
-  valuesList = valuesList.map(values => sql`(${sql.values(values)})`)
+sql.valuesList = valuesList => parameterPosition => {
+  const subValuesList = valuesList.map(values => {
+    values = sql.values(values)(parameterPosition)
+    parameterPosition += values.parameters.length
+    return values
+  })
   return {
-    text: valuesList
-      .map(values => values.text)
+    text: subValuesList
+      .map(values => `(${values.text})`)
       .join(', '),
-    parameters: valuesList
+    parameters: subValuesList
       .map(values => values.parameters)
       .reduce((valuesA, valuesB) => valuesA.concat(valuesB), [])
   }
 }
 
-sql.pairs = (pairs, separator) => {
+sql.pairs = (pairs, separator) => parameterPosition => {
   const texts = []
   const parameters = []
   for (const key of Object.keys(pairs)) {
     const value = pairs[key]
-    texts.push(`${escapeKey(key)} = $`)
+    texts.push(`${escapeKey(key)} = $${++parameterPosition}`)
     parameters.push(value)
   }
   return {
