@@ -9,7 +9,7 @@ function sql (textFragments, ...valueFragments) {
       if (typeof valueFragment !== 'object') {
         valueFragment = sql.value(valueFragment)(parameterPosition)
       }
-      text += valueFragment.text + textFragments[i + 1] || ''
+      text += valueFragment.text + textFragments[i + 1]
       parameterPosition += valueFragment.parameters.length
       parameters = parameters.concat(valueFragment.parameters)
     })
