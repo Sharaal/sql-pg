@@ -1,6 +1,11 @@
 Complex queries can be written with normal SQL, including the values needs to be bound and prefixed with the `sql` tag.
 
-The project is highly inspired by [slonik](https://www.npmjs.com/package/slonik) and the article having a critical look at [knex](https://www.npmjs.com/package/knex): https://medium.com/@gajus/stop-using-knex-js-and-earn-30-bf410349856c. Special thx to [gajus](https://github.com/gajus).
+The project is highly inspired by [slonik](https://www.npmjs.com/package/slonik) and the article having a critical look at [knex](https://www.npmjs.com/package/knex):
+
+https://medium.com/@gajus/stop-using-knex-js-and-earn-30-bf410349856c
+
+Special thanks to [gajus](https://github.com/gajus).
+
 Also it's more a research than a production ready library to understand the concepts behind in deep and get more experience in working effectively with SQL.
 
 # Initialization
