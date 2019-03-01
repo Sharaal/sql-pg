@@ -1,5 +1,8 @@
 Complex queries can be written with normal SQL, including the values needs to be bound and prefixed with the `sql` tag.
 
+The project is highly inspired by [slonik](https://www.npmjs.com/package/slonik) and the article having a critical look at [knex](https://www.npmjs.com/package/knex): https://medium.com/@gajus/stop-using-knex-js-and-earn-30-bf410349856c. Special thx to [gajus](https://github.com/gajus).
+Also it's more a research than a production ready library to understand the concepts behind in deep and get more experience in working effectively with SQL.
+
 # Initialization
 
 ```javascript
@@ -126,3 +129,8 @@ const result = await client.query(sql`
 1. Install `language-babel` package
 2. In the settings of this package search for "JavaScript Tagged Template Literals Grammar Extensions" and add the support for SQL via `sql:source.sql`
 3. If it doesn't work disable "Use Tree Sitter Parsers" in the core settings
+
+# Additional packages
+
+* [@sharaal/sql-helper-pg](https://github.com/Sharaal/sql-helper-pg): The library provide smart helpers for standard operations integrated with PostgreSQL
+* [@sharaal/sql-restrict-pg](https://github.com/Sharaal/sql-restrict-pg): Restrict `client.query` only handle queries created with the sql tagged template literal
