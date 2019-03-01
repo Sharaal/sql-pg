@@ -16,7 +16,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
 
     it('should work with one value at the end of the query', () => {
@@ -31,7 +31,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
 
     it('should work with multiple values', () => {
@@ -47,7 +47,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
   })
 
@@ -64,7 +64,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
 
     it('should work with a list of keys array based', () => {
@@ -79,7 +79,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
 
     it('should work with a list of keys object based', () => {
@@ -94,7 +94,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
   })
 
@@ -111,7 +111,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
 
     it('should work with multiple values in the value list array based', () => {
@@ -126,7 +126,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
 
     it('should work with multiple values in the value list object based', () => {
@@ -141,7 +141,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
   })
 
@@ -161,7 +161,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
 
     it('should work with multiple value lists object based', () => {
@@ -179,7 +179,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
   })
 
@@ -196,7 +196,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
 
     it('should work with multiple pairs', () => {
@@ -211,7 +211,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
   })
 
@@ -228,7 +228,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
 
     it('should work with multiple pairs', () => {
@@ -243,7 +243,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
   })
 
@@ -262,7 +262,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
   })
 
@@ -277,7 +277,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
 
     it('should not accidentally replace "$" with numbered binding in nested query text fragments', () => {
@@ -290,7 +290,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
   })
 
@@ -305,7 +305,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
 
     it('should bind reservered "$" correctly if given as binding in nested query', () => {
@@ -318,7 +318,7 @@ describe('sql', () => {
 
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
       actual = actual(0)
-      assert.deepEqual(actual, expected)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
   })
 })
