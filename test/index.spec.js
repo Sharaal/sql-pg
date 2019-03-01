@@ -2,7 +2,7 @@ const assert = require('power-assert')
 
 const sql = require('../')
 
-describe('sql', () => {
+describe('sql-pg', () => {
   describe('extract and bind values', () => {
     it('should work with one value inside the query', () => {
       const expected = {
