@@ -44,7 +44,18 @@ const result = await client.query(sql`
 // parameters: []
 ```
 
-If the `columns` parameter is an object (e.g. a row) the keys of the object will be used.
+If the parameter is an object (e.g. a user) the keys of the object will be used:
+
+```javascript
+const user = { id: 'id', email: 'email' }
+
+const result = await client.query(sql`
+  SELECT ${sql.keys(user)} FROM users
+`)
+
+// text: SELECT "id", "email" FROM "users"
+// parameters: []
+```
 
 ## Extract and bind list of values
 
@@ -60,7 +71,18 @@ const result = await client.query(sql`
 // parameters: ['email', 'passwordhash']
 ```
 
-If the `values` parameter is an object (e.g. a row) the values of the object will be used.
+If the parameter is an object (e.g. a user) the values of the object will be used:
+
+```javascript
+const user = { email: 'email', passwordhash: 'passwordhash' }
+
+const result = await client.query(sql`
+  INSERT INTO users (email, passwordhash) VALUES (${sql.values(user)})
+`)
+
+// text: INSERT INTO users (email, passwordhash) VALUES ($1, $2)
+// parameters: ['email', 'passwordhash']
+```
 
 ## Extract and bind multiple value lists
 
