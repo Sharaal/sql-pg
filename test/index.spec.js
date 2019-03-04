@@ -145,8 +145,8 @@ describe('sql-pg', () => {
     })
   })
 
-  describe('extract and bind multiple value lists', () => {
-    it('should work with multiple value lists array based', () => {
+  describe('extract and bind multiple list of values', () => {
+    it('should work with multiple list of values array based', () => {
       const expected = {
         text: 'INSERT INTO users (email, passwordhash) VALUES ($1, $2), ($3, $4)',
         parameters: ['emailA', 'passwordhashA', 'emailB', 'passwordhashB']
@@ -164,7 +164,7 @@ describe('sql-pg', () => {
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
 
-    it('should work with multiple value lists object based', () => {
+    it('should work with multiple list of values object based', () => {
       const expected = {
         text: 'INSERT INTO users (email, passwordhash) VALUES ($1, $2), ($3, $4)',
         parameters: ['emailA', 'passwordhashA', 'emailB', 'passwordhashB']

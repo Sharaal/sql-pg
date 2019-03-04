@@ -84,7 +84,7 @@ const result = await client.query(sql`
 // parameters: ['email', 'passwordhash']
 ```
 
-## Extract and bind multiple value lists
+## Extract and bind multiple list of values
 
 ```javascript
 const valuesList = [
@@ -142,7 +142,7 @@ const result = await client.query(sql`
 // parameters: ['email', 'passwordhash']
 ```
 
-# Support for nested queries
+## Support for nested queries
 
 ```javascript
 const state = 'active'
