@@ -14,6 +14,19 @@ Also it's more a research than a production ready package to understand the conc
 const sql = require('@sharaal/sql-pg')
 ```
 
+# Syntax Highlighting
+
+## Atom
+
+1. Install `language-babel` package
+2. In the settings of this package search for "JavaScript Tagged Template Literals Grammar Extensions" and add the support for SQL via `sql:source.sql`
+3. If it doesn't work disable "Use Tree Sitter Parsers" in the core settings
+
+# Additional packages
+
+* [@sharaal/sql-helper-pg](https://github.com/Sharaal/sql-helper-pg): The library provide smart helpers for standard operations integrated with PostgreSQL
+* [@sharaal/sql-restrict-pg](https://github.com/Sharaal/sql-restrict-pg): Restrict `client.query` only handle queries created with the sql tagged template literal
+
 # Examples
 
 ## Extract and bind values
@@ -191,14 +204,6 @@ const result = await client.query(sql`
 // parameters: []
 ```
 
-# Syntax Highlighting
-
-## Atom
-
-1. Install `language-babel` package
-2. In the settings of this package search for "JavaScript Tagged Template Literals Grammar Extensions" and add the support for SQL via `sql:source.sql`
-3. If it doesn't work disable "Use Tree Sitter Parsers" in the core settings
-
 # Extend with own fragment methods
 
 It's possible to define own fragment methods by adding them to the `sql` tag:
@@ -255,8 +260,3 @@ client.query(sql`
 // text: SELECT * FROM users LIMIT 1
 // parameters: []
 ```
-
-# Additional packages
-
-* [@sharaal/sql-helper-pg](https://github.com/Sharaal/sql-helper-pg): The library provide smart helpers for standard operations integrated with PostgreSQL
-* [@sharaal/sql-restrict-pg](https://github.com/Sharaal/sql-restrict-pg): Restrict `client.query` only handle queries created with the sql tagged template literal
