@@ -93,14 +93,28 @@ const valuesList = [
 ]
 
 const result = await client.query(sql`
-  INSERT INTO users VALUES ${sql.values(valuesList)}
+  INSERT INTO users (email, passwordhash) VALUES ${sql.values(valuesList)}
 `)
 
-// text: INSERT INTO users VALUES ($1, $2), ($3, $4)
+// text: INSERT INTO users (email, passwordhash) VALUES ($1, $2), ($3, $4)
 // parameters: ['emailA', 'passwordhashA', 'emailB', 'passwordhashB']
 ```
 
-If the `valuesList` parameter is an array of objects (e.g. list of rows) the values of the objects will be used.
+If the parameter is an array of objects (e.g. list of users) the values of the objects will be used:
+
+```javascript
+const users = [
+  { email: 'emailA', passwordhash: 'passwordhashA' },
+  { email: 'emailB', passwordhash: 'passwordhashB' }
+]
+
+const result = await client.query(sql`
+  INSERT INTO users (email, passwordhash) VALUES ${sql.values(users)}
+`)
+
+// text: INSERT INTO users (email, passwordhash) VALUES ($1, $2), ($3, $4)
+// parameters: ['emailA', 'passwordhashA', 'emailB', 'passwordhashB']
+```
 
 ## Support pairs of column keys and values using as set of updates
 
