@@ -163,6 +163,34 @@ const result = await client.query(sql`
 // parameters: ['active', 'email', 'passwordhash']
 ```
 
+## Support for limit, offset and pagination
+
+```javascript
+const limit = 10
+const offset = 20
+
+const result = await client.query(sql`
+  SELECT * FROM users ${sql.limit(limit)} ${sql.offset(offset)}
+`)
+
+// text: SELECT * FROM users LIMIT 10 OFFSET 20
+// parameters: []
+```
+
+Because of pagination is a common use case there is also a pagination shorthand:
+
+```javascript
+const page = 5
+const pageSize = 10
+
+const result = await client.query(sql`
+  SELECT * FROM users ${sql.pagination(page, pageSize)}
+`)
+
+// text: SELECT * FROM users LIMIT 10 OFFSET 50
+// parameters: []
+```
+
 # Syntax Highlighting
 
 ## Atom

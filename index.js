@@ -74,4 +74,25 @@ sql.pairs = (pairs, separator) => parameterPosition => {
   }
 }
 
+function positivNumber (number, fallback) {
+  number = parseInt(number)
+  if (isNaN(number) || number <= 0) {
+    number = fallback
+  }
+  return number
+}
+
+sql.limit = (limit, fallback = 1) => ({
+  text: `LIMIT ${positivNumber(limit, fallback)}`,
+  parameters: []
+})
+
+sql.offset = (offset, fallback = 0) => ({
+  text: `OFFSET ${positivNumber(offset, fallback)}`,
+  parameters: []
+})
+
+sql.pagination = (page, pageSize) =>
+  sql`${sql.limit(pageSize)} ${sql.offset(page * pageSize)}`
+
 module.exports = sql

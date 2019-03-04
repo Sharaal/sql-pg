@@ -266,6 +266,72 @@ describe('sql-pg', () => {
     })
   })
 
+  describe('Support for limit, offset and pagination', () => {
+    it('should work with right values', () => {
+      const expected = {
+        text: 'SELECT * FROM users LIMIT 10 OFFSET 20',
+        parameters: []
+      }
+
+      const limit = 10
+      const offset = 20
+
+      let actual = sql`SELECT * FROM users ${sql.limit(limit)} ${sql.offset(offset)}`
+
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+      actual = actual(0)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+    })
+
+    it('should work with 0 values by using the fallbacks', () => {
+      const expected = {
+        text: 'SELECT * FROM users LIMIT 1 OFFSET 0',
+        parameters: []
+      }
+
+      const limit = 0
+      const offset = 0
+
+      let actual = sql`SELECT * FROM users ${sql.limit(limit)} ${sql.offset(offset)}`
+
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+      actual = actual(0)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+    })
+
+    it('should work with non number values by using the fallbacks', () => {
+      const expected = {
+        text: 'SELECT * FROM users LIMIT 1 OFFSET 0',
+        parameters: []
+      }
+
+      const limit = 'example'
+      const offset = 'example'
+
+      let actual = sql`SELECT * FROM users ${sql.limit(limit)} ${sql.offset(offset)}`
+
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+      actual = actual(0)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+    })
+
+    it('should work with the pagination shorthand', () => {
+      const expected = {
+        text: 'SELECT * FROM users LIMIT 10 OFFSET 50',
+        parameters: []
+      }
+
+      const page = 5
+      const pageSize = 10
+
+      let actual = sql`SELECT * FROM users ${sql.pagination(page, pageSize)}`
+
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+      actual = actual(0)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+    })
+  })
+
   describe('Right handling of "$" in text fragments', () => {
     it('should not accidentally replace "$" with numbered binding in text fragments', () => {
       const expected = {
