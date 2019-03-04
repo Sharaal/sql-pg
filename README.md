@@ -248,13 +248,29 @@ const result = await client.query(sql`
 If no parameter bindings needed, the shorthand can be used by returning directly the result object:
 
 ```javascript
-sql.first = () => {
+sql.active = active => {
+  text: active ? 'active = true' : '1',
+  parameters: []
+}
+
+const result = await client.query(sql`
+  SELECT * FROM users WHERE ${sql.active(true)}
+`)
+
+// text: SELECT * FROM users WHERE active = true
+// parameters: []
+```
+
+Or by define a constant result object if also no parameters needed:
+
+```javascript
+sql.first = {
   text: `LIMIT 1`,
   parameters: []
 }
 
-client.query(sql`
-  SELECT * FROM users ${sql.first()}
+const result = await client.query(sql`
+  SELECT * FROM users ${sql.first}
 `)
 
 // text: SELECT * FROM users LIMIT 1
