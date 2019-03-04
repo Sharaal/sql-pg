@@ -70,7 +70,7 @@ const result = await client.query(sql`
 // parameters: []
 ```
 
-## Extract and bind list of values
+## Support list of values
 
 ```javascript
 
@@ -97,7 +97,7 @@ const result = await client.query(sql`
 // parameters: ['email', 'passwordhash']
 ```
 
-## Extract and bind multiple list of values
+## Support multiple list of values
 
 ```javascript
 const valuesList = [

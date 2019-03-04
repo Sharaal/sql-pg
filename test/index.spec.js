@@ -98,7 +98,7 @@ describe('sql-pg', () => {
     })
   })
 
-  describe('extract and bind list of values', () => {
+  describe('support list of values', () => {
     it('should work with one value in the value list', () => {
       const expected = {
         text: 'INSERT INTO users (email) VALUES ($1)',
@@ -145,7 +145,7 @@ describe('sql-pg', () => {
     })
   })
 
-  describe('extract and bind multiple list of values', () => {
+  describe('support multiple list of values', () => {
     it('should work with multiple list of values array based', () => {
       const expected = {
         text: 'INSERT INTO users (email, passwordhash) VALUES ($1, $2), ($3, $4)',
