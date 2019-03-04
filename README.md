@@ -199,6 +199,63 @@ const result = await client.query(sql`
 2. In the settings of this package search for "JavaScript Tagged Template Literals Grammar Extensions" and add the support for SQL via `sql:source.sql`
 3. If it doesn't work disable "Use Tree Sitter Parsers" in the core settings
 
+# Extend with own fragment methods
+
+It's possible to define own fragment methods by adding them to the `sql` tag:
+
+```javascript
+const bcrypt = require('bcrypt')
+
+sql.passwordhash = (password, saltRounds = 10) => parameterPosition => ({
+  text: `$${++parameterPosition}`,
+  parameters: [bcrypt.hashSync(password, saltRounds)]
+})
+
+const user = { email: 'email' }
+const password = 'password'
+
+const result = await client.query(sql`
+  INSERT INTO users (email, passwordhash) VALUES (${sql.values(user)}, ${sql.passwordhash(password)})
+`)
+
+// text: INSERT INTO users (email, passwordhash) VALUES ($1, $2)
+// parameters: ['email', '$2b$10$ODInlkbnvW90q.EGZ.1Ale3YpOqqdn0QtAotg8q/JzM5HGky6Q2j6']
+```
+
+It's also possible to reuse existing fragments methods to define own ones:
+
+```javascript
+const bcrypt = require('bcrypt')
+
+sql.passwordhash = (password, saltRounds = 10) => sql.values([bcrypt.hashSync(password, saltRounds)])
+
+const user = { email: 'email' }
+const password = 'password'
+
+const result = await client.query(sql`
+  INSERT INTO users (email, passwordhash) VALUES (${sql.values(user)}, ${sql.passwordhash(password)})
+`)
+
+// text: INSERT INTO users (email, passwordhash) VALUES ($1, $2)
+// parameters: ['email', '$2b$10$ODInlkbnvW90q.EGZ.1Ale3YpOqqdn0QtAotg8q/JzM5HGky6Q2j6']
+```
+
+If no parameter bindings needed, the shorthand can be used by returning directly the result object:
+
+```javascript
+sql.first = () => {
+  text: `LIMIT 1`,
+  parameters: []
+}
+
+client.query(sql`
+  SELECT * FROM users ${sql.first()}
+`)
+
+// text: SELECT * FROM users LIMIT 1
+// parameters: []
+```
+
 # Additional packages
 
 * [@sharaal/sql-helper-pg](https://github.com/Sharaal/sql-helper-pg): The library provide smart helpers for standard operations integrated with PostgreSQL
