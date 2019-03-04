@@ -332,6 +332,93 @@ describe('sql-pg', () => {
     })
   })
 
+  describe('Extend with own fragment methods', () => {
+    it('should work with using parameterPosition in fragment method', () => {
+      const expected = {
+        text: 'INSERT INTO users (email, passwordhash) VALUES ($1, $2)',
+        parameters: ['email', '$2b$10$ODInlkbnvW90q.EGZ.1Ale3YpOqqdn0QtAotg8q/JzM5HGky6Q2j6']
+      }
+
+      const bcrypt = {
+        hashSync: () => '$2b$10$ODInlkbnvW90q.EGZ.1Ale3YpOqqdn0QtAotg8q/JzM5HGky6Q2j6'
+      }
+
+      sql.passwordhash = (password, saltRounds = 10) => parameterPosition => ({
+        text: `$${++parameterPosition}`,
+        parameters: [bcrypt.hashSync(password, saltRounds)]
+      })
+
+      const user = { email: 'email' }
+      const password = 'password'
+
+      let actual = sql`INSERT INTO users (email, passwordhash) VALUES (${sql.values(user)}, ${sql.passwordhash(password)})`
+
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+      actual = actual(0)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+    })
+
+    it('should work with reusing existing fragment method', () => {
+      const expected = {
+        text: 'INSERT INTO users (email, passwordhash) VALUES ($1, $2)',
+        parameters: ['email', '$2b$10$ODInlkbnvW90q.EGZ.1Ale3YpOqqdn0QtAotg8q/JzM5HGky6Q2j6']
+      }
+
+      const bcrypt = {
+        hashSync: () => '$2b$10$ODInlkbnvW90q.EGZ.1Ale3YpOqqdn0QtAotg8q/JzM5HGky6Q2j6'
+      }
+
+      sql.passwordhash = (password, saltRounds = 10) => sql.values([bcrypt.hashSync(password, saltRounds)])
+
+      const user = { email: 'email' }
+      const password = 'password'
+
+      let actual = sql`INSERT INTO users (email, passwordhash) VALUES (${sql.values(user)}, ${sql.passwordhash(password)})`
+
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+      actual = actual(0)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+    })
+
+    it('should work with fragment method returning directly result object', () => {
+      const expected = {
+        text: 'SELECT * FROM users WHERE active = true',
+        parameters: []
+      }
+
+      sql.active = active => ({
+        text: active ? 'active = true' : '1',
+        parameters: []
+      })
+
+      const active = true
+
+      let actual = sql`SELECT * FROM users WHERE ${sql.active(active)}`
+
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+      actual = actual(0)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+    })
+
+    it('should work with constant result object', () => {
+      const expected = {
+        text: 'SELECT * FROM users LIMIT 1',
+        parameters: []
+      }
+
+      sql.first = {
+        text: `LIMIT 1`,
+        parameters: []
+      }
+
+      let actual = sql`SELECT * FROM users ${sql.first}`
+
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+      actual = actual(0)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+    })
+  })
+
   describe('Right handling of "$" in text fragments', () => {
     it('should not accidentally replace "$" with numbered binding in text fragments', () => {
       const expected = {

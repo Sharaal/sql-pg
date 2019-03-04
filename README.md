@@ -248,13 +248,15 @@ const result = await client.query(sql`
 If no parameter bindings needed, the shorthand can be used by returning directly the result object:
 
 ```javascript
-sql.active = active => {
+sql.active = active => ({
   text: active ? 'active = true' : '1',
   parameters: []
-}
+})
+
+const active = true
 
 const result = await client.query(sql`
-  SELECT * FROM users WHERE ${sql.active(true)}
+  SELECT * FROM users WHERE ${sql.active(active)}
 `)
 
 // text: SELECT * FROM users WHERE active = true
