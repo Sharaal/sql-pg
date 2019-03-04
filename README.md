@@ -178,12 +178,15 @@ const result = await client.query(sql`
 
 ## Support for limit, offset and pagination
 
+`maxLimit` is optional, but it should be set with a non user defined number to ensure a user can't select an infinite number of rows.
+
 ```javascript
-const limit = 10
+const actualLimit = 10
+const maxLimit = 50
 const offset = 20
 
 const result = await client.query(sql`
-  SELECT * FROM users ${sql.limit(limit)} ${sql.offset(offset)}
+  SELECT * FROM users ${sql.limit(actualLimit, maxLimit)} ${sql.offset(offset)}
 `)
 
 // text: SELECT * FROM users LIMIT 10 OFFSET 20

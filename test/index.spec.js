@@ -330,6 +330,22 @@ describe('sql-pg', () => {
       actual = actual(0)
       assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
     })
+
+    it('should work if the actualLimit is higher than the maxLimit', () => {
+      const expected = {
+        text: 'SELECT * FROM users LIMIT 10',
+        parameters: []
+      }
+
+      const actualLimit = 50
+      const maxLimit = 10
+
+      let actual = sql`SELECT * FROM users ${sql.limit(actualLimit, maxLimit)}`
+
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+      actual = actual(0)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+    })
   })
 
   describe('Extend with own fragment methods', () => {

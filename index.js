@@ -82,8 +82,8 @@ function positivNumber (number, fallback) {
   return number
 }
 
-sql.limit = (limit, fallback = 1) => ({
-  text: `LIMIT ${positivNumber(limit, fallback)}`,
+sql.limit = (actualLimit, maxLimit = Infinity, fallback = 1) => ({
+  text: `LIMIT ${Math.min(positivNumber(actualLimit, fallback), maxLimit)}`,
   parameters: []
 })
 
