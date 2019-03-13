@@ -12,9 +12,6 @@
     "lint:fix": "standard --fix",
     "test": "nyc mocha --require intelli-espower-loader --recursive './test/**/*.spec.js'"
   },
-  "directories": {
-    "test": "test"
-  },
   "devDependencies": {
     "espower-loader": "^1.2.2",
     "husky": "^1.3.1",
@@ -23,6 +20,14 @@
     "nyc": "^13.3.0",
     "power-assert": "^1.6.1",
     "standard": "^12.0.1"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm test"
+    }
   },
   "nyc": {
     "include": "index.js",
@@ -38,10 +43,5 @@
     "env": [
       "mocha"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint && npm test"
-    }
   }
 }
