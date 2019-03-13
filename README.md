@@ -11,7 +11,7 @@ Also it's more a research than a production ready package to understand the conc
 # Initialization
 
 ```javascript
-const sql = require('@sharaal/sql-pg')
+const sql = require('sql-pg')
 ```
 
 # Syntax Highlighting
@@ -24,8 +24,12 @@ const sql = require('@sharaal/sql-pg')
 
 # Additional packages
 
-* [@sharaal/sql-helper-pg](https://github.com/Sharaal/sql-helper-pg): The library provide smart helpers for standard operations integrated with PostgreSQL
-* [@sharaal/sql-restrict-pg](https://github.com/Sharaal/sql-restrict-pg): Restrict `client.query` only handle queries created with the sql tagged template literal
+* [sql-pg-helper](https://www.npmjs.com/package/sql-pg-helper): The library provide smart helpers for standard operations integrated with PostgreSQL
+* [sql-pg-restrict](https://www.npmjs.com/package/sql-pg-restrict): Restrict `client.query` only handle queries created with the sql tagged template literal
+
+# Alternative databases
+
+* MySQL: [sql-mysql](https://www.npmjs.com/package/sql-mysql)
 
 # Examples
 
