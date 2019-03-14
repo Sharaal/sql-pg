@@ -48,32 +48,40 @@ sql.values = values => {
 sql.value = value => sql.values([value])
 
 sql.valuesList = valuesList => parameterPosition => {
-  const texts = []
-  let parameters = []
+  const queries = []
   for (const values of valuesList) {
     const query = sql.values(values)(parameterPosition)
-    texts.push(`(${query.text})`)
-    parameters = parameters.concat(query.parameters)
+    queries.push({
+      text: `(${query.text})`,
+      parameters: query.parameters
+    })
     parameterPosition += query.parameters.length
   }
-  return {
-    text: texts.join(', '),
-    parameters
-  }
+  return queries.reduce(
+    (queryA, queryB) => ({
+      text: queryA.text + (queryA.text ? ', ' : '') + queryB.text,
+      parameters: queryA.parameters.concat(queryB.parameters)
+    }),
+    { text: '', parameters: [] }
+  )
 }
 
 sql.pairs = (pairs, separator) => parameterPosition => {
-  const texts = []
-  const parameters = []
+  const queries = []
   for (const key of Object.keys(pairs)) {
     const value = pairs[key]
-    texts.push(`${escapeKey(key)} = $${++parameterPosition}`)
-    parameters.push(value)
+    queries.push({
+      text: `${escapeKey(key)} = $${++parameterPosition}`,
+      parameters: [value]
+    })
   }
-  return {
-    text: texts.join(separator),
-    parameters
-  }
+  return queries.reduce(
+    (queryA, queryB) => ({
+      text: queryA.text + (queryA.text ? separator : '') + queryB.text,
+      parameters: queryA.parameters.concat(queryB.parameters)
+    }),
+    { text: '', parameters: [] }
+  )
 }
 
 function positivNumber (number, fallback) {
