@@ -1,18 +1,20 @@
 function sql (textFragments, ...valueFragments) {
   const build = parameterPosition => {
-    let text = textFragments[0]
-    let parameters = []
+    const query = {
+      text: textFragments[0],
+      parameters: []
+    }
     valueFragments.forEach((valueFragment, i) => {
       if (!['function', 'object'].includes(typeof valueFragment)) {
         valueFragment = sql.value(valueFragment)
       }
       if (typeof valueFragment === 'function') {
-        valueFragment = valueFragment(parameterPosition + parameters.length)
+        valueFragment = valueFragment(parameterPosition + query.parameters.length)
       }
-      text += valueFragment.text + textFragments[i + 1]
-      parameters = parameters.concat(valueFragment.parameters)
+      query.text += valueFragment.text + textFragments[i + 1]
+      query.parameters = query.parameters.concat(valueFragment.parameters)
     })
-    return { text, parameters }
+    return query
   }
   return Object.assign(build, build(0))
 }
@@ -45,20 +47,20 @@ sql.values = values => {
 
 sql.value = value => sql.values([value])
 
-sql.valuesList = valuesList => parameterPosition =>
-  valuesList
-    .map(values => {
-      values = sql.values(values)(parameterPosition)
-      parameterPosition += values.parameters.length
-      return values
-    })
-    .reduce(
-      (valuesA, valuesB) => ({
-        text: valuesA.text + (valuesA.text ? ', ' : '') + `(${valuesB.text})`,
-        parameters: valuesA.parameters.concat(valuesB.parameters)
-      }),
-      { text: '', parameters: [] }
-    )
+sql.valuesList = valuesList => parameterPosition => {
+  const texts = []
+  let parameters = []
+  for (const values of valuesList) {
+    const query = sql.values(values)(parameterPosition)
+    texts.push(`(${query.text})`)
+    parameters = parameters.concat(query.parameters)
+    parameterPosition += query.parameters.length
+  }
+  return {
+    text: texts.join(', '),
+    parameters
+  }
+}
 
 sql.pairs = (pairs, separator) => parameterPosition => {
   const texts = []
