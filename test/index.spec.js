@@ -349,7 +349,7 @@ describe('sql-pg', () => {
   })
 
   describe('Extend with own fragment methods', () => {
-    it('should work with using parameterPosition in fragment method', () => {
+    it('should work to define own fragment methods by adding them to the `sql` tag', () => {
       const expected = {
         text: 'INSERT INTO users (email, passwordhash) VALUES ($1, $2)',
         parameters: ['email', '$2b$10$ODInlkbnvW90q.EGZ.1Ale3YpOqqdn0QtAotg8q/JzM5HGky6Q2j6']

@@ -270,7 +270,7 @@ const result = await client.query(sql`
 // parameters: []
 ```
 
-Or by define a constant result object if also no parameters needed:
+Or by define a constant result object if no parameters needed:
 
 ```javascript
 sql.first = {
