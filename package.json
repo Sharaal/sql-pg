@@ -2,6 +2,14 @@
   "name": "sql-pg",
   "version": "1.0.0",
   "description": "Complex queries can be written with normal SQL, including the values needs to be bound and prefixed with the `sql` tag.",
+  "keywords": [
+    "node-postgres",
+    "nodejs",
+    "postgresql",
+    "query-builder",
+    "sql",
+    "tagged-template-literals"
+  ],
   "repository": "sharaal/sql-pg",
   "license": "MIT",
   "publishConfig": {
