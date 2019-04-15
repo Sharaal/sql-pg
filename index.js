@@ -85,7 +85,7 @@ sql.pairs = (pairs, separator) => parameterPosition => {
 }
 
 function positivNumber (number, fallback) {
-  number = parseInt(number)
+  number = parseInt(number, 10)
   if (number > 0) {
     return number
   }
