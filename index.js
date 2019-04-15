@@ -86,10 +86,10 @@ sql.pairs = (pairs, separator) => parameterPosition => {
 
 function positivNumber (number, fallback) {
   number = parseInt(number)
-  if (isNaN(number) || number <= 0) {
-    number = fallback
+  if (number > 0) {
+    return number
   }
-  return number
+  return fallback
 }
 
 sql.limit = (actualLimit, maxLimit = Infinity, fallback = 1) => ({
