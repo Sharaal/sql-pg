@@ -25,7 +25,7 @@ const sql = require('sql-pg')
 # Additional packages
 
 * [sql-pg-helper](https://www.npmjs.com/package/sql-pg-helper): The library provide smart helpers for standard operations integrated with PostgreSQL
-* [sql-pg-restrict](https://www.npmjs.com/package/sql-pg-restrict): Restrict `client.query` only handle queries created with the sql tagged template literal
+* [sql-pg-restrict](https://www.npmjs.com/package/sql-pg-restrict): Provide a restricted client only handle queries created with the sql tagged template literal
 
 # Alternative databases
 
