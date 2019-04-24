@@ -66,6 +66,9 @@ sql.valuesList = valuesList => parameterPosition => {
   )
 }
 
+sql.assignments = pairs => parameterPosition =>
+  sql`(${sql.keys(pairs)}) = (${sql.values(pairs)})`
+
 sql.pairs = (pairs, separator) => parameterPosition => {
   const queries = []
   for (const key of Object.keys(pairs)) {

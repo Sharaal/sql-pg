@@ -133,7 +133,20 @@ const result = await client.query(sql`
 // parameters: ['emailA', 'passwordhashA', 'emailB', 'passwordhashB']
 ```
 
-## Support pairs of column keys and values using as set of updates
+## Support assignments for updates
+
+```javascript
+const user = { email: 'email', passwordhash: 'passwordhash' }
+
+const result = await client.query(sql`
+  UPDATE users SET ${sql.assignments(user)} WHERE id = 'id'
+`)
+
+// text: UPDATE users SET ("email", "passwordhash") = ($1, $2) WHERE id = 'id'
+// parameters: ['email', 'passwordhash']
+```
+
+## Support pairs of column keys and values using as alternative of assignments for updates
 
 ```javascript
 const user = { email: 'email', passwordhash: 'passwordhash' }

@@ -183,7 +183,39 @@ describe('sql-pg', () => {
     })
   })
 
-  describe('Support pairs of column keys and values using as set of updates', () => {
+  describe('Support assignments for updates', () => {
+    it('should work with one pair', () => {
+      const expected = {
+        text: 'UPDATE users SET ("active") = ($1) WHERE id = \'id\'',
+        parameters: ['1']
+      }
+
+      const user = { active: '1' }
+
+      let actual = sql`UPDATE users SET ${sql.assignments(user)} WHERE id = 'id'`
+
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+      actual = actual(0)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+    })
+
+    it('should work with multiple pairs', () => {
+      const expected = {
+        text: 'UPDATE users SET ("email", "passwordhash") = ($1, $2) WHERE id = \'id\'',
+        parameters: ['email', 'passwordhash']
+      }
+
+      const user = { email: 'email', passwordhash: 'passwordhash' }
+
+      let actual = sql`UPDATE users SET ${sql.assignments(user)} WHERE id = 'id'`
+
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+      actual = actual(0)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+    })
+  })
+
+  describe('Support pairs of column keys and values using as alternative of assignments for updates', () => {
     it('should work with one pair', () => {
       const expected = {
         text: 'UPDATE users SET "email" = $1 WHERE id = \'id\'',
