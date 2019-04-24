@@ -1,6 +1,6 @@
 {
   "name": "sql-pg",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Complex queries can be written with normal SQL, including the values needs to be bound and prefixed with the `sql` tag.",
   "keywords": [
     "node-postgres",
