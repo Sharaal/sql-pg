@@ -159,7 +159,20 @@ const result = await client.query(sql`
 // parameters: ['email', 'passwordhash']
 ```
 
-## Support pairs of column keys and values using as set of conditions
+## Support conditions for basic use cases
+
+```javascript
+const user = { email: 'email', passwordhash: 'passwordhash' }
+
+const result = await client.query(sql`
+  SELECT * FROM users WHERE ${sql.conditions(user)}
+`)
+
+// text: SELECT * FROM users WHERE "email" = $1 AND "passwordhash" = $2
+// parameters: ['email', 'passwordhash']
+```
+
+## Support pairs of column keys and values using as alternative of conditions
 
 ```javascript
 const user = { email: 'email', passwordhash: 'passwordhash' }

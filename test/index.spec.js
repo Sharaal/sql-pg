@@ -247,7 +247,39 @@ describe('sql-pg', () => {
     })
   })
 
-  describe('Support pairs of column keys and values using as set of conditions', () => {
+  describe('Support conditions for basic use cases', () => {
+    it('should work with one pair', () => {
+      const expected = {
+        text: 'SELECT * FROM users WHERE "email" = $1',
+        parameters: ['email']
+      }
+
+      const user = { email: 'email' }
+
+      let actual = sql`SELECT * FROM users WHERE ${sql.conditions(user)}`
+
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+      actual = actual(0)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+    })
+
+    it('should work with multiple pairs', () => {
+      const expected = {
+        text: 'SELECT * FROM users WHERE "email" = $1 AND "passwordhash" = $2',
+        parameters: ['email', 'passwordhash']
+      }
+
+      const user = { email: 'email', passwordhash: 'passwordhash' }
+
+      let actual = sql`SELECT * FROM users WHERE ${sql.conditions(user)}`
+
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+      actual = actual(0)
+      assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
+    })
+  })
+
+  describe('Support pairs of column keys and values using as alternative of conditions', () => {
     it('should work with one pair', () => {
       const expected = {
         text: 'SELECT * FROM users WHERE "email" = $1',

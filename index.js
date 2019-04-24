@@ -87,6 +87,8 @@ sql.pairs = (pairs, separator) => parameterPosition => {
   )
 }
 
+sql.conditions = pairs => sql.pairs(pairs, ' AND ')
+
 function positivNumber (number, fallback) {
   number = parseInt(number, 10)
   if (number > 0) {
