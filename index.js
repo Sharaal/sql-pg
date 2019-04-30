@@ -1,8 +1,11 @@
+const symbol = Symbol('sql-pg')
+
 function sql (textFragments, ...valueFragments) {
   const build = parameterPosition => {
     const query = {
       text: textFragments[0],
-      parameters: []
+      parameters: [],
+      symbol
     }
     valueFragments.forEach((valueFragment, i) => {
       if (!['function', 'object'].includes(typeof valueFragment)) {
@@ -17,6 +20,60 @@ function sql (textFragments, ...valueFragments) {
     return query
   }
   return Object.assign(build, build(0))
+}
+
+sql.query = (...params) => {
+  if (typeof sql.client !== 'object' || typeof sql.client.query !== 'function') {
+    throw Error('to use "sql.query" assign the initialized pg client to "sql.client"')
+  }
+  const [query] = params
+  if (typeof query !== 'function' || query.symbol !== symbol) {
+    throw Error('only queries created with the sql tagged template literal are allowed')
+  }
+  return sql.client.query(...params)
+}
+
+sql.select = async (table, columns, conditions) => {
+  if (!conditions) {
+    conditions = columns
+    columns = ['*']
+  }
+  const result = await sql.query(sql`SELECT ${sql.keys(columns)} FROM ${sql.key(table)} WHERE ${sql.conditions(conditions)}`)
+  return result.rows
+}
+
+sql.insert = async (table, rows, serialColumn = 'id') => {
+  let array = true
+  if (!Array.isArray(rows)) {
+    rows = [rows]
+    array = false
+  }
+  const result = await sql.query(sql`INSERT INTO ${sql.key(table)} (${sql.keys(rows[0])}) VALUES ${sql.valuesList(rows)} RETURNING ${sql.key(serialColumn)}`)
+  if (!array) {
+    return result.rows[0][serialColumn]
+  }
+  return result.rows.map(row => row[serialColumn])
+}
+
+sql.update = async (table, updates, conditions) => {
+  const result = await sql.query(sql`UPDATE ${sql.key(table)} SET ${sql.assignments(updates)} WHERE ${sql.conditions(conditions)}`)
+  return result.rowCount
+}
+
+sql.delete = async (table, conditions) => {
+  const result = await sql.query(sql`DELETE FROM ${sql.key(table)} WHERE ${sql.conditions(conditions)}`)
+  return result.rowCount
+}
+
+sql.transaction = async (callback) => {
+  await sql.query(sql`BEGIN`)
+  try {
+    await callback()
+    await sql.query(sql`COMMIT`)
+  } catch (e) {
+    await sql.query(sql`ROLLBACK`)
+    throw e
+  }
 }
 
 function escapeKey (key) {
