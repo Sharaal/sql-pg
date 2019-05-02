@@ -156,6 +156,8 @@ await client.transaction(async () => {
 
 # Examples using the SQL tagged template literal and tag helpers
 
+Alternatively to `sql.query()` also the `client.query()` of `pg` can be used. The downside is the missing check the given parameter is a SQL tagged template literal. A missing SQL tag can open the doors for SQL injection.
+
 ## Extract and bind values
 
 ```javascript
