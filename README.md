@@ -310,13 +310,13 @@ const result = await sql.query(sql`
 ## Support for limit, offset and pagination
 
 ```javascript
-const actualLimit = 5
+const limit = 5
 const fallbackLimit = 15
 const maxLimit = 50
 const offset = 20
 
 const result = await sql.query(sql`
-  SELECT * FROM users ${sql.limit(actualLimit, { fallbackLimit, maxLimit })} ${sql.offset(offset)}
+  SELECT * FROM users ${sql.limit(limit, { fallbackLimit, maxLimit })} ${sql.offset(offset)}
 `)
 
 // text: SELECT * FROM users LIMIT 5 OFFSET 20
