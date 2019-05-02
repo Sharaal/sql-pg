@@ -360,7 +360,7 @@ const result = await sql.query(sql`
 // parameters: []
 ```
 
-# Extend with own fragment methods
+# Extend with own tag helpers
 
 It's possible to define own fragment methods by adding them to the `sql` tag:
 
