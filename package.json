@@ -18,7 +18,7 @@
   "scripts": {
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "test": "nyc mocha --require intelli-espower-loader --recursive './test/**/*.spec.js'"
+    "test": "nyc mocha --require intelli-espower-loader --recursive './test/**/*.js'"
   },
   "devDependencies": {
     "espower-loader": "^1.2.2",
@@ -27,6 +27,7 @@
     "mocha": "^5.2.0",
     "nyc": "^13.3.0",
     "power-assert": "^1.6.1",
+    "sinon": "^7.2.4",
     "standard": "^12.0.1"
   },
   "directories": {

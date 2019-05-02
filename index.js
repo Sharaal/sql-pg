@@ -1,8 +1,11 @@
+const symbol = Symbol('sql-pg')
+
 function sql (textFragments, ...valueFragments) {
   const build = parameterPosition => {
     const query = {
       text: textFragments[0],
-      parameters: []
+      parameters: [],
+      symbol
     }
     valueFragments.forEach((valueFragment, i) => {
       if (!['function', 'object'].includes(typeof valueFragment)) {
@@ -17,6 +20,62 @@ function sql (textFragments, ...valueFragments) {
     return query
   }
   return Object.assign(build, build(0))
+}
+
+sql.query = (...params) => {
+  if (typeof sql.client !== 'object' || typeof sql.client.query !== 'function') {
+    throw Error('to use "sql.query()" assign the initialized pg client to "sql.client"')
+  }
+  const [query] = params
+  if (typeof query !== 'function' || query.symbol !== symbol) {
+    throw Error('only queries created with the sql tagged template literal are allowed')
+  }
+  return sql.client.query(...params)
+}
+
+sql.select = async (table, columns, conditions) => {
+  if (!conditions) {
+    conditions = columns
+    columns = ['*']
+  }
+  const result = await sql.query(sql`SELECT ${sql.keys(columns)} FROM ${sql.key(table)} WHERE ${sql.conditions(conditions)}`)
+  return result.rows
+}
+
+sql.defaultSerialColumn = 'id'
+
+sql.insert = async (table, rows, { serialColumn: serialColumn = sql.defaultSerialColumn } = {}) => {
+  let array = true
+  if (!Array.isArray(rows)) {
+    rows = [rows]
+    array = false
+  }
+  const result = await sql.query(sql`INSERT INTO ${sql.key(table)} (${sql.keys(rows[0])}) VALUES ${sql.valuesList(rows)} RETURNING ${sql.key(serialColumn)}`)
+  if (!array) {
+    return result.rows[0][serialColumn]
+  }
+  return result.rows.map(row => row[serialColumn])
+}
+
+sql.update = async (table, updates, conditions) => {
+  const result = await sql.query(sql`UPDATE ${sql.key(table)} SET ${sql.assignments(updates)} WHERE ${sql.conditions(conditions)}`)
+  return result.rowCount
+}
+
+sql.delete = async (table, conditions) => {
+  const result = await sql.query(sql`DELETE FROM ${sql.key(table)} WHERE ${sql.conditions(conditions)}`)
+  return result.rowCount
+}
+
+sql.transaction = async (callback) => {
+  await sql.query(sql`BEGIN`)
+  try {
+    await callback()
+    await sql.query(sql`COMMIT`)
+  } catch (e) {
+    await sql.query(sql`ROLLBACK`)
+    throw e
+  }
 }
 
 function escapeKey (key) {
@@ -66,30 +125,31 @@ sql.valuesList = valuesList => parameterPosition => {
   )
 }
 
-sql.pairs = (pairs, separator) => parameterPosition => {
-  const queries = []
-  for (const key of Object.keys(pairs)) {
-    const value = pairs[key]
-    queries.push({
-      text: `${escapeKey(key)} = $${++parameterPosition}`,
-      parameters: [value]
-    })
+function pairs (pairs, separator) {
+  return parameterPosition => {
+    const queries = []
+    for (const key of Object.keys(pairs)) {
+      const value = pairs[key]
+      queries.push({
+        text: `${escapeKey(key)} = $${++parameterPosition}`,
+        parameters: [value]
+      })
+    }
+    return queries.reduce(
+      (queryA, queryB) => ({
+        text: queryA.text + (queryA.text ? separator : '') + queryB.text,
+        parameters: queryA.parameters.concat(queryB.parameters)
+      }),
+      { text: '', parameters: [] }
+    )
   }
-  return queries.reduce(
-    (queryA, queryB) => ({
-      text: queryA.text + (queryA.text ? separator : '') + queryB.text,
-      parameters: queryA.parameters.concat(queryB.parameters)
-    }),
-    { text: '', parameters: [] }
-  )
 }
 
-sql.assignments = pairs => parameterPosition =>
-  sql`(${sql.keys(pairs)}) = (${sql.values(pairs)})`
+sql.assignments = assignments => pairs(assignments, ', ')
 
-sql.conditions = pairs => sql.pairs(pairs, ' AND ')
+sql.conditions = conditions => pairs(conditions, ' AND ')
 
-function positivNumber (number, fallback) {
+function positiveNumber (number, fallback) {
   number = parseInt(number, 10)
   if (number > 0) {
     return number
@@ -97,17 +157,25 @@ function positivNumber (number, fallback) {
   return fallback
 }
 
-sql.limit = (actualLimit, maxLimit = Infinity, fallback = 1) => ({
-  text: `LIMIT ${Math.min(positivNumber(actualLimit, fallback), maxLimit)}`,
+sql.defaultFallbackLimit = 10
+
+sql.defaultMaxLimit = 100
+
+sql.limit = (limit, { fallbackLimit: fallbackLimit = sql.defaultFallbackLimit, maxLimit: maxLimit = sql.defaultMaxLimit } = {}) => ({
+  text: `LIMIT ${Math.min(positiveNumber(limit, fallbackLimit), maxLimit)}`,
   parameters: []
 })
 
-sql.offset = (offset, fallback = 0) => ({
-  text: `OFFSET ${positivNumber(offset, fallback)}`,
+sql.offset = offset => ({
+  text: `OFFSET ${positiveNumber(offset, 0)}`,
   parameters: []
 })
 
-sql.pagination = (page, pageSize) =>
-  sql`${sql.limit(pageSize)} ${sql.offset(page * pageSize)}`
+sql.defaultPageSize = 10
+
+sql.pagination = (page, pageSize = sql.defaultPageSize) => ({
+  text: `${sql.limit(pageSize).text} ${sql.offset(page * pageSize).text}`,
+  parameters: []
+})
 
 module.exports = sql
