@@ -100,12 +100,14 @@ The return value is also an array if the given `rows` array contains only one ob
 const example = await sql.insert(
   'users',
   { email: 'email', passwordhash: 'passwordhash' },
-  'example'
+  { serialColumn: 'example' }
 )
 
 // text: INSERT INTO "users" ("email", "passwordhash") VALUES ($1, $2) RETURNING "example"
 // parameters: ['email', 'passwordhash']
 ```
+
+The default serialColumn `id` can be changed by setting `sql.defaultSerialColumn`.
 
 ## Update
 
@@ -308,33 +310,38 @@ const result = await sql.query(sql`
 ## Support for limit, offset and pagination
 
 ```javascript
-const actualLimit = 10
+const actualLimit = 5
+const fallbackLimit = 15
 const maxLimit = 50
 const offset = 20
 
 const result = await sql.query(sql`
-  SELECT * FROM users ${sql.limit(actualLimit, maxLimit)} ${sql.offset(offset)}
+  SELECT * FROM users ${sql.limit(actualLimit, { fallbackLimit, maxLimit })} ${sql.offset(offset)}
 `)
 
-// text: SELECT * FROM users LIMIT 10 OFFSET 20
+// text: SELECT * FROM users LIMIT 5 OFFSET 20
 // parameters: []
 ```
 
-`maxLimit` is optional, but it should be set with a non user defined number to ensure a user can't select an infinite number of rows.
+The default fallbackLimit `10` can be changed by setting `sql.defaultFallbackLimit`.
+
+The default maxLimit `100` can be changed by setting `sql.defaultMaxLimit`.
 
 Because of pagination is a common use case there is also a pagination shorthand:
 
 ```javascript
 const page = 5
-const pageSize = 10
+const pageSize = 15
 
 const result = await sql.query(sql`
   SELECT * FROM users ${sql.pagination(page, pageSize)}
 `)
 
-// text: SELECT * FROM users LIMIT 10 OFFSET 50
+// text: SELECT * FROM users LIMIT 15 OFFSET 75
 // parameters: []
 ```
+
+The default pageSize `10` can be changed by setting `sql.defaultPageSize`.
 
 # Extend with own tag helpers
 
