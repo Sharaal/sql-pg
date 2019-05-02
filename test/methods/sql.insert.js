@@ -175,4 +175,72 @@ describe('sql.update', () => {
     }
     assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
   })
+
+  it('insert given keys of row', async () => {
+    const expectedId = 5
+    const client = {
+      query: sinon.fake.returns(Promise.resolve({ rows: [{ id: expectedId }] }))
+    }
+
+    sql.client = client
+    const actualId = await sql.insert(
+      'table',
+      { column1: 'value1', column2: 'value2', column3: 'value3', column4: 'value4' },
+      { keys: ['column1', 'column2'] }
+    )
+
+    assert.equal(actualId, expectedId)
+
+    assert(client.query.calledOnce)
+
+    const actualArg = client.query.getCall(0).args[0]
+    const expectedArg = {
+      text: 'INSERT INTO "table" ("column1", "column2") VALUES ($1, $2) RETURNING "id"',
+      parameters: ['value1', 'value2']
+    }
+    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
+
+    const actualArg5 = actualArg(5)
+    const expectedArg5 = {
+      text: 'INSERT INTO "table" ("column1", "column2") VALUES ($6, $7) RETURNING "id"',
+      parameters: ['value1', 'value2']
+    }
+    assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
+  })
+
+  it('insert given keys of multiple rows', async () => {
+    const expectedIds = [5, 15, 25]
+    const client = {
+      query: sinon.fake.returns(Promise.resolve({ rows: expectedIds.map(id => ({ id })) }))
+    }
+
+    sql.client = client
+    const actualIds = await sql.insert(
+      'table',
+      [
+        { column1: 'value11', column2: 'value12', column3: 'value13', column4: 'value14' },
+        { column1: 'value21', column2: 'value22', column3: 'value23', column4: 'value24' },
+        { column1: 'value31', column2: 'value32', column3: 'value33', column4: 'value34' }
+      ],
+      { keys: ['column1', 'column2'] }
+    )
+
+    assert.deepEqual(actualIds, expectedIds)
+
+    assert(client.query.calledOnce)
+
+    const actualArg = client.query.getCall(0).args[0]
+    const expectedArg = {
+      text: 'INSERT INTO "table" ("column1", "column2") VALUES ($1, $2), ($3, $4), ($5, $6) RETURNING "id"',
+      parameters: ['value11', 'value12', 'value21', 'value22', 'value31', 'value32']
+    }
+    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
+
+    const actualArg5 = actualArg(5)
+    const expectedArg5 = {
+      text: 'INSERT INTO "table" ("column1", "column2") VALUES ($6, $7), ($8, $9), ($10, $11) RETURNING "id"',
+      parameters: ['value11', 'value12', 'value21', 'value22', 'value31', 'value32']
+    }
+    assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
+  })
 })

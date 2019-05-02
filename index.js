@@ -44,13 +44,16 @@ sql.select = async (table, columns, conditions) => {
 
 sql.defaultSerialColumn = 'id'
 
-sql.insert = async (table, rows, { serialColumn: serialColumn = sql.defaultSerialColumn } = {}) => {
+sql.insert = async (table, rows, { keys, serialColumn: serialColumn = sql.defaultSerialColumn } = {}) => {
   let array = true
   if (!Array.isArray(rows)) {
     rows = [rows]
     array = false
   }
-  const result = await sql.query(sql`INSERT INTO ${sql.key(table)} (${sql.keys(rows[0])}) VALUES ${sql.valuesList(rows)} RETURNING ${sql.key(serialColumn)}`)
+  if (!keys) {
+    keys = Object.keys(rows[0])
+  }
+  const result = await sql.query(sql`INSERT INTO ${sql.key(table)} (${sql.keys(keys)}) VALUES ${sql.valuesList(rows, { keys })} RETURNING ${sql.key(serialColumn)}`)
   if (!array) {
     return result.rows[0][serialColumn]
   }
@@ -94,9 +97,9 @@ sql.keys = keys => {
 
 sql.key = key => sql.keys([key])
 
-sql.values = values => {
+sql.values = (values, { keys: keys = Object.keys(values) } = {}) => {
   if (!Array.isArray(values)) {
-    values = Object.values(values)
+    values = keys.map(key => values[key])
   }
   return parameterPosition => ({
     text: Array.apply(null, { length: values.length }).map(() => `$${++parameterPosition}`).join(', '),
@@ -106,10 +109,10 @@ sql.values = values => {
 
 sql.value = value => sql.values([value])
 
-sql.valuesList = valuesList => parameterPosition => {
+sql.valuesList = (valuesList, { keys: keys = Object.keys(valuesList[0]) } = {}) => parameterPosition => {
   const queries = []
   for (const values of valuesList) {
-    const query = sql.values(values)(parameterPosition)
+    const query = sql.values(values, { keys })(parameterPosition)
     queries.push({
       text: `(${query.text})`,
       parameters: query.parameters
