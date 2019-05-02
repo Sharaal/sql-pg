@@ -24,7 +24,7 @@ function sql (textFragments, ...valueFragments) {
 
 sql.query = (...params) => {
   if (typeof sql.client !== 'object' || typeof sql.client.query !== 'function') {
-    throw Error('to use "sql.query" assign the initialized pg client to "sql.client"')
+    throw Error('to use "sql.query()" assign the initialized pg client to "sql.client"')
   }
   const [query] = params
   if (typeof query !== 'function' || query.symbol !== symbol) {
@@ -42,7 +42,9 @@ sql.select = async (table, columns, conditions) => {
   return result.rows
 }
 
-sql.insert = async (table, rows, serialColumn = 'id') => {
+sql.defaultSerialColumn = 'id'
+
+sql.insert = async (table, rows, { serialColumn: serialColumn = sql.defaultSerialColumn } = {}) => {
   let array = true
   if (!Array.isArray(rows)) {
     rows = [rows]
@@ -123,30 +125,31 @@ sql.valuesList = valuesList => parameterPosition => {
   )
 }
 
-sql.pairs = (pairs, separator) => parameterPosition => {
-  const queries = []
-  for (const key of Object.keys(pairs)) {
-    const value = pairs[key]
-    queries.push({
-      text: `${escapeKey(key)} = $${++parameterPosition}`,
-      parameters: [value]
-    })
+function pairs (pairs, separator) {
+  return parameterPosition => {
+    const queries = []
+    for (const key of Object.keys(pairs)) {
+      const value = pairs[key]
+      queries.push({
+        text: `${escapeKey(key)} = $${++parameterPosition}`,
+        parameters: [value]
+      })
+    }
+    return queries.reduce(
+      (queryA, queryB) => ({
+        text: queryA.text + (queryA.text ? separator : '') + queryB.text,
+        parameters: queryA.parameters.concat(queryB.parameters)
+      }),
+      { text: '', parameters: [] }
+    )
   }
-  return queries.reduce(
-    (queryA, queryB) => ({
-      text: queryA.text + (queryA.text ? separator : '') + queryB.text,
-      parameters: queryA.parameters.concat(queryB.parameters)
-    }),
-    { text: '', parameters: [] }
-  )
 }
 
-sql.assignments = pairs => parameterPosition =>
-  sql`(${sql.keys(pairs)}) = (${sql.values(pairs)})`
+sql.assignments = assignments => pairs(assignments, ', ')
 
-sql.conditions = pairs => sql.pairs(pairs, ' AND ')
+sql.conditions = conditions => pairs(conditions, ' AND ')
 
-function positivNumber (number, fallback) {
+function positiveNumber (number, fallback) {
   number = parseInt(number, 10)
   if (number > 0) {
     return number
@@ -154,17 +157,25 @@ function positivNumber (number, fallback) {
   return fallback
 }
 
-sql.limit = (actualLimit, maxLimit = Infinity, fallback = 1) => ({
-  text: `LIMIT ${Math.min(positivNumber(actualLimit, fallback), maxLimit)}`,
+sql.defaultFallbackLimit = 10
+
+sql.defaultMaxLimit = 100
+
+sql.limit = (limit, { fallbackLimit: fallbackLimit = sql.defaultFallbackLimit, maxLimit: maxLimit = sql.defaultMaxLimit } = {}) => ({
+  text: `LIMIT ${Math.min(positiveNumber(limit, fallbackLimit), maxLimit)}`,
   parameters: []
 })
 
-sql.offset = (offset, fallback = 0) => ({
-  text: `OFFSET ${positivNumber(offset, fallback)}`,
+sql.offset = offset => ({
+  text: `OFFSET ${positiveNumber(offset, 0)}`,
   parameters: []
 })
 
-sql.pagination = (page, pageSize) =>
-  sql`${sql.limit(pageSize)} ${sql.offset(page * pageSize)}`
+sql.defaultPageSize = 10
+
+sql.pagination = (page, pageSize = sql.defaultPageSize) => ({
+  text: `${sql.limit(pageSize).text} ${sql.offset(page * pageSize).text}`,
+  parameters: []
+})
 
 module.exports = sql
