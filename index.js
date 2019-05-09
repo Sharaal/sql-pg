@@ -33,15 +33,6 @@ sql.query = (...params) => {
   return sql.client.query(...params)
 }
 
-sql.select = async (table, columns, conditions) => {
-  if (!conditions) {
-    conditions = columns
-    columns = ['*']
-  }
-  const result = await sql.query(sql`SELECT ${sql.keys(columns)} FROM ${sql.key(table)} WHERE ${sql.conditions(conditions)}`)
-  return result.rows
-}
-
 sql.defaultSerialColumn = 'id'
 
 sql.insert = async (table, rows, { keys, serialColumn: serialColumn = sql.defaultSerialColumn } = {}) => {
@@ -58,6 +49,15 @@ sql.insert = async (table, rows, { keys, serialColumn: serialColumn = sql.defaul
     return result.rows[0][serialColumn]
   }
   return result.rows.map(row => row[serialColumn])
+}
+
+sql.select = async (table, columns, conditions) => {
+  if (!conditions) {
+    conditions = columns
+    columns = ['*']
+  }
+  const result = await sql.query(sql`SELECT ${sql.keys(columns)} FROM ${sql.key(table)} WHERE ${sql.conditions(conditions)}`)
+  return result.rows
 }
 
 sql.update = async (table, updates, conditions) => {
