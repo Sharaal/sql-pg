@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/sharaal/sql-pg.svg)](https://travis-ci.org/sharaal/sql-pg)
-[![Coverage Status](https://coveralls.io/repos/github/sharaal/sql-pg/badge.svg)](https://coveralls.io/github/sharaal/sql-pg)
-[![dependencies Status](https://david-dm.org/sharaal/sql-pg/status.svg)](https://david-dm.org/sharaal/sql-pg)
+[![Build Status](https://travis-ci.org/Sharaal/sql-pg.svg)](https://travis-ci.org/Sharaal/sql-pg)
+[![Coverage Status](https://coveralls.io/repos/github/Sharaal/sql-pg/badge.svg)](https://coveralls.io/github/Sharaal/sql-pg)
+[![dependencies Status](https://david-dm.org/Sharaal/sql-pg/status.svg)](https://david-dm.org/Sharaal/sql-pg)
 
 # Getting Started
 
