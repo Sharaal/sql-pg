@@ -33,7 +33,7 @@ await sql.delete('users', { id: userId })
 
 ### SQL Tag and Tag Helpers
 
-For all use cases which are not simple CRUD operations, the SQL Tag and Tag Helpers can be used, variables will be exchanged with PostgreSQL placeholders and the values overgiven as parameters.
+For all use cases which are not simple CRUD operations, the SQL Tag and Tag Helpers can be used, variables will be exchanged with PostgreSQL placeholders and the values given as parameters.
 
 E.g. list of not activated users filtered by name and with pagination:
 
