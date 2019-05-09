@@ -19,7 +19,7 @@ E.g. some user operations:
 
 ```javascript
 // Insert a user with a name and email
-const userId = await sql.insert('users', { name: 'Sharaal', email: 'eMail@sharaal.de' })
+const userId = await sql.insert('users', { name: 'Sharaal', email: 'sql-pg@sharaal.de' })
 
 // Select the user by the ID
 const user = (await sql.select('users', { id: userId }))[0]
