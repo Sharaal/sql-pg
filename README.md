@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/sharaal/sql-pg.svg)](https://travis-ci.org/sharaal/sql-pg)
+[![Coverage Status](https://coveralls.io/repos/github/sharaal/sql-pg/badge.svg)](https://coveralls.io/github/sharaal/sql-pg)
+[![dependencies Status](https://david-dm.org/sharaal/sql-pg/status.svg)](https://david-dm.org/sharaal/sql-pg)
+
 # Getting Started
 
 ## Initialisation
@@ -31,7 +35,7 @@ await sql.delete('users', { id: userId })
 
 ### SQL Tag and Tag Helpers
 
-For all use cases which are not simple CRUD operations, the SQL Tag and Tag Helpers can be used, variables will be exchanged with PostgreSQL placeholders and the values overgiven as parameters. 
+For all use cases which are not simple CRUD operations, the SQL Tag and Tag Helpers can be used, variables will be exchanged with PostgreSQL placeholders and the values overgiven as parameters.
 
 E.g. list of not activated users filtered by name and with pagination:
 
@@ -40,9 +44,9 @@ const name = 'raa'
 const page = 0
 
 const users = await sql.query(sql`
-  SELECT name, email FROM users 
-    WHERE 
-      validated IS NULL 
+  SELECT name, email FROM users
+    WHERE
+      validated IS NULL
       AND
       name LIKE ${'%' + name + '%'}
     ${sql.pagination(page)}
