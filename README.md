@@ -52,7 +52,3 @@ const users = await sql.query(sql`
 ```
 
 For all details of the methods, the SQL tag and the tag helpers have a look into the [Wiki](https://github.com/Sharaal/sql-pg/wiki).
-
-# Alternative Databases
-
-* MySQL: [sql-mysql](https://www.npmjs.com/package/sql-mysql)
