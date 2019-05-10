@@ -43,7 +43,7 @@ await sql.delete('users', { id: userId })
 
 For all use cases which are not simple CRUD operations, the SQL Tag and Tag Helpers can be used, variables will be exchanged with PostgreSQL placeholders and the values given as parameters.
 
-E.g. list of not activated users filtered by name and with pagination:
+E.g. list of not activated users optional filtered by name and with pagination:
 
 ```javascript
 const name = 'raa'
@@ -53,10 +53,17 @@ const users = await sql.query(sql`
   SELECT name, email FROM users
     WHERE
       validated IS NULL
-      AND
-      name LIKE ${'%' + name + '%'}
+      ${sql.if(name, sql`AND name LIKE ${'%' + name + '%'}`)}
     ${sql.pagination(page)}
 `)
+
+// text:
+//   SELECT name, email FROM users
+//     WHERE
+//       validated IS NULL
+//       AND name LIKE $1
+//     LIMIT 10 OFFSET 0
+// parameters: ['%raa%']
 ```
 
 For all details of the methods, the SQL tag and the tag helpers have a look into the [Wiki](https://github.com/Sharaal/sql-pg/wiki).
