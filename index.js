@@ -181,4 +181,6 @@ sql.pagination = (page, pageSize = sql.defaultPageSize) => ({
   parameters: []
 })
 
+sql.if = (condition, truly, falsy = { text: '', parameters: [] }) => (condition ? truly : falsy)
+
 module.exports = sql
