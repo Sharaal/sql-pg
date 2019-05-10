@@ -4,6 +4,12 @@
 
 # Getting Started
 
+## Installation
+
+```bash
+npm install --save sql-pg
+```
+
 ## Initialisation
 
 ```javascript
