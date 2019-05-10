@@ -5,3 +5,7 @@ node_js:
   - "10"
   - "11"
   - "12"
+
+after_script:
+  - npm i -g coveralls
+  - npx nyc report --reporter=text-lcov | coveralls
