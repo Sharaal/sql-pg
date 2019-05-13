@@ -27,7 +27,7 @@ describe('sql.pagination', () => {
   })
 
   it('use the given page and given pageSize to set limit and offset', () => {
-    const actual = sql.pagination(5, 15)
+    const actual = sql.pagination(5, { pageSize: 15 })
     const expected = { text: 'LIMIT 15 OFFSET 75', parameters: [] }
     assert.deepEqual(actual, expected)
   })
