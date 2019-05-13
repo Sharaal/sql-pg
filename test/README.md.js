@@ -15,7 +15,7 @@ describe('sql', () => {
       SELECT name, email FROM users
         WHERE
           validated IS NULL
-          ${sql.if(name, sql`AND name LIKE ${'%' + name + '%'}`)}
+          ${sql.if(name, sql`AND name LIKE ${`%${name}%`}`)}
         ${sql.pagination(page)}
     `
 
