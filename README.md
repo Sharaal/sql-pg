@@ -4,6 +4,8 @@
 
 For all details of the methods, the SQL tag and the tag helpers have a look into the [Wiki](https://github.com/Sharaal/sql-pg/wiki).
 
+There is also my blog article [Knex vs alternatives](http://blog.sharaal.de/2019/03/12/knex-vs-alternatives.html) which describes the reasons I started this library.
+
 # Getting Started
 
 ## Installation
