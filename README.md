@@ -2,6 +2,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/Sharaal/sql-pg/badge.svg?branch=master)](https://coveralls.io/github/Sharaal/sql-pg?branch=master)
 [![Greenkeeper badge](https://badges.greenkeeper.io/Sharaal/sql-pg.svg)](https://greenkeeper.io/)
 
+For all details of the methods, the SQL tag and the tag helpers have a look into the [Wiki](https://github.com/Sharaal/sql-pg/wiki).
+
 # Getting Started
 
 ## Installation
@@ -65,5 +67,3 @@ const users = await sql.query(sql`
 //     LIMIT 10 OFFSET 0
 // parameters: ['%raa%']
 ```
-
-For all details of the methods, the SQL tag and the tag helpers have a look into the [Wiki](https://github.com/Sharaal/sql-pg/wiki).
