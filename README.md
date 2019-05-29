@@ -69,3 +69,11 @@ const users = await sql.query(sql`
 //     LIMIT 10 OFFSET 0
 // parameters: ['%raa%']
 ```
+
+## Contact
+
+Found a bug or missing a feature? -> Create a new [[Issue|https://github.com/Sharaal/sql-pg/issues]]
+
+Found a security issue? -> Create a new [[Security Advisory|https://github.com/Sharaal/sql-pg/security/advisories]]
+
+Having questions, want to give feedback or talk to me? -> E-Mail me sql-pg@sharaal.de
