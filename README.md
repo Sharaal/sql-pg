@@ -63,6 +63,10 @@ const user = await sql.one(
 
 There are more Query Methods available and documented in the Wiki.
 
+### Processing Methods
+
+...
+
 ### SQL Tag and Tag Helpers
 
 For all use cases which are not simple CRUD operations, the SQL Tag and Tag Helpers can be used, variables will be exchanged with PostgreSQL placeholders and the values given as parameters.
