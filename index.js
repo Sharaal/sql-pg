@@ -43,7 +43,7 @@ sql.manyOrNone = sql.any
 sql.many = async (...params) => {
   const rows = await sql.any(...params)
   if (rows.length === 0) {
-    throw new Error(`"sql.many" exptects to have one or more rows in the query result`)
+    throw new Error('"sql.many" expects to have one or more rows in the query result')
   }
   return rows
 }
@@ -56,7 +56,7 @@ sql.oneOrNone = async (...params) => {
 sql.one = async (...params) => {
   const row = await sql.oneOrNone(...params)
   if (!row) {
-    throw new Error(`"sql.one" exptects to have exactly one row in the query result`)
+    throw new Error('"sql.one" exptects to have exactly one row in the query result')
   }
   return row
 }
@@ -64,7 +64,7 @@ sql.one = async (...params) => {
 sql.none = async (...params) => {
   const rows = await sql.any(...params)
   if (rows.length !== 0) {
-    throw new Error(`"sql.none" exptects to have none rows in the query result`)
+    throw new Error('"sql.none" exptects to have none rows in the query result')
   }
 }
 
