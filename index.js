@@ -33,6 +33,55 @@ sql.query = (...params) => {
   return sql.client.query(...params)
 }
 
+sql.any = async (...params) => {
+  const result = await sql.query(...params)
+  return result.rows
+}
+
+sql.manyOrNone = sql.any
+
+sql.many = async (...params) => {
+  const rows = await sql.any(...params)
+  if (rows.length === 0) {
+    throw new Error(`"sql.many" exptects to have one or more rows in the query result`)
+  }
+  return rows
+}
+
+sql.oneOrNone = async (...params) => {
+  const rows = await sql.any(...params)
+  return rows[0]
+}
+
+sql.one = async (...params) => {
+  const row = await sql.oneOrNone(...params)
+  if (!row) {
+    throw new Error(`"sql.one" exptects to have exactly one row in the query result`)
+  }
+  return row
+}
+
+sql.none = async (...params) => {
+  const rows = await sql.any(...params)
+  if (rows.length !== 0) {
+    throw new Error(`"sql.none" exptects to have none rows in the query result`)
+  }
+}
+
+sql.each = async (...params) => {
+  const callback = params.pop()
+  const rows = await sql.any(...params)
+  rows.forEach(callback)
+  return rows
+}
+
+sql.map = async (...params) => {
+  const callback = params.pop()
+  const rows = await sql.any(...params)
+  await Promise.all(rows.map(callback))
+  return rows
+}
+
 sql.defaultSerialColumn = 'id'
 
 sql.insert = async (table, rows, { keys, serialColumn: serialColumn = sql.defaultSerialColumn } = {}) => {
