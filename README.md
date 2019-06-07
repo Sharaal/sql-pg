@@ -23,7 +23,7 @@ sql.client = client // Assign initialised `pg` client
 
 ## Usage
 
-### Methods
+### CRUD Methods
 
 Simple CRUD operations can be done without writing any SQL Statements.
 
@@ -43,6 +43,26 @@ await sql.update('users', { validated: 1 }, { id: userId })
 await sql.delete('users', { id: userId })
 ```
 
+### Query Methods
+
+Often needed convenient methods to check, extract and process query results are available with the Query Methods. These are highly inspired by [pg-promise](http://vitaly-t.github.io/pg-promise/index.html).
+
+E.g. some user queries:
+
+```javascript
+// Select statements expect to have many or none rows in the result
+const users = await sql.any(
+  sql`SELECT * FROM users WHERE validated = 1`
+)
+
+// Select statements expect to have one row in the result
+const user = await sql.one(
+  sql`SELECT * FROM users WHERE id = ${userId} AND validated = 1`
+)
+```
+
+There are more Query Methods available and documented in the Wiki.
+
 ### SQL Tag and Tag Helpers
 
 For all use cases which are not simple CRUD operations, the SQL Tag and Tag Helpers can be used, variables will be exchanged with PostgreSQL placeholders and the values given as parameters.
@@ -53,13 +73,15 @@ E.g. list of not activated users optional filtered by name and with pagination:
 const name = 'raa'
 const page = 0
 
-const users = await sql.query(sql`
-  SELECT name, email FROM users
-    WHERE
-      validated IS NULL
-      ${sql.if(name, sql`AND name LIKE ${`%${name}%`}`)}
-    ${sql.pagination(page)}
-`)
+const users = await sql.query(
+  sql`
+    SELECT name, email FROM users
+      WHERE
+        validated IS NULL
+        ${sql.if(name, sql`AND name LIKE ${`%${name}%`}`)}
+      ${sql.pagination(page)}
+  `
+)
 
 // text:
 //   SELECT name, email FROM users
@@ -69,6 +91,8 @@ const users = await sql.query(sql`
 //     LIMIT 10 OFFSET 0
 // parameters: ['%raa%']
 ```
+
+There are more Tag Helpers available and documented in the Wiki.
 
 ## Contact
 
