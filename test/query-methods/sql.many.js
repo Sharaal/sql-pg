@@ -44,7 +44,7 @@ describe('sql.any', () => {
       await sql.many(query)
       assert(false)
     } catch (e) {
-      assert.equal(e.message, '"sql.many" expects to have one or more rows in the query result')
+      assert.equal(e.message, 'Expects to have at least one row in the query result')
     }
 
     assert(client.query.calledOnce)

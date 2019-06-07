@@ -24,7 +24,7 @@ function sql (textFragments, ...valueFragments) {
 
 sql.query = (...params) => {
   if (typeof sql.client !== 'object' || typeof sql.client.query !== 'function') {
-    throw Error('to use "sql.query()" assign the initialized pg client to "sql.client"')
+    throw Error('Missing assignment of the initialized pg client to "sql.client"')
   }
   const [query] = params
   if (typeof query !== 'function' || query.symbol !== symbol) {
@@ -43,20 +43,23 @@ sql.manyOrNone = sql.any
 sql.many = async (...params) => {
   const rows = await sql.any(...params)
   if (rows.length === 0) {
-    throw new Error('"sql.many" expects to have one or more rows in the query result')
+    throw new Error('Expects to have at least one row in the query result')
   }
   return rows
 }
 
 sql.oneOrNone = async (...params) => {
   const rows = await sql.any(...params)
+  if (rows.length > 1) {
+    throw new Error('Expects to have not more than one row in the query result')
+  }
   return rows[0]
 }
 
 sql.one = async (...params) => {
   const row = await sql.oneOrNone(...params)
   if (!row) {
-    throw new Error('"sql.one" exptects to have exactly one row in the query result')
+    throw new Error('Expects to have one row in the query result')
   }
   return row
 }
@@ -64,7 +67,7 @@ sql.one = async (...params) => {
 sql.none = async (...params) => {
   const rows = await sql.any(...params)
   if (rows.length !== 0) {
-    throw new Error('"sql.none" exptects to have none rows in the query result')
+    throw new Error('Expects to have none rows in the query result')
   }
 }
 
