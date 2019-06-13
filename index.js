@@ -64,13 +64,6 @@ sql.one = async (...params) => {
   return row
 }
 
-sql.none = async (...params) => {
-  const rows = await sql.any(...params)
-  if (rows.length !== 0) {
-    throw new Error('Expects to have none rows in the query result')
-  }
-}
-
 sql.defaultSerialColumn = 'id'
 
 sql.insert = async (table, rows, { keys, serialColumn: serialColumn = sql.defaultSerialColumn } = {}) => {
