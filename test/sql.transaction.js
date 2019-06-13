@@ -4,7 +4,7 @@ const sinon = require('sinon')
 describe('sql.transaction', () => {
   let sql
   beforeEach(() => {
-    sql = require('../../')
+    sql = require('../')
     sql.client = undefined
   })
 

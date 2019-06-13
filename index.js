@@ -33,8 +33,72 @@ sql.query = (...params) => {
   return sql.client.query(...params)
 }
 
+sql.transaction = async (callback) => {
+  await sql.query(sql`BEGIN`)
+  try {
+    await callback()
+    await sql.query(sql`COMMIT`)
+  } catch (e) {
+    await sql.query(sql`ROLLBACK`)
+    throw e
+  }
+}
+
+sql.defaultSerialColumn = 'id'
+
+sql.insert = async (...params) => {
+  if (typeof params[0] === 'string') {
+    let [table, rows, { keys, serialColumn: serialColumn = sql.defaultSerialColumn } = {}] = params
+    let array = true
+    if (!Array.isArray(rows)) {
+      rows = [rows]
+      array = false
+    }
+    if (!keys) {
+      keys = Object.keys(rows[0])
+    }
+    const result = await sql.query(sql`INSERT INTO ${sql.key(table)} (${sql.keys(keys)}) VALUES ${sql.valuesList(rows, { keys })} RETURNING ${sql.key(serialColumn)}`)
+    if (!array) {
+      return result.rows[0][serialColumn]
+    }
+    return result.rows.map(row => row[serialColumn])
+  }
+  let [query, { serialColumn: serialColumn = sql.defaultSerialColumn } = {}] = params
+  const result = await sql.query(query)
+  return result.rows.map(row => row[serialColumn])
+}
+
+sql.update = async (...params) => {
+  if (typeof params[0] === 'string') {
+    const [table, updates, conditions] = params
+    params = [sql`UPDATE ${sql.key(table)} SET ${sql.assignments(updates)} WHERE ${sql.conditions(conditions)}`]
+  }
+  const [query] = params
+  const result = await sql.query(query)
+  return result.rowCount
+}
+
+sql.delete = async (...params) => {
+  if (typeof params[0] === 'string') {
+    const [table, conditions] = params
+    params = [sql`DELETE FROM ${sql.key(table)} WHERE ${sql.conditions(conditions)}`]
+  }
+  const [query] = params
+  const result = await sql.query(query)
+  return result.rowCount
+}
+
 sql.any = async (...params) => {
-  const result = await sql.query(...params)
+  if (typeof params[0] === 'string') {
+    let [table, columns, conditions] = params
+    if (!conditions) {
+      conditions = columns
+      columns = ['*']
+    }
+    params = [sql`SELECT ${sql.keys(columns)} FROM ${sql.key(table)} WHERE ${sql.conditions(conditions)}`]
+  }
+  const [query] = params
+  const result = await sql.query(query)
   return result.rows
 }
 
@@ -62,54 +126,6 @@ sql.one = async (...params) => {
     throw new Error('Expects to have one row in the query result')
   }
   return row
-}
-
-sql.defaultSerialColumn = 'id'
-
-sql.insert = async (table, rows, { keys, serialColumn: serialColumn = sql.defaultSerialColumn } = {}) => {
-  let array = true
-  if (!Array.isArray(rows)) {
-    rows = [rows]
-    array = false
-  }
-  if (!keys) {
-    keys = Object.keys(rows[0])
-  }
-  const result = await sql.query(sql`INSERT INTO ${sql.key(table)} (${sql.keys(keys)}) VALUES ${sql.valuesList(rows, { keys })} RETURNING ${sql.key(serialColumn)}`)
-  if (!array) {
-    return result.rows[0][serialColumn]
-  }
-  return result.rows.map(row => row[serialColumn])
-}
-
-sql.select = async (table, columns, conditions) => {
-  if (!conditions) {
-    conditions = columns
-    columns = ['*']
-  }
-  const result = await sql.query(sql`SELECT ${sql.keys(columns)} FROM ${sql.key(table)} WHERE ${sql.conditions(conditions)}`)
-  return result.rows
-}
-
-sql.update = async (table, updates, conditions) => {
-  const result = await sql.query(sql`UPDATE ${sql.key(table)} SET ${sql.assignments(updates)} WHERE ${sql.conditions(conditions)}`)
-  return result.rowCount
-}
-
-sql.delete = async (table, conditions) => {
-  const result = await sql.query(sql`DELETE FROM ${sql.key(table)} WHERE ${sql.conditions(conditions)}`)
-  return result.rowCount
-}
-
-sql.transaction = async (callback) => {
-  await sql.query(sql`BEGIN`)
-  try {
-    await callback()
-    await sql.query(sql`COMMIT`)
-  } catch (e) {
-    await sql.query(sql`ROLLBACK`)
-    throw e
-  }
 }
 
 function escapeKey (key) {
