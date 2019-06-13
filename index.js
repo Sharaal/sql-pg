@@ -71,20 +71,6 @@ sql.none = async (...params) => {
   }
 }
 
-sql.each = async (...params) => {
-  const callback = params.pop()
-  const rows = await sql.any(...params)
-  rows.forEach(callback)
-  return rows
-}
-
-sql.map = async (...params) => {
-  const callback = params.pop()
-  const rows = await sql.any(...params)
-  await Promise.all(rows.map(callback))
-  return rows
-}
-
 sql.defaultSerialColumn = 'id'
 
 sql.insert = async (table, rows, { keys, serialColumn: serialColumn = sql.defaultSerialColumn } = {}) => {

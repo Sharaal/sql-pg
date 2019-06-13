@@ -1,7 +1,7 @@
 const assert = require('power-assert')
 const sinon = require('sinon')
 
-describe('sql.oneOrNone', () => {
+describe('sql.any', () => {
   let sql
   beforeEach(() => {
     sql = require('../../')
