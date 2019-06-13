@@ -243,4 +243,96 @@ describe('sql.update', () => {
     }
     assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
   })
+
+  it('insert with SQL Tag and the standard default serial column', async () => {
+    const expectedIds = [5, 15, 25]
+    const client = {
+      query: sinon.fake.returns(Promise.resolve({ rows: expectedIds.map(id => ({ id })) }))
+    }
+
+    sql.client = client
+    const actualIds = await sql.insert(
+      sql`INSERT INTO "table" SELECT * FROM "table"`
+    )
+
+    assert.deepEqual(actualIds, expectedIds)
+
+    assert(client.query.calledOnce)
+
+    const actualArg = client.query.getCall(0).args[0]
+    const expectedArg = {
+      text: 'INSERT INTO "table" SELECT * FROM "table"',
+      parameters: []
+    }
+    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
+
+    const actualArg5 = actualArg(5)
+    const expectedArg5 = {
+      text: 'INSERT INTO "table" SELECT * FROM "table"',
+      parameters: []
+    }
+    assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
+  })
+
+  it('insert with SQL Tag and the overwritten default serial column', async () => {
+    const expectedIds = [5, 15, 25]
+    const client = {
+      query: sinon.fake.returns(Promise.resolve({ rows: expectedIds.map(id => ({ column: id })) }))
+    }
+
+    sql.client = client
+    sql.defaultSerialColumn = 'column'
+    const actualIds = await sql.insert(
+      sql`INSERT INTO "table" SELECT * FROM "table"`
+    )
+
+    assert.deepEqual(actualIds, expectedIds)
+
+    assert(client.query.calledOnce)
+
+    const actualArg = client.query.getCall(0).args[0]
+    const expectedArg = {
+      text: 'INSERT INTO "table" SELECT * FROM "table"',
+      parameters: []
+    }
+    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
+
+    const actualArg5 = actualArg(5)
+    const expectedArg5 = {
+      text: 'INSERT INTO "table" SELECT * FROM "table"',
+      parameters: []
+    }
+    assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
+  })
+
+  it('insert with SQL Tag and the given serial column', async () => {
+    const expectedIds = [5, 15, 25]
+    const client = {
+      query: sinon.fake.returns(Promise.resolve({ rows: expectedIds.map(id => ({ column: id })) }))
+    }
+
+    sql.client = client
+    const actualIds = await sql.insert(
+      sql`INSERT INTO "table" SELECT * FROM "table"`,
+      { serialColumn: 'column' }
+    )
+
+    assert.deepEqual(actualIds, expectedIds)
+
+    assert(client.query.calledOnce)
+
+    const actualArg = client.query.getCall(0).args[0]
+    const expectedArg = {
+      text: 'INSERT INTO "table" SELECT * FROM "table"',
+      parameters: []
+    }
+    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
+
+    const actualArg5 = actualArg(5)
+    const expectedArg5 = {
+      text: 'INSERT INTO "table" SELECT * FROM "table"',
+      parameters: []
+    }
+    assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
+  })
 })
