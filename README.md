@@ -45,7 +45,7 @@ await sql.delete('users', { id: userId })
 
 ### Query Methods
 
-Often needed convenient methods to check, extract and process query results are available with the Query Methods. These are highly inspired by [pg-promise](http://vitaly-t.github.io/pg-promise/index.html).
+Often needed convenient methods to check and extract query results are available with the Query Methods. These are highly inspired by [pg-promise](http://vitaly-t.github.io/pg-promise/index.html).
 
 E.g. some user queries:
 
