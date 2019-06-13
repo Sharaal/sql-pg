@@ -57,7 +57,7 @@ const users = await sql.any(
 
 // Select statements expect to have one row in the result
 const user = await sql.one(
-  sql`SELECT * FROM users WHERE id = ${userId} AND validated = 1`
+  sql`SELECT * FROM users WHERE id = ${userId}`
 )
 ```
 
