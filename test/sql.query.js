@@ -4,7 +4,7 @@ const sinon = require('sinon')
 describe('sql.query', () => {
   let sql
   beforeEach(() => {
-    sql = require('../../')
+    sql = require('../')
     sql.client = undefined
   })
 
@@ -43,7 +43,7 @@ describe('sql.query', () => {
       sql.query('SELECT "*" FROM "table"')
       assert(false)
     } catch (e) {
-      assert.equal(e.message, 'to use "sql.query()" assign the initialized pg client to "sql.client"')
+      assert.equal(e.message, 'Missing assignment of the initialized pg client to "sql.client"')
     }
 
     assert.equal(client.query.callCount, 0)

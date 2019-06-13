@@ -24,13 +24,44 @@ function sql (textFragments, ...valueFragments) {
 
 sql.query = (...params) => {
   if (typeof sql.client !== 'object' || typeof sql.client.query !== 'function') {
-    throw Error('to use "sql.query()" assign the initialized pg client to "sql.client"')
+    throw Error('Missing assignment of the initialized pg client to "sql.client"')
   }
   const [query] = params
   if (typeof query !== 'function' || query.symbol !== symbol) {
     throw Error('only queries created with the sql tagged template literal are allowed')
   }
   return sql.client.query(...params)
+}
+
+sql.any = async (...params) => {
+  const result = await sql.query(...params)
+  return result.rows
+}
+
+sql.manyOrNone = sql.any
+
+sql.many = async (...params) => {
+  const rows = await sql.any(...params)
+  if (rows.length === 0) {
+    throw new Error('Expects to have at least one row in the query result')
+  }
+  return rows
+}
+
+sql.oneOrNone = async (...params) => {
+  const rows = await sql.any(...params)
+  if (rows.length > 1) {
+    throw new Error('Expects to have not more than one row in the query result')
+  }
+  return rows[0]
+}
+
+sql.one = async (...params) => {
+  const row = await sql.oneOrNone(...params)
+  if (!row) {
+    throw new Error('Expects to have one row in the query result')
+  }
+  return row
 }
 
 sql.defaultSerialColumn = 'id'
