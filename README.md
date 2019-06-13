@@ -2,7 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/Sharaal/sql-pg/badge.svg?branch=master)](https://coveralls.io/github/Sharaal/sql-pg?branch=master)
 [![Greenkeeper badge](https://badges.greenkeeper.io/Sharaal/sql-pg.svg)](https://greenkeeper.io/)
 
-For all details of the methods, the SQL tag and the tag helpers have a look into the [Wiki](https://github.com/Sharaal/sql-pg/wiki).
+For all details of CRUD Methods, Select Methods, SQL Tag and Tag Helpers have a look into the [Wiki](https://github.com/Sharaal/sql-pg/wiki).
 
 There is also my blog article [Knex vs alternatives](http://blog.sharaal.de/2019/03/12/knex-vs-alternatives.html) which describes the reasons I started this library.
 
@@ -18,50 +18,38 @@ npm install --save sql-pg
 
 ```javascript
 const sql = require('sql-pg')
-sql.client = client // Assign initialised `pg` client
+sql.client = client
 ```
 
 ## Usage
 
 ### CRUD Methods
 
-Simple CRUD operations can be done without writing any SQL Statements.
+Simple CRUD can be done without writing any SQL Statements.
 
 E.g. some user operations:
 
 ```javascript
-// Insert a user with a name and email
-const userId = await sql.insert('users', { name: 'Sharaal', email: 'sql-pg@sharaal.de' })
+const id = await sql.insert('users', { name: 'Sharaal', email: 'sql-pg@sharaal.de' })
 
-// Select the user by the ID
-const user = (await sql.select('users', { id: userId }))[0]
+await sql.update('users', { validated: 1 }, { id })
 
-// Update the user after verified the email validation request
-await sql.update('users', { validated: 1 }, { id: userId })
-
-// Delete the user
-await sql.delete('users', { id: userId })
+await sql.delete('users', { id })
 ```
+
+There is also the opportunity to use the CRUD Methods with the SQL Tag, for the details have a look into the Wiki, starting with [Wiki -> Insert](https://github.com/Sharaal/sql-pg/wiki/Insert).
 
 ### Query Methods
 
 Often needed convenient methods to check and extract query results are available with the Query Methods. These are highly inspired by [pg-promise](http://vitaly-t.github.io/pg-promise/index.html).
 
-E.g. some user queries:
+E.g. select the inserted user:
 
 ```javascript
-// Select statements expect to have many or none rows in the result
-const users = await sql.any(
-  sql`SELECT * FROM users WHERE validated = 1`
-)
-
-// Select statements expect to have one row in the result
-const user = await sql.one(
-  sql`SELECT * FROM users WHERE id = ${userId}`
-)
+const user = await sql.one('users', { id })
 ```
 
-There are more Query Methods available and documented in the Wiki.
+The other Query Methods `any`/`manyOrNone`, `many`, `oneOrNone` and `one` are documented in the [Wiki -> Query Methods](https://github.com/Sharaal/sql-pg/wiki/Query-Methods).
 
 ### SQL Tag and Tag Helpers
 
@@ -73,7 +61,7 @@ E.g. list of not activated users optional filtered by name and with pagination:
 const name = 'raa'
 const page = 0
 
-const users = await sql.query(
+const users = await sql.any(
   sql`
     SELECT name, email FROM users
       WHERE
@@ -82,17 +70,9 @@ const users = await sql.query(
       ${sql.pagination(page)}
   `
 )
-
-// text:
-//   SELECT name, email FROM users
-//     WHERE
-//       validated IS NULL
-//       AND name LIKE $1
-//     LIMIT 10 OFFSET 0
-// parameters: ['%raa%']
 ```
 
-There are more Tag Helpers available and documented in the Wiki.
+There are a lot more Tag Helpers available and documented in the Wiki, starting with [Wiki -> Key(s)](https://github.com/Sharaal/sql-pg/wiki/Key%28s%29).
 
 ## Contact
 
