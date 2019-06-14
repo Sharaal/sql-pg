@@ -2,9 +2,9 @@
 [![Coverage Status](https://coveralls.io/repos/github/Sharaal/sql-pg/badge.svg?branch=master)](https://coveralls.io/github/Sharaal/sql-pg?branch=master)
 [![Greenkeeper badge](https://badges.greenkeeper.io/Sharaal/sql-pg.svg)](https://greenkeeper.io/)
 
-For all details of CRUD Methods, Select Methods, SQL Tag and Tag Helpers have a look into the [Wiki](https://github.com/Sharaal/sql-pg/wiki).
+For all details of the Manipulation Methods, Selection Methods, SQL Tag and Tag Helpers have a look into the [Wiki](https://github.com/Sharaal/sql-pg/wiki).
 
-There is also my blog article [Knex vs alternatives](http://blog.sharaal.de/2019/03/12/knex-vs-alternatives.html) which describes the reasons why I started this library.
+There is also my blog article [Knex vs alternatives](http://blog.sharaal.de/2019/03/12/knex-vs-alternatives.html) which describes why I started to develop this library.
 
 # Getting Started
 
@@ -23,11 +23,11 @@ sql.client = client
 
 ## Usage
 
-### CRUD Methods
+### Manipulation Methods
 
-Simple CRUD can be done without writing any SQL Statements.
+Simple data manipulation can be done without writing any SQL Statements.
 
-E.g. some user operations:
+E.g. some user data manipulation:
 
 ```javascript
 const id = await sql.insert('users', { name: 'Sharaal', email: 'sql-pg@sharaal.de' })
@@ -37,13 +37,13 @@ await sql.update('users', { validated: 1 }, { id })
 await sql.delete('users', { id })
 ```
 
-More complex CRUD can be done with the SQL Tag.
+More complex data manipulation can be done with the SQL Tag.
 
-For all details have a look into the Wiki, starting with [Wiki -> Insert](https://github.com/Sharaal/sql-pg/wiki/Insert).
+For all details of `insert`, `update` and `delete` have a look into the Wiki, starting with [Wiki -> Insert](https://github.com/Sharaal/sql-pg/wiki/Insert).
 
-### Query Methods
+### Selection Methods
 
-Often needed convenient methods to check and extract query results are available with the Query Methods. These are highly inspired by [pg-promise](http://vitaly-t.github.io/pg-promise/index.html).
+Often needed convenient methods to check and extract query results are available with the Selection Methods. They are highly inspired by [pg-promise](http://vitaly-t.github.io/pg-promise/index.html).
 
 E.g. select the inserted user:
 
@@ -51,9 +51,9 @@ E.g. select the inserted user:
 const user = await sql.one('users', { id })
 ```
 
-Also the Query Methods supports SQL Tag as parameter for more complex selections.
+Also the Selection Methods supports SQL Tag as parameter for more complex selections.
 
-The other Query Methods `any`/`manyOrNone`, `many`, `oneOrNone` and `one` are documented in the [Wiki -> Query Methods](https://github.com/Sharaal/sql-pg/wiki/Query-Methods).
+For all details of `any`/`manyOrNone`, `many`, `oneOrNone` and `one` have a look into the [Wiki -> Query Methods](https://github.com/Sharaal/sql-pg/wiki/Query-Methods).
 
 ### SQL Tag and Tag Helpers
 
@@ -71,7 +71,7 @@ const users = await sql.any(
   sql`
     SELECT name, email FROM users
       WHERE
-        validated IS NULL
+        validated = 0
         ${sql.if(name, sql`AND name LIKE ${`%${name}%`}`)}
       ${sql.pagination(page)}
   `
@@ -81,6 +81,39 @@ const users = await sql.any(
 There are a lot more Tag Helpers available and documented in the Wiki, starting with [Wiki -> Key(s)](https://github.com/Sharaal/sql-pg/wiki/Key%28s%29).
 
 Also own Tag Helpers can be written easily to extend the possibilities the library provide. Details for these can be found also in the [Wiki -> Writing Tag Helpers](https://github.com/Sharaal/sql-pg/wiki/Writing-Tag-Helpers).
+
+## Query
+
+For all remaining use cases (e.g. change database schema or grant access) there is a `query` method which is similar to the method of [pg](https://node-postgres.com/), except it only accepts queries created with the SQL Tag.
+
+E.g. create the users table used in the examples:
+
+```javascript
+await sql.query(
+  sql`
+    CREATE TABLE users {
+      id serial PRIMARY KEY,
+      name VARCHAR (255) NOT NULL,
+      email VARCHAR (255) UNIQUE NOT NULL,
+      password CHAR (60),
+      validated BOOLEAN DEFAULT 0
+    }
+  `
+)
+```
+
+## Transaction
+
+If there is the need to run several queries in one transaction there is the `transaction` method available which envelopes the queries with the `BEGIN` and `COMMIT` (if all was successful) or `ROLLBACK` (if there was an error).
+
+E.g. create user and add an audit log entry:
+
+```javascript
+await sql.transaction(async () => {
+  const id = await sql.insert('users', { name: 'Sharaal', email: 'sql-pg@sharaal.de' })
+  await sql.insert('audits', { action: 'USER_CREATED', id })
+})
+```
 
 ## Contact
 
