@@ -57,7 +57,7 @@ The other Query Methods `any`/`manyOrNone`, `many`, `oneOrNone` and `one` are do
 
 ### SQL Tag and Tag Helpers
 
-The SQL Tag and Tag Helpers are the way to go if it becomes more complex.
+If it becomes more complex the SQL Tag and Tag Helpers are the way to go.
 
 They are as near as possible to native SQL queries to be readable and easy to write. All variables can be directly used and will be exchanged via placeholders and given to the database separately as parameters. For non native values like lists, for table/column names and conditions there are Tag Helpers.
 
