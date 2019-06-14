@@ -82,6 +82,19 @@ There are a lot more Tag Helpers available and documented in the Wiki, starting 
 
 Also own Tag Helpers can be written easily to extend the possibilities the library provide. Details for these can be found also in the [Wiki -> Writing Tag Helpers](https://github.com/Sharaal/sql-pg/wiki/Writing-Tag-Helpers).
 
+## Transaction
+
+If there is the need to run several queries in one transaction there is the `transaction` method available which envelopes the queries with the `BEGIN` and `COMMIT` (if all was successful) or `ROLLBACK` (if there was an error).
+
+E.g. create user and add an audit log entry:
+
+```javascript
+await sql.transaction(async () => {
+  const id = await sql.insert('users', { name: 'Sharaal', email: 'sql-pg@sharaal.de' })
+  await sql.insert('audits', { action: 'USER_CREATED', id })
+})
+```
+
 ## Query
 
 For all remaining use cases (e.g. change database schema or grant access) there is a `query` method which is similar to the method of [pg](https://node-postgres.com/), except it only accepts queries created with the SQL Tag.
@@ -100,19 +113,6 @@ await sql.query(
     }
   `
 )
-```
-
-## Transaction
-
-If there is the need to run several queries in one transaction there is the `transaction` method available which envelopes the queries with the `BEGIN` and `COMMIT` (if all was successful) or `ROLLBACK` (if there was an error).
-
-E.g. create user and add an audit log entry:
-
-```javascript
-await sql.transaction(async () => {
-  const id = await sql.insert('users', { name: 'Sharaal', email: 'sql-pg@sharaal.de' })
-  await sql.insert('audits', { action: 'USER_CREATED', id })
-})
 ```
 
 ## Contact
