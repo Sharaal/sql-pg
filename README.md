@@ -37,7 +37,9 @@ await sql.update('users', { validated: 1 }, { id })
 await sql.delete('users', { id })
 ```
 
-More complex CRUD can be done with the SQL Tag. For all details have a look into the Wiki, starting with [Wiki -> Insert](https://github.com/Sharaal/sql-pg/wiki/Insert).
+More complex CRUD can be done with the SQL Tag.
+
+For all details have a look into the Wiki, starting with [Wiki -> Insert](https://github.com/Sharaal/sql-pg/wiki/Insert).
 
 ### Query Methods
 
@@ -49,7 +51,9 @@ E.g. select the inserted user:
 const user = await sql.one('users', { id })
 ```
 
-The other Query Methods `any`/`manyOrNone`, `many`, `oneOrNone` and `one` are documented in the [Wiki -> Query Methods](https://github.com/Sharaal/sql-pg/wiki/Query-Methods). Also the Query Methods supports SQL Tag as parameter for more complex selections.
+Also the Query Methods supports SQL Tag as parameter for more complex selections.
+
+The other Query Methods `any`/`manyOrNone`, `many`, `oneOrNone` and `one` are documented in the [Wiki -> Query Methods](https://github.com/Sharaal/sql-pg/wiki/Query-Methods).
 
 ### SQL Tag and Tag Helpers
 
