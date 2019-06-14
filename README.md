@@ -78,7 +78,9 @@ const users = await sql.any(
 )
 ```
 
-There are a lot more Tag Helpers available and documented in the Wiki, starting with [Wiki -> Key(s)](https://github.com/Sharaal/sql-pg/wiki/Key%28s%29). Also own Tag Helpers can be written easily to extend the possibilities the library provide.
+There are a lot more Tag Helpers available and documented in the Wiki, starting with [Wiki -> Key(s)](https://github.com/Sharaal/sql-pg/wiki/Key%28s%29).
+
+Also own Tag Helpers can be written easily to extend the possibilities the library provide. Details for these can be found also in the [Wiki -> Writing Tag Helpers](https://github.com/Sharaal/sql-pg/wiki/Writing-Tag-Helpers).
 
 ## Contact
 
