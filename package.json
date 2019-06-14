@@ -34,11 +34,11 @@
     "test": "test"
   },
   "files": [
-    "./index.js",
-    "./LICENSE",
-    "./package.json",
-    "./README.md",
-    "./SECURITY.md"
+    "index.js",
+    "LICENSE",
+    "package.json",
+    "README.md",
+    "SECURITY.md"
   ],
   "husky": {
     "hooks": {
