@@ -4,7 +4,7 @@
 
 For all details of CRUD Methods, Select Methods, SQL Tag and Tag Helpers have a look into the [Wiki](https://github.com/Sharaal/sql-pg/wiki).
 
-There is also my blog article [Knex vs alternatives](http://blog.sharaal.de/2019/03/12/knex-vs-alternatives.html) which describes the reasons I started this library.
+There is also my blog article [Knex vs alternatives](http://blog.sharaal.de/2019/03/12/knex-vs-alternatives.html) which describes the reasons why I started this library.
 
 # Getting Started
 
@@ -37,7 +37,7 @@ await sql.update('users', { validated: 1 }, { id })
 await sql.delete('users', { id })
 ```
 
-There is also the opportunity to use the CRUD Methods with the SQL Tag, for the details have a look into the Wiki, starting with [Wiki -> Insert](https://github.com/Sharaal/sql-pg/wiki/Insert).
+More complex CRUD can be done with the SQL Tag. For all details have a look into the Wiki, starting with [Wiki -> Insert](https://github.com/Sharaal/sql-pg/wiki/Insert).
 
 ### Query Methods
 
@@ -49,11 +49,11 @@ E.g. select the inserted user:
 const user = await sql.one('users', { id })
 ```
 
-The other Query Methods `any`/`manyOrNone`, `many`, `oneOrNone` and `one` are documented in the [Wiki -> Query Methods](https://github.com/Sharaal/sql-pg/wiki/Query-Methods).
+The other Query Methods `any`/`manyOrNone`, `many`, `oneOrNone` and `one` are documented in the [Wiki -> Query Methods](https://github.com/Sharaal/sql-pg/wiki/Query-Methods). Also the Query Methods supports SQL Tag as parameter for more complex selections.
 
 ### SQL Tag and Tag Helpers
 
-For all use cases which are not simple CRUD operations, the SQL Tag and Tag Helpers can be used, variables will be exchanged with PostgreSQL placeholders and the values given as parameters.
+The SQL Tag and Tag Helpers are the way to go if it becomes more complex. They are as near as possible to native SQL queries to be readable and easy to write. All variables can be directly used and will be exchanged via placeholders and given to the database separately as parameters. For non native values like lists, for table/column names and conditions there are Tag Helpers.
 
 E.g. list of not activated users optional filtered by name and with pagination:
 
@@ -72,7 +72,7 @@ const users = await sql.any(
 )
 ```
 
-There are a lot more Tag Helpers available and documented in the Wiki, starting with [Wiki -> Key(s)](https://github.com/Sharaal/sql-pg/wiki/Key%28s%29).
+There are a lot more Tag Helpers available and documented in the Wiki, starting with [Wiki -> Key(s)](https://github.com/Sharaal/sql-pg/wiki/Key%28s%29). Also own Tag Helpers can be written easily to extend the possibilities the library provide.
 
 ## Contact
 
