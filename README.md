@@ -69,10 +69,10 @@ const page = 0
 
 const users = await sql.any(
   sql`
-    SELECT name, email FROM users
+    SELECT "name", "email" FROM "users"
       WHERE
-        validated = 0
-        ${sql.if(name, sql`AND name LIKE ${`%${name}%`}`)}
+        "validated" = 0
+        ${sql.if(name, sql`AND "name" LIKE ${`%${name}%`}`)}
       ${sql.pagination(page)}
   `
 )
@@ -104,12 +104,12 @@ E.g. create the users table used in the examples:
 ```javascript
 await sql.query(
   sql`
-    CREATE TABLE users {
-      id serial PRIMARY KEY,
-      name VARCHAR (255) NOT NULL,
-      email VARCHAR (255) UNIQUE NOT NULL,
-      password CHAR (60),
-      validated BOOLEAN DEFAULT 0
+    CREATE TABLE "users" {
+      "id" serial PRIMARY KEY,
+      "name" VARCHAR (255) NOT NULL,
+      "email" VARCHAR (255) UNIQUE NOT NULL,
+      "password" CHAR (60),
+      "validated" BOOLEAN DEFAULT 0
     }
   `
 )
