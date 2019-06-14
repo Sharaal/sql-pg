@@ -33,6 +33,13 @@
   "directories": {
     "test": "test"
   },
+  "files": [
+    "./index.js",
+    "./LICENSE",
+    "./package.json",
+    "./README.md",
+    "./SECURITY.md"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint && npm test"
