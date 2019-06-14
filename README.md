@@ -90,7 +90,10 @@ E.g. create user and add an audit log entry:
 
 ```javascript
 await sql.transaction(async () => {
-  const id = await sql.insert('users', { name: 'Sharaal', email: 'sql-pg@sharaal.de' })
+  const id = await sql.insert(
+    'users',
+    { name: 'Sharaal', email: 'sql-pg@sharaal.de' }
+  )
   await sql.insert('audits', { action: 'USER_CREATED', id })
 })
 ```
