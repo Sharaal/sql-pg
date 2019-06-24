@@ -62,7 +62,7 @@ sql.insert = async (...params) => {
     }
     return result.rows.map(row => row[serialColumn])
   }
-  let [query, { serialColumn: serialColumn = sql.defaultSerialColumn } = {}] = params
+  const [query, { serialColumn: serialColumn = sql.defaultSerialColumn } = {}] = params
   const result = await sql.query(query)
   return result.rows.map(row => row[serialColumn])
 }
