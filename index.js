@@ -4,8 +4,7 @@ function sql (textFragments, ...valueFragments) {
   const build = parameterPosition => {
     const query = {
       text: textFragments[0],
-      parameters: [],
-      symbol
+      parameters: []
     }
     valueFragments.forEach((valueFragment, i) => {
       if (!['function', 'object'].includes(typeof valueFragment)) {
@@ -19,7 +18,7 @@ function sql (textFragments, ...valueFragments) {
     })
     return query
   }
-  return Object.assign(build, build(0))
+  return Object.assign(build, Object.assign(build(0), { symbol }))
 }
 
 sql.query = (...params) => {
