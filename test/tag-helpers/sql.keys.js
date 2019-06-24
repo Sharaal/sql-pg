@@ -8,7 +8,7 @@ describe('sql.keys', () => {
       'column1',
       'column2',
       'column3'
-    ])
+    ])()
     const expected = {
       text: '"column1", "column2", "column3"',
       parameters: []
@@ -21,7 +21,7 @@ describe('sql.keys', () => {
       'column1"column1',
       'column2"column2',
       'column3"column3'
-    ])
+    ])()
     const expected = {
       text: '"column1""column1", "column2""column2", "column3""column3"',
       parameters: []
@@ -30,7 +30,11 @@ describe('sql.keys', () => {
   })
 
   it('exchange the keys of the given object', () => {
-    const actual = sql.keys({ column1: 'value1', column2: 'value2', column3: 'value3' })
+    const actual = sql.keys({
+      column1: 'value1',
+      column2: 'value2',
+      column3: 'value3'
+    })()
     const expected = {
       text: '"column1", "column2", "column3"',
       parameters: []

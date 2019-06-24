@@ -4,7 +4,7 @@ const sql = require('../../')
 
 describe('sql.key', () => {
   it('escapes the given key', () => {
-    const actual = sql.key('column')
+    const actual = sql.key('column')()
     const expected = {
       text: '"column"',
       parameters: []
@@ -13,7 +13,7 @@ describe('sql.key', () => {
   })
 
   it('escapes the given unsecure key', () => {
-    const actual = sql.key('column"column')
+    const actual = sql.key('column"column')()
     const expected = {
       text: '"column""column"',
       parameters: []

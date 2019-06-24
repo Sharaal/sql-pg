@@ -7,12 +7,10 @@ function sql (textFragments, ...valueFragments) {
       parameters: []
     }
     valueFragments.forEach((valueFragment, i) => {
-      if (!['function', 'object'].includes(typeof valueFragment)) {
+      if (typeof valueFragment !== 'function') {
         valueFragment = sql.value(valueFragment)
       }
-      if (typeof valueFragment === 'function') {
-        valueFragment = valueFragment(parameterPosition + query.parameters.length)
-      }
+      valueFragment = valueFragment(parameterPosition + query.parameters.length)
       query.text += valueFragment.text + textFragments[i + 1]
       query.parameters = query.parameters.concat(valueFragment.parameters)
     })
@@ -135,10 +133,10 @@ sql.keys = keys => {
   if (!Array.isArray(keys)) {
     keys = Object.keys(keys)
   }
-  return {
+  return () => ({
     text: keys.map(escapeKey).join(', '),
     parameters: []
-  }
+  })
 }
 
 sql.key = key => sql.keys([key])
@@ -155,24 +153,25 @@ sql.values = (values, { keys: keys = Object.keys(values) } = {}) => {
 
 sql.value = value => sql.values([value])
 
-sql.valuesList = (valuesList, { keys: keys = Object.keys(valuesList[0]) } = {}) => parameterPosition => {
-  const queries = []
-  for (const values of valuesList) {
-    const query = sql.values(values, { keys })(parameterPosition)
-    queries.push({
-      text: `(${query.text})`,
-      parameters: query.parameters
-    })
-    parameterPosition += query.parameters.length
+sql.valuesList = (valuesList, { keys: keys = Object.keys(valuesList[0]) } = {}) =>
+  parameterPosition => {
+    const queries = []
+    for (const values of valuesList) {
+      const query = sql.values(values, { keys })(parameterPosition)
+      queries.push({
+        text: `(${query.text})`,
+        parameters: query.parameters
+      })
+      parameterPosition += query.parameters.length
+    }
+    return queries.reduce(
+      (queryA, queryB) => ({
+        text: queryA.text + (queryA.text ? ', ' : '') + queryB.text,
+        parameters: queryA.parameters.concat(queryB.parameters)
+      }),
+      { text: '', parameters: [] }
+    )
   }
-  return queries.reduce(
-    (queryA, queryB) => ({
-      text: queryA.text + (queryA.text ? ', ' : '') + queryB.text,
-      parameters: queryA.parameters.concat(queryB.parameters)
-    }),
-    { text: '', parameters: [] }
-  )
-}
 
 function pairs (pairs, separator) {
   return parameterPosition => {
@@ -210,23 +209,23 @@ sql.defaultFallbackLimit = 10
 
 sql.defaultMaxLimit = 100
 
-sql.limit = (limit, { fallbackLimit: fallbackLimit = sql.defaultFallbackLimit, maxLimit: maxLimit = sql.defaultMaxLimit } = {}) => ({
-  text: `LIMIT ${Math.min(positiveNumber(limit, fallbackLimit), maxLimit)}`,
-  parameters: []
-})
+sql.limit = (limit, { fallbackLimit: fallbackLimit = sql.defaultFallbackLimit, maxLimit: maxLimit = sql.defaultMaxLimit } = {}) =>
+  () => ({
+    text: `LIMIT ${Math.min(positiveNumber(limit, fallbackLimit), maxLimit)}`,
+    parameters: []
+  })
 
-sql.offset = offset => ({
-  text: `OFFSET ${positiveNumber(offset, 0)}`,
-  parameters: []
-})
+sql.offset = offset =>
+  () => ({
+    text: `OFFSET ${positiveNumber(offset, 0)}`,
+    parameters: []
+  })
 
 sql.defaultPageSize = 10
 
-sql.pagination = (page, { pageSize: pageSize = sql.defaultPageSize } = {}) => ({
-  text: `${sql.limit(pageSize).text} ${sql.offset(page * pageSize).text}`,
-  parameters: []
-})
+sql.pagination = (page, { pageSize: pageSize = sql.defaultPageSize } = {}) =>
+  sql`${sql.limit(pageSize)} ${sql.offset(page * pageSize)}`
 
-sql.if = (condition, truly, falsy = { text: '', parameters: [] }) => (condition ? truly : falsy)
+sql.if = (condition, truly, falsy = () => ({ text: '', parameters: [] })) => condition ? truly : falsy
 
 module.exports = sql
