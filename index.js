@@ -179,10 +179,10 @@ function pairs (pairs, separator) {
   return parameterPosition => {
     const queries = []
     for (const key of Object.keys(pairs)) {
-      const value = pairs[key]
+      const value = sql.value(pairs[key])(parameterPosition++)
       queries.push({
-        text: `${escapeKey(key)} = $${++parameterPosition}`,
-        parameters: [value]
+        text: `${escapeKey(key)} = ${value.text}`,
+        parameters: value.parameters
       })
     }
     return queries.reduce(
