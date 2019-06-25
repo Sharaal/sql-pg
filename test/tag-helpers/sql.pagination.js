@@ -1,9 +1,9 @@
 const assert = require('power-assert')
 
+const sql = require('../../')
+
 describe('sql.pagination', () => {
-  let sql
   beforeEach(() => {
-    sql = require('../../')
     sql.defaultPageSize = 10
   })
 

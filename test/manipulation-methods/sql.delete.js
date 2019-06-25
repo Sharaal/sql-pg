@@ -1,10 +1,10 @@
 const assert = require('power-assert')
 const sinon = require('sinon')
 
+const sql = require('../../')
+
 describe('sql.delete', () => {
-  let sql
   beforeEach(() => {
-    sql = require('../../')
     sql.client = undefined
   })
 

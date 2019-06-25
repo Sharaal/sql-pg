@@ -1,9 +1,9 @@
 const assert = require('power-assert')
 
+const sql = require('../../')
+
 describe('sql.limit', () => {
-  let sql
   beforeEach(() => {
-    sql = require('../../')
     sql.defaultFallbackLimit = 10
     sql.defaultMaxLimit = 100
   })
