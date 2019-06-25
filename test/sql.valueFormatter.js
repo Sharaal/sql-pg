@@ -4,8 +4,10 @@ const sinon = require('sinon')
 const sql = require('../')
 
 describe('sql.valueFormatter', () => {
+  const originalValueFormatter = sql.valueFormatter
   beforeEach(() => {
     sql.client = undefined
+    sql.valueFormatter = originalValueFormatter
   })
 
   it('return object values as stringified JSON with default value formatter', () => {
@@ -49,5 +51,18 @@ describe('sql.valueFormatter', () => {
       parameters: ['{"key":"value"}']
     }
     assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
+  })
+
+  it('return object values as they are given by overwriting the default value formatter', () => {
+    const object = { key: 'value' }
+
+    sql.valueFormatter = undefined
+    const actual = sql`INSERT INTO "table" (json) VALUES (${object})`
+
+    const expected = {
+      text: 'INSERT INTO "table" (json) VALUES ($1)',
+      parameters: [{ key: 'value' }]
+    }
+    assert.deepEqual({ text: actual.text, parameters: actual.parameters }, expected)
   })
 })
