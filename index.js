@@ -141,9 +141,19 @@ sql.keys = keys => {
 
 sql.key = key => sql.keys([key])
 
+sql.valueFormatter = value => {
+  if (typeof value === 'object') {
+    value = JSON.stringify(value)
+  }
+  return value
+}
+
 sql.values = (values, { keys: keys = Object.keys(values) } = {}) => {
   if (!Array.isArray(values)) {
     values = keys.map(key => values[key])
+  }
+  if (sql.valueFormatter) {
+    values = values.map(sql.valueFormatter)
   }
   return parameterPosition => ({
     text: Array.apply(null, { length: values.length }).map(() => `$${++parameterPosition}`).join(', '),
