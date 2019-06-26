@@ -59,7 +59,7 @@ describe('sql.query', () => {
       sql.query('SELECT "*" FROM "table"')
       assert(false)
     } catch (e) {
-      assert.equal(e.message, 'only queries created with the sql tagged template literal are allowed')
+      assert.equal(e.message, 'Only queries created with the sql tagged template literal are allowed')
     }
 
     assert.equal(client.query.callCount, 0)

@@ -25,7 +25,7 @@ sql.query = (...params) => {
   }
   const [query] = params
   if (typeof query !== 'function' || query.symbol !== symbol) {
-    throw Error('only queries created with the sql tagged template literal are allowed')
+    throw Error('Only queries created with the sql tagged template literal are allowed')
   }
   return sql.client.query(...params)
 }
