@@ -16,7 +16,7 @@ function sql (textFragments, ...valueFragments) {
     })
     return query
   }
-  return Object.assign(build, Object.assign(build(0), { symbol }))
+  return Object.assign(build, build(0), { symbol })
 }
 
 sql.query = (...params) => {
