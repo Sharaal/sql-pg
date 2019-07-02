@@ -2,6 +2,7 @@ const assert = require('power-assert')
 const sinon = require('sinon')
 
 const sql = require('../')
+const { testSql } = require('./test')
 
 describe('sql.transaction', () => {
   beforeEach(() => {
@@ -20,22 +21,28 @@ describe('sql.transaction', () => {
 
     assert.equal(client.query.callCount, 3)
 
-    const actualArg0 = client.query.getCall(0).args[0]
-    assert.deepEqual(
-      { text: actualArg0.text, parameters: actualArg0.parameters },
-      { text: 'BEGIN', parameters: [] }
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: 'BEGIN',
+        parameters: []
+      }
     )
 
-    const actualArg1 = client.query.getCall(1).args[0]
-    assert.deepEqual(
-      { text: actualArg1.text, parameters: actualArg1.parameters },
-      { text: 'SELECT "*" FROM "table"', parameters: [] }
+    testSql(
+      client.query.getCall(1).args[0],
+      {
+        text: 'SELECT "*" FROM "table"',
+        parameters: []
+      }
     )
 
-    const actualArg2 = client.query.getCall(2).args[0]
-    assert.deepEqual(
-      { text: actualArg2.text, parameters: actualArg2.parameters },
-      { text: 'COMMIT', parameters: [] }
+    testSql(
+      client.query.getCall(2).args[0],
+      {
+        text: 'COMMIT',
+        parameters: []
+      }
     )
   })
 
@@ -57,22 +64,28 @@ describe('sql.transaction', () => {
 
     assert.equal(client.query.callCount, 3)
 
-    const actualArg0 = client.query.getCall(0).args[0]
-    assert.deepEqual(
-      { text: actualArg0.text, parameters: actualArg0.parameters },
-      { text: 'BEGIN', parameters: [] }
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: 'BEGIN',
+        parameters: []
+      }
     )
 
-    const actualArg1 = client.query.getCall(1).args[0]
-    assert.deepEqual(
-      { text: actualArg1.text, parameters: actualArg1.parameters },
-      { text: 'SELECT "*" FROM "table"', parameters: [] }
+    testSql(
+      client.query.getCall(1).args[0],
+      {
+        text: 'SELECT "*" FROM "table"',
+        parameters: []
+      }
     )
 
-    const actualArg2 = client.query.getCall(2).args[0]
-    assert.deepEqual(
-      { text: actualArg2.text, parameters: actualArg2.parameters },
-      { text: 'ROLLBACK', parameters: [] }
+    testSql(
+      client.query.getCall(2).args[0],
+      {
+        text: 'ROLLBACK',
+        parameters: []
+      }
     )
   })
 })
