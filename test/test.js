@@ -25,20 +25,18 @@ function testTagHelper (actual, expected) {
 }
 
 function testBuild (actual, expected) {
-  if (typeof expected.text === 'object') {
-    for (let parameterPosition of Object.keys(expected.text)) {
-      parameterPosition = parseInt(parameterPosition, 10)
-      const parameterPositionActual = actual(parameterPosition)
-      assert.deepEqual(
-        { text: parameterPositionActual.text, parameters: parameterPositionActual.parameters },
-        { text: expected.text[parameterPosition], parameters: expected.parameters }
-      )
+  if (typeof expected.text !== 'object') {
+    expected.text = {
+      0: expected.text,
+      5: expected.text
     }
-  } else {
-    const parameterPositionActual = actual(0)
+  }
+  for (let parameterPosition of Object.keys(expected.text)) {
+    parameterPosition = parseInt(parameterPosition, 10)
+    const parameterPositionActual = actual(parameterPosition)
     assert.deepEqual(
       { text: parameterPositionActual.text, parameters: parameterPositionActual.parameters },
-      { text: expected.text, parameters: expected.parameters }
+      { text: expected.text[parameterPosition], parameters: expected.parameters }
     )
   }
 }
