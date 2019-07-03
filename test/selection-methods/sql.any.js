@@ -1,12 +1,12 @@
 const assert = require('power-assert')
 const sinon = require('sinon')
 
-const sql = require('../../')
 const { testSql } = require('../test')
 
 describe('sql.any', () => {
+  let sql
   beforeEach(() => {
-    sql.client = undefined
+    sql = require('../../')()
   })
 
   it('supports shorthands to select all columns', async () => {

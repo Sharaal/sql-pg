@@ -1,7 +1,28 @@
-const sql = require('../')
+const assert = require('power-assert')
+
 const { testSql } = require('./test')
 
 describe('sql', () => {
+  let sql
+  beforeEach(() => {
+    sql = require('../')()
+  })
+
+  it('use the given client and default values', () => {
+    sql = require('../')({
+      client: 'client',
+      defaultSerialColumn: 'defaultSerialColumn',
+      defaultFallbackLimit: 'defaultFallbackLimit',
+      defaultMaxLimit: 'defaultMaxLimit',
+      defaultPageSize: 'defaultPageSize'
+    })
+    assert.equal(sql.client, 'client')
+    assert.equal(sql.defaultSerialColumn, 'defaultSerialColumn')
+    assert.equal(sql.defaultFallbackLimit, 'defaultFallbackLimit')
+    assert.equal(sql.defaultMaxLimit, 'defaultMaxLimit')
+    assert.equal(sql.defaultPageSize, 'defaultPageSize')
+  })
+
   it('return build function with text and parameter attribute assigned', () => {
     testSql(
       sql`SELECT "*" FROM "table"`,

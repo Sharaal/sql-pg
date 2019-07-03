@@ -1,12 +1,12 @@
 const assert = require('power-assert')
 const sinon = require('sinon')
 
-const sql = require('../../')
 const { testSql } = require('../test')
 
 describe('sql.many', () => {
+  let sql
   beforeEach(() => {
-    sql.client = undefined
+    sql = require('../../')()
   })
 
   it('select rows which are given back as return if there are some', async () => {

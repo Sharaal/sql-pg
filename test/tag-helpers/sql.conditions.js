@@ -1,4 +1,4 @@
-const sql = require('../../')
+const sql = require('../../')()
 const { testTagHelper } = require('../test')
 
 describe('sql.conditions', () => {

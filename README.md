@@ -17,8 +17,7 @@ npm install --save sql-pg
 ## Initialisation
 
 ```javascript
-const sql = require('sql-pg')
-sql.client = client
+const sql = require('sql-pg')({ client })
 ```
 
 ## Usage
