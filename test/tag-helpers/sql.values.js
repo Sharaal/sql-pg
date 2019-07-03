@@ -28,11 +28,11 @@ describe('sql.values', () => {
     )
   })
 
-  it('exchange only the values of the given keys of the given object', () => {
+  it('exchange only the values of the given columns of the given object', () => {
     testTagHelper(
       sql.values(
         { column1: 'value1', column2: 'value2', column3: 'value3', column4: 'value4' },
-        { keys: ['column1', 'column2'] }
+        { columns: ['column1', 'column2'] }
       ),
       {
         text: {

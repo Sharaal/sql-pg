@@ -158,7 +158,7 @@ describe('sql.update', () => {
     )
   })
 
-  it('insert given keys of row', async () => {
+  it('insert given columns of row', async () => {
     const expectedId = 5
     const client = {
       query: sinon.fake.returns(Promise.resolve({ rows: [{ id: expectedId }] }))
@@ -168,7 +168,7 @@ describe('sql.update', () => {
     const actualId = await sql.insert(
       'table',
       { column1: 'value1', column2: 'value2', column3: 'value3', column4: 'value4' },
-      { keys: ['column1', 'column2'] }
+      { columns: ['column1', 'column2'] }
     )
 
     assert.equal(actualId, expectedId)
@@ -187,7 +187,7 @@ describe('sql.update', () => {
     )
   })
 
-  it('insert given keys of multiple rows', async () => {
+  it('insert given columns of multiple rows', async () => {
     const expectedIds = [5, 15, 25]
     const client = {
       query: sinon.fake.returns(Promise.resolve({ rows: expectedIds.map(id => ({ id })) }))
@@ -201,7 +201,7 @@ describe('sql.update', () => {
         { column1: 'value21', column2: 'value22', column3: 'value23', column4: 'value24' },
         { column1: 'value31', column2: 'value32', column3: 'value33', column4: 'value34' }
       ],
-      { keys: ['column1', 'column2'] }
+      { columns: ['column1', 'column2'] }
     )
 
     assert.deepEqual(actualIds, expectedIds)
