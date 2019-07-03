@@ -2,6 +2,7 @@ const assert = require('power-assert')
 const sinon = require('sinon')
 
 const sql = require('../../')
+const { testSql } = require('../test')
 
 describe('sql.one', () => {
   beforeEach(() => {
@@ -14,21 +15,20 @@ describe('sql.one', () => {
       query: sinon.fake.returns(Promise.resolve({ rows: [expectedRow] }))
     }
 
-    const query = sql`SELECT "*" FROM "table"`
-
     sql.client = client
-    const actualRow = await sql.one(query)
+    const actualRow = await sql.one(sql`SELECT "*" FROM "table"`)
 
     assert.deepEqual(actualRow, expectedRow)
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'SELECT "*" FROM "table"',
-      parameters: []
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: 'SELECT "*" FROM "table"',
+        parameters: []
+      }
+    )
   })
 
   it('throw an exception if a there is none row in the result', async () => {
@@ -37,11 +37,9 @@ describe('sql.one', () => {
       query: sinon.fake.returns(Promise.resolve({ rows: [expectedRow] }))
     }
 
-    const query = sql`SELECT "*" FROM "table"`
-
     sql.client = client
     try {
-      await sql.one(query)
+      await sql.one(sql`SELECT "*" FROM "table"`)
       assert(false)
     } catch (e) {
       assert.equal(e.message, 'Expects to have one row in the query result')
@@ -49,12 +47,13 @@ describe('sql.one', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'SELECT "*" FROM "table"',
-      parameters: []
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: 'SELECT "*" FROM "table"',
+        parameters: []
+      }
+    )
   })
 
   it('throw an exception if a there is more than one row in the result', async () => {
@@ -63,11 +62,9 @@ describe('sql.one', () => {
       query: sinon.fake.returns(Promise.resolve({ rows: expectedRows }))
     }
 
-    const query = sql`SELECT "*" FROM "table"`
-
     sql.client = client
     try {
-      await sql.one(query)
+      await sql.one(sql`SELECT "*" FROM "table"`)
       assert(false)
     } catch (e) {
       assert.equal(e.message, 'Expects to have not more than one row in the query result')
@@ -75,11 +72,12 @@ describe('sql.one', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'SELECT "*" FROM "table"',
-      parameters: []
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: 'SELECT "*" FROM "table"',
+        parameters: []
+      }
+    )
   })
 })

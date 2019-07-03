@@ -65,10 +65,8 @@ describe('sql.any', () => {
       query: sinon.fake.returns(Promise.resolve({ rows: expectedRows }))
     }
 
-    const query = sql`SELECT "*" FROM "table"`
-
     sql.client = client
-    const actualRows = await sql.any(query)
+    const actualRows = await sql.any(sql`SELECT "*" FROM "table"`)
 
     assert.deepEqual(actualRows, expectedRows)
 
@@ -89,10 +87,8 @@ describe('sql.any', () => {
       query: sinon.fake.returns(Promise.resolve({ rows: expectedRows }))
     }
 
-    const query = sql`SELECT "*" FROM "table"`
-
     sql.client = client
-    const actualRows = await sql.any(query)
+    const actualRows = await sql.any(sql`SELECT "*" FROM "table"`)
 
     assert.deepEqual(actualRows, expectedRows)
 
