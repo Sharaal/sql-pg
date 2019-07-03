@@ -1,10 +1,9 @@
-const sql = require('../../')
 const { testTagHelper } = require('../test')
 
 describe('sql.limit', () => {
+  let sql
   beforeEach(() => {
-    sql.defaultFallbackLimit = 10
-    sql.defaultMaxLimit = 100
+    sql = require('../../')()
   })
 
   it('use the given positive number', () => {

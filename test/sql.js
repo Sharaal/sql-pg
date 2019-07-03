@@ -1,4 +1,4 @@
-const sql = require('../')
+const sql = require('../')()
 const { testSql } = require('./test')
 
 describe('sql', () => {

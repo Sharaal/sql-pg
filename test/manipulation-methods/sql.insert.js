@@ -1,13 +1,12 @@
 const assert = require('power-assert')
 const sinon = require('sinon')
 
-const sql = require('../../')
 const { testSql } = require('../test')
 
 describe('sql.update', () => {
+  let sql
   beforeEach(() => {
-    sql.client = undefined
-    sql.defaultSerialColumn = 'id'
+    sql = require('../../')()
   })
 
   it('insert single row', async () => {

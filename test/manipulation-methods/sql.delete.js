@@ -1,12 +1,12 @@
 const assert = require('power-assert')
 const sinon = require('sinon')
 
-const sql = require('../../')
 const { testSql } = require('../test')
 
 describe('sql.delete', () => {
+  let sql
   beforeEach(() => {
-    sql.client = undefined
+    sql = require('../../')()
   })
 
   it('delete rows with the shorthand', async () => {

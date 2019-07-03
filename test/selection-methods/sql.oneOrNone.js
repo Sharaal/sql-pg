@@ -1,12 +1,12 @@
 const assert = require('power-assert')
 const sinon = require('sinon')
 
-const sql = require('../../')
 const { testSql } = require('../test')
 
 describe('sql.oneOrNone', () => {
+  let sql
   beforeEach(() => {
-    sql.client = undefined
+    sql = require('../../')()
   })
 
   it('select one row which is given back as return', async () => {
