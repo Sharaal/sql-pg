@@ -21,4 +21,24 @@ describe('sql.table', () => {
       }
     )
   })
+
+  it('escapes the given schema and table', () => {
+    testTagHelper(
+      sql.table(['schema', 'table']),
+      {
+        text: '"schema"."table"',
+        parameters: []
+      }
+    )
+  })
+
+  it('escapes the given unsecure schema and table', () => {
+    testTagHelper(
+      sql.table(['schema"schema', 'table"table']),
+      {
+        text: '"schema""schema"."table""table"',
+        parameters: []
+      }
+    )
+  })
 })

@@ -53,7 +53,7 @@ module.exports = ({
   sql.defaultSerialColumn = defaultSerialColumn
 
   sql.insert = async (...params) => {
-    if (typeof params[0] === 'string') {
+    if (typeof params[0] === 'string' || Array.isArray(params[0])) {
       let [table, rows, { columns, serialColumn: serialColumn = sql.defaultSerialColumn } = {}] = params
       let array = true
       if (!Array.isArray(rows)) {
@@ -75,7 +75,7 @@ module.exports = ({
   }
 
   sql.update = async (...params) => {
-    if (typeof params[0] === 'string') {
+    if (typeof params[0] === 'string' || Array.isArray(params[0])) {
       const [table, updates, conditions] = params
       params = [sql`UPDATE ${sql.table(table)} SET ${sql.assignments(updates)} WHERE ${sql.conditions(conditions)}`]
     }
@@ -85,7 +85,7 @@ module.exports = ({
   }
 
   sql.delete = async (...params) => {
-    if (typeof params[0] === 'string') {
+    if (typeof params[0] === 'string' || Array.isArray(params[0])) {
       const [table, conditions] = params
       params = [sql`DELETE FROM ${sql.table(table)} WHERE ${sql.conditions(conditions)}`]
     }
@@ -95,7 +95,7 @@ module.exports = ({
   }
 
   sql.any = async (...params) => {
-    if (typeof params[0] === 'string') {
+    if (typeof params[0] === 'string' || Array.isArray(params[0])) {
       let [table, columns, conditions] = params
       if (!conditions) {
         conditions = columns
@@ -138,10 +138,15 @@ module.exports = ({
     return `"${identifier.replace(/"/g, '""')}"`
   }
 
-  sql.table = table => () => ({
-    text: escapeIdentifier(table),
-    parameters: []
-  })
+  sql.table = table => () => {
+    if (!Array.isArray(table)) {
+      table = [table]
+    }
+    return {
+      text: table.map(escapeIdentifier).join('.'),
+      parameters: []
+    }
+  }
 
   sql.columns = columns => {
     if (!Array.isArray(columns)) {
