@@ -2,6 +2,7 @@ const assert = require('power-assert')
 const sinon = require('sinon')
 
 const sql = require('../../')
+const { testSql } = require('../test')
 
 describe('sql.update', () => {
   beforeEach(() => {
@@ -25,19 +26,16 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "id"',
-      parameters: ['value1', 'value2', 'value3']
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
-
-    const actualArg5 = actualArg(5)
-    const expectedArg5 = {
-      text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($6, $7, $8) RETURNING "id"',
-      parameters: ['value1', 'value2', 'value3']
-    }
-    assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: {
+          0: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "id"',
+          5: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($6, $7, $8) RETURNING "id"'
+        },
+        parameters: ['value1', 'value2', 'value3']
+      }
+    )
   })
 
   it('insert multiple rows', async () => {
@@ -60,19 +58,16 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3), ($4, $5, $6), ($7, $8, $9) RETURNING "id"',
-      parameters: ['value11', 'value12', 'value13', 'value21', 'value22', 'value23', 'value31', 'value32', 'value33']
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
-
-    const actualArg5 = actualArg(5)
-    const expectedArg5 = {
-      text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($6, $7, $8), ($9, $10, $11), ($12, $13, $14) RETURNING "id"',
-      parameters: ['value11', 'value12', 'value13', 'value21', 'value22', 'value23', 'value31', 'value32', 'value33']
-    }
-    assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: {
+          0: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3), ($4, $5, $6), ($7, $8, $9) RETURNING "id"',
+          5: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($6, $7, $8), ($9, $10, $11), ($12, $13, $14) RETURNING "id"'
+        },
+        parameters: ['value11', 'value12', 'value13', 'value21', 'value22', 'value23', 'value31', 'value32', 'value33']
+      }
+    )
   })
 
   it('return array of IDs if inserting single row as array', async () => {
@@ -93,19 +88,16 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "id"',
-      parameters: ['value1', 'value2', 'value3']
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
-
-    const actualArg5 = actualArg(5)
-    const expectedArg5 = {
-      text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($6, $7, $8) RETURNING "id"',
-      parameters: ['value1', 'value2', 'value3']
-    }
-    assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: {
+          0: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "id"',
+          5: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($6, $7, $8) RETURNING "id"'
+        },
+        parameters: ['value1', 'value2', 'value3']
+      }
+    )
   })
 
   it('return overwritten default serial column', async () => {
@@ -125,19 +117,16 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "column4"',
-      parameters: ['value1', 'value2', 'value3']
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
-
-    const actualArg5 = actualArg(5)
-    const expectedArg5 = {
-      text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($6, $7, $8) RETURNING "column4"',
-      parameters: ['value1', 'value2', 'value3']
-    }
-    assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: {
+          0: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "column4"',
+          5: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($6, $7, $8) RETURNING "column4"'
+        },
+        parameters: ['value1', 'value2', 'value3']
+      }
+    )
   })
 
   it('return given serial column', async () => {
@@ -157,23 +146,16 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "column4"',
-      parameters: ['value1', 'value2', 'value3']
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
-
-    const actualArg0 = actualArg(0)
-    const expectedArg0 = expectedArg
-    assert.deepEqual({ text: actualArg0.text, parameters: actualArg0.parameters }, expectedArg0)
-
-    const actualArg5 = actualArg(5)
-    const expectedArg5 = {
-      text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($6, $7, $8) RETURNING "column4"',
-      parameters: ['value1', 'value2', 'value3']
-    }
-    assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: {
+          0: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "column4"',
+          5: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($6, $7, $8) RETURNING "column4"'
+        },
+        parameters: ['value1', 'value2', 'value3']
+      }
+    )
   })
 
   it('insert given keys of row', async () => {
@@ -193,19 +175,16 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'INSERT INTO "table" ("column1", "column2") VALUES ($1, $2) RETURNING "id"',
-      parameters: ['value1', 'value2']
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
-
-    const actualArg5 = actualArg(5)
-    const expectedArg5 = {
-      text: 'INSERT INTO "table" ("column1", "column2") VALUES ($6, $7) RETURNING "id"',
-      parameters: ['value1', 'value2']
-    }
-    assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: {
+          0: 'INSERT INTO "table" ("column1", "column2") VALUES ($1, $2) RETURNING "id"',
+          5: 'INSERT INTO "table" ("column1", "column2") VALUES ($6, $7) RETURNING "id"'
+        },
+        parameters: ['value1', 'value2']
+      }
+    )
   })
 
   it('insert given keys of multiple rows', async () => {
@@ -229,19 +208,16 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'INSERT INTO "table" ("column1", "column2") VALUES ($1, $2), ($3, $4), ($5, $6) RETURNING "id"',
-      parameters: ['value11', 'value12', 'value21', 'value22', 'value31', 'value32']
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
-
-    const actualArg5 = actualArg(5)
-    const expectedArg5 = {
-      text: 'INSERT INTO "table" ("column1", "column2") VALUES ($6, $7), ($8, $9), ($10, $11) RETURNING "id"',
-      parameters: ['value11', 'value12', 'value21', 'value22', 'value31', 'value32']
-    }
-    assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: {
+          0: 'INSERT INTO "table" ("column1", "column2") VALUES ($1, $2), ($3, $4), ($5, $6) RETURNING "id"',
+          5: 'INSERT INTO "table" ("column1", "column2") VALUES ($6, $7), ($8, $9), ($10, $11) RETURNING "id"'
+        },
+        parameters: ['value11', 'value12', 'value21', 'value22', 'value31', 'value32']
+      }
+    )
   })
 
   it('insert with SQL Tag and the standard default serial column', async () => {
@@ -259,19 +235,13 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'INSERT INTO "table" SELECT * FROM "table"',
-      parameters: []
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
-
-    const actualArg5 = actualArg(5)
-    const expectedArg5 = {
-      text: 'INSERT INTO "table" SELECT * FROM "table"',
-      parameters: []
-    }
-    assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: 'INSERT INTO "table" SELECT * FROM "table"',
+        parameters: []
+      }
+    )
   })
 
   it('insert with SQL Tag and the overwritten default serial column', async () => {
@@ -290,19 +260,13 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'INSERT INTO "table" SELECT * FROM "table"',
-      parameters: []
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
-
-    const actualArg5 = actualArg(5)
-    const expectedArg5 = {
-      text: 'INSERT INTO "table" SELECT * FROM "table"',
-      parameters: []
-    }
-    assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: 'INSERT INTO "table" SELECT * FROM "table"',
+        parameters: []
+      }
+    )
   })
 
   it('insert with SQL Tag and the given serial column', async () => {
@@ -321,18 +285,12 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'INSERT INTO "table" SELECT * FROM "table"',
-      parameters: []
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
-
-    const actualArg5 = actualArg(5)
-    const expectedArg5 = {
-      text: 'INSERT INTO "table" SELECT * FROM "table"',
-      parameters: []
-    }
-    assert.deepEqual({ text: actualArg5.text, parameters: actualArg5.parameters }, expectedArg5)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: 'INSERT INTO "table" SELECT * FROM "table"',
+        parameters: []
+      }
+    )
   })
 })

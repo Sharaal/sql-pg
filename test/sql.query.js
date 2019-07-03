@@ -2,6 +2,7 @@ const assert = require('power-assert')
 const sinon = require('sinon')
 
 const sql = require('../')
+const { testSql } = require('./test')
 
 describe('sql.query', () => {
   beforeEach(() => {
@@ -18,12 +19,13 @@ describe('sql.query', () => {
 
     assert.equal(client.query.callCount, 1)
 
-    const actualArg0 = client.query.getCall(0).args[0]
-    const expectedArg0 = {
-      text: 'SELECT "*" FROM "table"',
-      parameters: []
-    }
-    assert.deepEqual({ text: actualArg0.text, parameters: actualArg0.parameters }, expectedArg0)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: 'SELECT "*" FROM "table"',
+        parameters: []
+      }
+    )
 
     const actualArg1 = client.query.getCall(0).args[1]
     const expectedArg1 = 'param2'

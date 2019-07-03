@@ -1,17 +1,24 @@
-const assert = require('power-assert')
-
 const sql = require('../../')
+const { testTagHelper } = require('../test')
 
 describe('sql.offset', () => {
   it('use the given positive number', () => {
-    const actual = sql.offset(5)()
-    const expected = { text: 'OFFSET 5', parameters: [] }
-    assert.deepEqual(actual, expected)
+    testTagHelper(
+      sql.offset(5),
+      {
+        text: 'OFFSET 5',
+        parameters: []
+      }
+    )
   })
 
   it('use the fallback if there is not a positive number given', () => {
-    const actual = sql.offset(NaN)()
-    const expected = { text: 'OFFSET 0', parameters: [] }
-    assert.deepEqual(actual, expected)
+    testTagHelper(
+      sql.offset(NaN),
+      {
+        text: 'OFFSET 0',
+        parameters: []
+      }
+    )
   })
 })

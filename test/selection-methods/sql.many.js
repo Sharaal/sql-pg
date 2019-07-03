@@ -2,6 +2,7 @@ const assert = require('power-assert')
 const sinon = require('sinon')
 
 const sql = require('../../')
+const { testSql } = require('../test')
 
 describe('sql.many', () => {
   beforeEach(() => {
@@ -14,21 +15,20 @@ describe('sql.many', () => {
       query: sinon.fake.returns(Promise.resolve({ rows: expectedRows }))
     }
 
-    const query = sql`SELECT "*" FROM "table"`
-
     sql.client = client
-    const actualRows = await sql.many(query)
+    const actualRows = await sql.many(sql`SELECT "*" FROM "table"`)
 
     assert.deepEqual(actualRows, expectedRows)
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'SELECT "*" FROM "table"',
-      parameters: []
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: 'SELECT "*" FROM "table"',
+        parameters: []
+      }
+    )
   })
 
   it('throw an exception if a there are none rows in the result', async () => {
@@ -37,11 +37,9 @@ describe('sql.many', () => {
       query: sinon.fake.returns(Promise.resolve({ rows: expectedRows }))
     }
 
-    const query = sql`SELECT "*" FROM "table"`
-
     sql.client = client
     try {
-      await sql.many(query)
+      await sql.many(sql`SELECT "*" FROM "table"`)
       assert(false)
     } catch (e) {
       assert.equal(e.message, 'Expects to have at least one row in the query result')
@@ -49,11 +47,12 @@ describe('sql.many', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'SELECT "*" FROM "table"',
-      parameters: []
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: 'SELECT "*" FROM "table"',
+        parameters: []
+      }
+    )
   })
 })

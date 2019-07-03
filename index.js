@@ -224,7 +224,10 @@ sql.offset = offset =>
 sql.defaultPageSize = 10
 
 sql.pagination = (page, { pageSize: pageSize = sql.defaultPageSize } = {}) =>
-  sql`${sql.limit(pageSize)} ${sql.offset(page * pageSize)}`
+  () => ({
+    text: `${sql.limit(pageSize)().text} ${sql.offset(page * pageSize)().text}`,
+    parameters: []
+  })
 
 sql.if = (condition, truly, falsy = () => ({ text: '', parameters: [] })) => condition ? truly : falsy
 
