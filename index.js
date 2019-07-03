@@ -1,6 +1,7 @@
 module.exports = ({
   client,
   defaultSerialColumn: defaultSerialColumn = 'id',
+  defaultSchema,
   defaultFallbackLimit: defaultFallbackLimit = 10,
   defaultMaxLimit: defaultMaxLimit = 100,
   defaultPageSize: defaultPageSize = 10
@@ -138,12 +139,14 @@ module.exports = ({
     return `"${identifier.replace(/"/g, '""')}"`
   }
 
+  sql.defaultSchema = defaultSchema
+
   sql.table = table => () => {
     if (!Array.isArray(table)) {
-      table = [table]
+      table = [sql.defaultSchema, table]
     }
     return {
-      text: table.map(escapeIdentifier).join('.'),
+      text: table.filter(table => table).map(escapeIdentifier).join('.'),
       parameters: []
     }
   }

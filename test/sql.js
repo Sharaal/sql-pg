@@ -12,12 +12,14 @@ describe('sql', () => {
     sql = require('../')({
       client: 'client',
       defaultSerialColumn: 'defaultSerialColumn',
+      defaultSchema: 'defaultSchema',
       defaultFallbackLimit: 'defaultFallbackLimit',
       defaultMaxLimit: 'defaultMaxLimit',
       defaultPageSize: 'defaultPageSize'
     })
     assert.equal(sql.client, 'client')
     assert.equal(sql.defaultSerialColumn, 'defaultSerialColumn')
+    assert.equal(sql.defaultSchema, 'defaultSchema')
     assert.equal(sql.defaultFallbackLimit, 'defaultFallbackLimit')
     assert.equal(sql.defaultMaxLimit, 'defaultMaxLimit')
     assert.equal(sql.defaultPageSize, 'defaultPageSize')
