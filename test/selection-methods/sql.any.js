@@ -2,6 +2,7 @@ const assert = require('power-assert')
 const sinon = require('sinon')
 
 const sql = require('../../')
+const { testSql } = require('../test')
 
 describe('sql.any', () => {
   beforeEach(() => {
@@ -21,12 +22,16 @@ describe('sql.any', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'SELECT "*" FROM "table" WHERE "column" = $1',
-      parameters: ['value']
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: {
+          0: 'SELECT "*" FROM "table" WHERE "column" = $1',
+          5: 'SELECT "*" FROM "table" WHERE "column" = $6'
+        },
+        parameters: ['value']
+      }
+    )
   })
 
   it('supports shorthands to select specific columns', async () => {
@@ -42,12 +47,16 @@ describe('sql.any', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'SELECT "column1", "column2" FROM "table" WHERE "column3" = $1',
-      parameters: ['value']
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: {
+          0: 'SELECT "column1", "column2" FROM "table" WHERE "column3" = $1',
+          5: 'SELECT "column1", "column2" FROM "table" WHERE "column3" = $6'
+        },
+        parameters: ['value']
+      }
+    )
   })
 
   it('select rows which are given back as return', async () => {
@@ -65,12 +74,13 @@ describe('sql.any', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'SELECT "*" FROM "table"',
-      parameters: []
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: 'SELECT "*" FROM "table"',
+        parameters: []
+      }
+    )
   })
 
   it('select rows which are given back as return also if there are no rows', async () => {
@@ -88,11 +98,12 @@ describe('sql.any', () => {
 
     assert(client.query.calledOnce)
 
-    const actualArg = client.query.getCall(0).args[0]
-    const expectedArg = {
-      text: 'SELECT "*" FROM "table"',
-      parameters: []
-    }
-    assert.deepEqual({ text: actualArg.text, parameters: actualArg.parameters }, expectedArg)
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: 'SELECT "*" FROM "table"',
+        parameters: []
+      }
+    )
   })
 })
