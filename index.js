@@ -45,16 +45,16 @@ sql.defaultSerialColumn = 'id'
 
 sql.insert = async (...params) => {
   if (typeof params[0] === 'string') {
-    let [table, rows, { keys, serialColumn: serialColumn = sql.defaultSerialColumn } = {}] = params
+    let [table, rows, { columns, serialColumn: serialColumn = sql.defaultSerialColumn } = {}] = params
     let array = true
     if (!Array.isArray(rows)) {
       rows = [rows]
       array = false
     }
-    if (!keys) {
-      keys = Object.keys(rows[0])
+    if (!columns) {
+      columns = Object.keys(rows[0])
     }
-    const result = await sql.query(sql`INSERT INTO ${sql.key(table)} (${sql.keys(keys)}) VALUES ${sql.valuesList(rows, { keys })} RETURNING ${sql.key(serialColumn)}`)
+    const result = await sql.query(sql`INSERT INTO ${sql.table(table)} (${sql.columns(columns)}) VALUES ${sql.valuesList(rows, { columns })} RETURNING ${sql.column(serialColumn)}`)
     if (!array) {
       return result.rows[0][serialColumn]
     }
@@ -68,7 +68,7 @@ sql.insert = async (...params) => {
 sql.update = async (...params) => {
   if (typeof params[0] === 'string') {
     const [table, updates, conditions] = params
-    params = [sql`UPDATE ${sql.key(table)} SET ${sql.assignments(updates)} WHERE ${sql.conditions(conditions)}`]
+    params = [sql`UPDATE ${sql.table(table)} SET ${sql.assignments(updates)} WHERE ${sql.conditions(conditions)}`]
   }
   const [query] = params
   const result = await sql.query(query)
@@ -78,7 +78,7 @@ sql.update = async (...params) => {
 sql.delete = async (...params) => {
   if (typeof params[0] === 'string') {
     const [table, conditions] = params
-    params = [sql`DELETE FROM ${sql.key(table)} WHERE ${sql.conditions(conditions)}`]
+    params = [sql`DELETE FROM ${sql.table(table)} WHERE ${sql.conditions(conditions)}`]
   }
   const [query] = params
   const result = await sql.query(query)
@@ -92,7 +92,7 @@ sql.any = async (...params) => {
       conditions = columns
       columns = ['*']
     }
-    params = [sql`SELECT ${sql.keys(columns)} FROM ${sql.key(table)} WHERE ${sql.conditions(conditions)}`]
+    params = [sql`SELECT ${sql.columns(columns)} FROM ${sql.table(table)} WHERE ${sql.conditions(conditions)}`]
   }
   const [query] = params
   const result = await sql.query(query)
@@ -125,25 +125,30 @@ sql.one = async (...params) => {
   return row
 }
 
-function escapeKey (key) {
-  return `"${key.replace(/"/g, '""')}"`
+function escapeIdentifier (identifier) {
+  return `"${identifier.replace(/"/g, '""')}"`
 }
 
-sql.keys = keys => {
-  if (!Array.isArray(keys)) {
-    keys = Object.keys(keys)
+sql.table = table => () => ({
+  text: escapeIdentifier(table),
+  parameters: []
+})
+
+sql.columns = columns => {
+  if (!Array.isArray(columns)) {
+    columns = Object.keys(columns)
   }
   return () => ({
-    text: keys.map(escapeKey).join(', '),
+    text: columns.map(escapeIdentifier).join(', '),
     parameters: []
   })
 }
 
-sql.key = key => sql.keys([key])
+sql.column = column => sql.columns([column])
 
-sql.values = (values, { keys: keys = Object.keys(values) } = {}) => {
+sql.values = (values, { columns: columns = Object.keys(values) } = {}) => {
   if (!Array.isArray(values)) {
-    values = keys.map(key => values[key])
+    values = columns.map(column => values[column])
   }
   return parameterPosition => ({
     text: Array.apply(null, { length: values.length }).map(() => `$${++parameterPosition}`).join(', '),
@@ -153,11 +158,11 @@ sql.values = (values, { keys: keys = Object.keys(values) } = {}) => {
 
 sql.value = value => sql.values([value])
 
-sql.valuesList = (valuesList, { keys: keys = Object.keys(valuesList[0]) } = {}) =>
+sql.valuesList = (valuesList, { columns: columns = Object.keys(valuesList[0]) } = {}) =>
   parameterPosition => {
     const queries = []
     for (const values of valuesList) {
-      const query = sql.values(values, { keys })(parameterPosition)
+      const query = sql.values(values, { columns })(parameterPosition)
       queries.push({
         text: `(${query.text})`,
         parameters: query.parameters
@@ -176,10 +181,10 @@ sql.valuesList = (valuesList, { keys: keys = Object.keys(valuesList[0]) } = {}) 
 function pairs (pairs, separator) {
   return parameterPosition => {
     const queries = []
-    for (const key of Object.keys(pairs)) {
-      const value = sql.value(pairs[key])(parameterPosition++)
+    for (const column of Object.keys(pairs)) {
+      const value = sql.value(pairs[column])(parameterPosition++)
       queries.push({
-        text: `${escapeKey(key)} = ${value.text}`,
+        text: `${escapeIdentifier(column)} = ${value.text}`,
         parameters: value.parameters
       })
     }

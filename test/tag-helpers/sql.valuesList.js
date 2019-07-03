@@ -53,7 +53,7 @@ describe('sql.valuesList', () => {
     )
   })
 
-  it('exchange only the values of the given keys of the given objects of the list', () => {
+  it('exchange only the values of the given columns of the given objects of the list', () => {
     testTagHelper(
       sql.valuesList(
         [
@@ -61,7 +61,7 @@ describe('sql.valuesList', () => {
           { column1: 'value21', column2: 'value22', column3: 'value23', column4: 'value24' },
           { column1: 'value31', column2: 'value32', column3: 'value33', column4: 'value34' }
         ],
-        { keys: ['column1', 'column2'] }
+        { columns: ['column1', 'column2'] }
       ),
       {
         text: {

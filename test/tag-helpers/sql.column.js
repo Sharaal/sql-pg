@@ -1,10 +1,10 @@
 const sql = require('../../')
 const { testTagHelper } = require('../test')
 
-describe('sql.key', () => {
-  it('escapes the given key', () => {
+describe('sql.column', () => {
+  it('escapes the given column', () => {
     testTagHelper(
-      sql.key('column'),
+      sql.column('column'),
       {
         text: '"column"',
         parameters: []
@@ -12,9 +12,9 @@ describe('sql.key', () => {
     )
   })
 
-  it('escapes the given unsecure key', () => {
+  it('escapes the given unsecure column', () => {
     testTagHelper(
-      sql.key('column"column'),
+      sql.column('column"column'),
       {
         text: '"column""column"',
         parameters: []
