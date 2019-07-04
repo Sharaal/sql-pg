@@ -34,6 +34,31 @@ describe('sql.any', () => {
     )
   })
 
+  it('supports shorthands to select all columns from a table with schema', async () => {
+    const expectedRows = []
+    const client = {
+      query: sinon.fake.returns(Promise.resolve({ rows: expectedRows }))
+    }
+
+    sql.client = client
+    const actualRows = await sql.any(['schema', 'table'], { column: 'value' })
+
+    assert.deepEqual(actualRows, expectedRows)
+
+    assert(client.query.calledOnce)
+
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: {
+          0: 'SELECT "*" FROM "schema"."table" WHERE "column" = $1',
+          5: 'SELECT "*" FROM "schema"."table" WHERE "column" = $6'
+        },
+        parameters: ['value']
+      }
+    )
+  })
+
   it('supports shorthands to select specific columns', async () => {
     const expectedRows = []
     const client = {

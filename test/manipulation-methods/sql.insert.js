@@ -219,6 +219,34 @@ describe('sql.update', () => {
     )
   })
 
+  it('insert single row into a table with schema', async () => {
+    const expectedId = 5
+    const client = {
+      query: sinon.fake.returns(Promise.resolve({ rows: [{ id: expectedId }] }))
+    }
+
+    sql.client = client
+    const actualId = await sql.insert(
+      ['schema', 'table'],
+      { column1: 'value1', column2: 'value2', column3: 'value3' }
+    )
+
+    assert.equal(actualId, expectedId)
+
+    assert(client.query.calledOnce)
+
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: {
+          0: 'INSERT INTO "schema"."table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "id"',
+          5: 'INSERT INTO "schema"."table" ("column1", "column2", "column3") VALUES ($6, $7, $8) RETURNING "id"'
+        },
+        parameters: ['value1', 'value2', 'value3']
+      }
+    )
+  })
+
   it('insert with SQL Tag and the standard default serial column', async () => {
     const expectedIds = [5, 15, 25]
     const client = {
