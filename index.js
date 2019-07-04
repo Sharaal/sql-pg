@@ -136,17 +136,15 @@ module.exports = ({
   }
 
   function escapeIdentifier (identifier) {
-    return `"${identifier.replace(/"/g, '""')}"`
+    return '"' + identifier.replace(/"/g, '""') + '"'
   }
 
   sql.defaultSchema = defaultSchema
 
-  sql.table = table => () => {
-    if (!Array.isArray(table)) {
-      table = [sql.defaultSchema, table]
-    }
+  sql.table = param => () => {
+    const [schema, table] = Array.isArray(param) ? param : [sql.defaultSchema, param]
     return {
-      text: table.filter(table => table).map(escapeIdentifier).join('.'),
+      text: (schema ? escapeIdentifier(schema) + '.' : '') + escapeIdentifier(table),
       parameters: []
     }
   }
@@ -168,7 +166,7 @@ module.exports = ({
       values = columns.map(column => values[column])
     }
     return parameterPosition => ({
-      text: Array.apply(null, { length: values.length }).map(() => `$${++parameterPosition}`).join(', '),
+      text: Array.apply(null, { length: values.length }).map(() => '$' + (++parameterPosition)).join(', '),
       parameters: values
     })
   }
@@ -181,7 +179,7 @@ module.exports = ({
       for (const values of valuesList) {
         const query = sql.values(values, { columns })(parameterPosition)
         queries.push({
-          text: `(${query.text})`,
+          text: '(' + query.text + ')',
           parameters: query.parameters
         })
         parameterPosition += query.parameters.length
@@ -201,7 +199,7 @@ module.exports = ({
       for (const column of Object.keys(pairs)) {
         const value = sql.value(pairs[column])(parameterPosition++)
         queries.push({
-          text: `${escapeIdentifier(column)} = ${value.text}`,
+          text: escapeIdentifier(column) + ' = ' + value.text,
           parameters: value.parameters
         })
       }
@@ -233,13 +231,13 @@ module.exports = ({
 
   sql.limit = (limit, { fallbackLimit: fallbackLimit = sql.defaultFallbackLimit, maxLimit: maxLimit = sql.defaultMaxLimit } = {}) =>
     () => ({
-      text: `LIMIT ${Math.min(positiveNumber(limit, fallbackLimit), maxLimit)}`,
+      text: 'LIMIT ' + Math.min(positiveNumber(limit, fallbackLimit), maxLimit),
       parameters: []
     })
 
   sql.offset = offset =>
     () => ({
-      text: `OFFSET ${positiveNumber(offset, 0)}`,
+      text: 'OFFSET ' + positiveNumber(offset, 0),
       parameters: []
     })
 
@@ -247,7 +245,7 @@ module.exports = ({
 
   sql.pagination = (page, { pageSize: pageSize = sql.defaultPageSize } = {}) =>
     () => ({
-      text: `${sql.limit(pageSize)().text} ${sql.offset(page * pageSize)().text}`,
+      text: sql.limit(pageSize)().text + ' ' + sql.offset(page * pageSize)().text,
       parameters: []
     })
 
