@@ -52,7 +52,7 @@ const user = await sql.one('users', { id })
 
 Also the Selection Methods supports SQL Tag as parameter for more complex selections.
 
-For all details of `any`/`manyOrNone`, `many`, `oneOrNone` and `one` have a look into the [Wiki -> Query Methods](https://github.com/Sharaal/sql-pg/wiki/Query-Methods).
+For all details of `any`/`manyOrNone`, `many`, `oneOrNone` and `one` have a look into the [Wiki -> Selection Methods](https://github.com/Sharaal/sql-pg/wiki/Selection-Methods).
 
 ### SQL Tag and Tag Helpers
 
