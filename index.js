@@ -1,10 +1,10 @@
 module.exports = ({
   client,
-  defaultSerialColumn: defaultSerialColumn = 'id',
+  defaultSerialColumn = 'id',
   defaultSchema,
-  defaultFallbackLimit: defaultFallbackLimit = 10,
-  defaultMaxLimit: defaultMaxLimit = 100,
-  defaultPageSize: defaultPageSize = 10
+  defaultFallbackLimit = 10,
+  defaultMaxLimit = 100,
+  defaultPageSize = 10
 } = {}) => {
   const symbol = Symbol('sql-pg')
 
@@ -55,7 +55,7 @@ module.exports = ({
 
   sql.insert = async (...params) => {
     if (typeof params[0] === 'string' || Array.isArray(params[0])) {
-      let [table, rows, { columns, serialColumn: serialColumn = sql.defaultSerialColumn } = {}] = params
+      let [table, rows, { columns, serialColumn = sql.defaultSerialColumn } = {}] = params
       let array = true
       if (!Array.isArray(rows)) {
         rows = [rows]
@@ -70,7 +70,7 @@ module.exports = ({
       }
       return result.rows.map(row => row[serialColumn])
     }
-    const [query, { serialColumn: serialColumn = sql.defaultSerialColumn } = {}] = params
+    const [query, { serialColumn = sql.defaultSerialColumn } = {}] = params
     const result = await sql.query(query)
     return result.rows.map(row => row[serialColumn])
   }
@@ -161,7 +161,7 @@ module.exports = ({
 
   sql.column = column => sql.columns([column])
 
-  sql.values = (values, { columns: columns = Object.keys(values) } = {}) => {
+  sql.values = (values, { columns = Object.keys(values) } = {}) => {
     if (!Array.isArray(values)) {
       values = columns.map(column => values[column])
     }
@@ -173,7 +173,7 @@ module.exports = ({
 
   sql.value = value => sql.values([value])
 
-  sql.valuesList = (valuesList, { columns: columns = Object.keys(valuesList[0]) } = {}) =>
+  sql.valuesList = (valuesList, { columns = Object.keys(valuesList[0]) } = {}) =>
     parameterPosition => {
       const queries = []
       for (const values of valuesList) {
@@ -229,7 +229,7 @@ module.exports = ({
 
   sql.defaultMaxLimit = defaultMaxLimit
 
-  sql.limit = (limit, { fallbackLimit: fallbackLimit = sql.defaultFallbackLimit, maxLimit: maxLimit = sql.defaultMaxLimit } = {}) =>
+  sql.limit = (limit, { fallbackLimit = sql.defaultFallbackLimit, maxLimit = sql.defaultMaxLimit } = {}) =>
     () => ({
       text: 'LIMIT ' + Math.min(positiveNumber(limit, fallbackLimit), maxLimit),
       parameters: []
@@ -243,7 +243,7 @@ module.exports = ({
 
   sql.defaultPageSize = defaultPageSize
 
-  sql.pagination = (page, { pageSize: pageSize = sql.defaultPageSize } = {}) =>
+  sql.pagination = (page, { pageSize = sql.defaultPageSize } = {}) =>
     () => ({
       text: sql.limit(pageSize)().text + ' ' + sql.offset(page * pageSize)().text,
       parameters: []
