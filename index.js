@@ -78,7 +78,7 @@ module.exports = ({
   sql.update = async (...params) => {
     if (typeof params[0] === 'string' || Array.isArray(params[0])) {
       const [table, updates, conditions] = params
-      params = [sql`UPDATE ${sql.table(table)} SET ${sql.assignments(updates)} WHERE ${sql.conditions(conditions)}`]
+      params = [sql`UPDATE ${sql.table(table)} SET ${sql.assignments(updates)}${sql.if(conditions, sql` WHERE ${sql.conditions(conditions)}`)}`]
     }
     const [query] = params
     const result = await sql.query(query)
@@ -88,7 +88,7 @@ module.exports = ({
   sql.delete = async (...params) => {
     if (typeof params[0] === 'string' || Array.isArray(params[0])) {
       const [table, conditions] = params
-      params = [sql`DELETE FROM ${sql.table(table)} WHERE ${sql.conditions(conditions)}`]
+      params = [sql`DELETE FROM ${sql.table(table)}${sql.if(conditions, sql` WHERE ${sql.conditions(conditions)}`)}`]
     }
     const [query] = params
     const result = await sql.query(query)
@@ -102,7 +102,7 @@ module.exports = ({
         conditions = columns
         columns = ['*']
       }
-      params = [sql`SELECT ${sql.columns(columns)} FROM ${sql.table(table)} WHERE ${sql.conditions(conditions)}`]
+      params = [sql`SELECT ${sql.columns(columns)} FROM ${sql.table(table)}${sql.if(conditions, sql` WHERE ${sql.conditions(conditions)}`)}`]
     }
     const [query] = params
     const result = await sql.query(query)
@@ -193,7 +193,7 @@ module.exports = ({
       )
     }
 
-  function pairs (pairs, separator) {
+  function pairs (pairs = {}, separator) {
     return parameterPosition => {
       const queries = []
       for (const column of Object.keys(pairs)) {

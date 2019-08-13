@@ -34,6 +34,28 @@ describe('sql.any', () => {
     )
   })
 
+  it('supports shorthands to select all columns without any conditions', async () => {
+    const expectedRows = []
+    const client = {
+      query: sinon.fake.returns(Promise.resolve({ rows: expectedRows }))
+    }
+
+    sql.client = client
+    const actualRows = await sql.any('table')
+
+    assert.deepEqual(actualRows, expectedRows)
+
+    assert(client.query.calledOnce)
+
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: 'SELECT "*" FROM "table"',
+        parameters: []
+      }
+    )
+  })
+
   it('supports shorthands to select all columns from a table with schema', async () => {
     const expectedRows = []
     const client = {

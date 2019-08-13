@@ -37,6 +37,28 @@ describe('sql.delete', () => {
     )
   })
 
+  it('delete rows with the shorthand without any conditions', async () => {
+    const expectedRowCount = 5
+    const client = {
+      query: sinon.fake.returns(Promise.resolve({ rowCount: expectedRowCount }))
+    }
+
+    sql.client = client
+    const actualRowCount = await sql.delete('table')
+
+    assert.equal(actualRowCount, expectedRowCount)
+
+    assert(client.query.calledOnce)
+
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: 'DELETE FROM "table"',
+        parameters: []
+      }
+    )
+  })
+
   it('delete rows with the shorthand from a table with schema', async () => {
     const expectedRowCount = 5
     const client = {
