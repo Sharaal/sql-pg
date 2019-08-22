@@ -1,6 +1,6 @@
 {
   "name": "sql-pg",
-  "version": "6.2.0",
+  "version": "6.3.0",
   "description": "Complex queries can be written with normal SQL, including the values needs to be bound and prefixed with the `sql` tag.",
   "keywords": [
     "node-postgres",
@@ -15,8 +15,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "bin" : {
-    "migrate" : "./bin/migrate.js"
+  "bin": {
+    "migrate": "./bin/migrate.js"
   },
   "scripts": {
     "lint": "standard",
