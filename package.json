@@ -15,6 +15,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "bin" : {
+    "migrate" : "./bin/migrate.js"
+  },
   "scripts": {
     "lint": "standard",
     "lint:fix": "standard --fix",
@@ -30,10 +33,15 @@
     "sinon": "^7.2.4",
     "standard": "^14.0.0"
   },
+  "peerDependencies": {
+    "debug": "^4.1.1",
+    "pg": "^7.12.1"
+  },
   "directories": {
     "test": "test"
   },
   "files": [
+    "bin/migrate.js",
     "index.js",
     "LICENSE",
     "package.json",
