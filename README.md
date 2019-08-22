@@ -117,6 +117,12 @@ await sql.query(
 )
 ```
 
+## Migrations
+
+There is also a migrations support to ensure the database is always in the latest schema in all environments. To use this it's needed to create migration files and executing the `migrate` command on every deploy.
+
+Details for these can be found also in the [Wiki -> Migrations](https://github.com/Sharaal/sql-pg/wiki/Migrations).
+
 ## Contact
 
 Found a bug or missing a feature? -> Create a new [Issue](https://github.com/Sharaal/sql-pg/issues)
