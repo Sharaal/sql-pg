@@ -13,13 +13,14 @@ const path = require('path')
 ;(async () => {
   debug('starting migrations')
   let client
-  try {
-    client = require(path.join(process.cwd(), 'pg.js'))
+  const clientPath = path.join(process.cwd(), 'pg.js')
+  if (fs.fileExistsSync(clientPath)) {
     debug('use the projects `pg.js` to connect to the database')
-  } catch (e) {
+    client = require(clientPath)
+  } else {
+    debug('use "process.env.DATABASE_URL" to connect to the database')
     const { Client } = require('pg')
     client = new Client({ connectionString: process.env.DATABASE_URL })
-    debug('use the default to connect to the database')
   }
   await client.connect()
 
