@@ -6,6 +6,14 @@
 
 Complex queries can be written with normal SQL, including the values needs to be bound and prefixed with the sql tag.
 
+<table>
+  <tr>
+    <td>![SQL](https://github.com/sharaal/sql-pg/raw/master/docs/sql.png)<td>
+    <td>Make name variable?<td>
+    <td>![SQL](https://github.com/sharaal/sql-pg/raw/master/docs/sql-pg.png)<td>
+  </tr>
+</table>
+
 ## Features
 
 * Built on top of `pg` as database driver
@@ -66,7 +74,6 @@ E.g. list of not activated users filtered by name and with pagination:
 
 ```javascript
 const name = 'raa'
-const page = 0
 
 const users = await sql.any(
   sql`
@@ -75,7 +82,6 @@ const users = await sql.any(
         "validated" = 0
         AND
         "name" LIKE ${`%${name}%`}
-      ${sql.pagination(page)}
   `
 )
 ```
