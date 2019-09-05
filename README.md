@@ -2,11 +2,17 @@
 [![Coverage Status](https://coveralls.io/repos/github/Sharaal/sql-pg/badge.svg?branch=master)](https://coveralls.io/github/Sharaal/sql-pg?branch=master)
 [![Greenkeeper badge](https://badges.greenkeeper.io/Sharaal/sql-pg.svg)](https://greenkeeper.io/)
 
-For all details of the Manipulation Methods, Selection Methods, SQL Tag and Tag Helpers have a look into the [Wiki](https://github.com/Sharaal/sql-pg/wiki).
+# SQL-PG
 
-There is also my blog article [Knex vs alternatives](http://blog.sharaal.de/2019/03/12/knex-vs-alternatives.html) which describes why I started to develop this library.
+Complex queries can be written with normal SQL, including the values needs to be bound and prefixed with the sql tag.
 
-# Getting Started
+## Features
+
+* Built on top of `pg` as database driver
+* Simple data manipulation and selection methods without the need to write SQL
+* SQL Tag and Tag Helpers to write queries looks like native SQL and be secure by design
+* Write easy unit testable queries
+* Possibility to add own Tag Helpers to extend the functionality
 
 ## Installation
 
@@ -60,7 +66,7 @@ If it becomes more complex the SQL Tag and Tag Helpers are the way to go.
 
 They are as near as possible to native SQL queries to be readable and easy to write. All variables can be directly used and will be exchanged via placeholders and given to the database separately as parameters. For non native values like lists, for table/column names and conditions there are Tag Helpers.
 
-E.g. list of not activated users optional filtered by name and with pagination:
+E.g. list of not activated users filtered by name and with pagination:
 
 ```javascript
 const name = 'raa'
@@ -71,7 +77,8 @@ const users = await sql.any(
     SELECT "name", "email" FROM "users"
       WHERE
         "validated" = 0
-        ${sql.if(name, sql`AND "name" LIKE ${`%${name}%`}`)}
+        AND
+        "name" LIKE ${`%${name}%`}
       ${sql.pagination(page)}
   `
 )
@@ -81,47 +88,9 @@ There are a lot more Tag Helpers available and documented in the Wiki, starting 
 
 Also own Tag Helpers can be written easily to extend the possibilities the library provide. Details for these can be found also in the [Wiki -> Writing Tag Helpers](https://github.com/Sharaal/sql-pg/wiki/Writing-Tag-Helpers).
 
-## Transaction
+## More
 
-If there is the need to run several queries in one transaction there is the `transaction` method available which envelopes the queries with the `BEGIN` and `COMMIT` (if all was successful) or `ROLLBACK` (if there was an error).
-
-E.g. create user and add an audit log entry:
-
-```javascript
-await sql.transaction(async () => {
-  const id = await sql.insert(
-    'users',
-    { name: 'Sharaal', email: 'sql-pg@sharaal.de' }
-  )
-  await sql.insert('audits', { action: 'USER_CREATED', id })
-})
-```
-
-## Query
-
-For all remaining use cases (e.g. change database schema or grant access) there is a `query` method which is similar to the method of [pg](https://node-postgres.com/), except it only accepts queries created with the SQL Tag.
-
-E.g. create the users table used in the examples:
-
-```javascript
-await sql.query(
-  sql`
-    CREATE TABLE "users" {
-      "id" serial PRIMARY KEY,
-      "name" VARCHAR (255) NOT NULL,
-      "email" VARCHAR (255) UNIQUE NOT NULL,
-      "password" CHAR (60),
-      "validated" BOOLEAN DEFAULT 0
-    }
-  `
-)
-```
-
-## Migrations
-
-There is also a migrations support to ensure the database is always in the latest schema in all environments. To use this it's needed to create migration files and executing the `migrate` command on every deploy.
-
-Details for these can be found also in the [Wiki -> Migrations](https://github.com/Sharaal/sql-pg/wiki/Migrations).
+Nested Queries, Transaction, Migrations, Syntax Highlighting in Atom... All additional documentation can be found in the [Wiki](https://github.com/Sharaal/sql-pg/wiki).
 
 ## Contact
 
