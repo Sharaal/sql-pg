@@ -44,11 +44,9 @@ await sql.delete('users', { id })
 
 More complex data manipulation can be done with the SQL Tag.
 
-For all details of `insert`, `update` and `delete` have a look into the Wiki, starting with [Wiki -> Insert](https://github.com/Sharaal/sql-pg/wiki/Insert).
-
 ### Selection Methods
 
-Often needed convenient methods to check and extract query results are available with the Selection Methods. They are highly inspired by [pg-promise](http://vitaly-t.github.io/pg-promise/index.html).
+Often needed convenient methods to check and extract query results are available with the Selection Methods.
 
 E.g. select the inserted user:
 
@@ -56,9 +54,7 @@ E.g. select the inserted user:
 const user = await sql.one('users', { id })
 ```
 
-Also the Selection Methods supports SQL Tag as parameter for more complex selections.
-
-For all details of `any`/`manyOrNone`, `many`, `oneOrNone` and `one` have a look into the [Wiki -> Selection Methods](https://github.com/Sharaal/sql-pg/wiki/Selection-Methods).
+Also the Selection Methods supports SQL Tag as parameter for more complex selections. Because they are highly inspired by `pg-promise`, there are the Selection Methods `any`/`manyOrNone`, `many`, `oneOrNone` and `one` available.
 
 ### SQL Tag and Tag Helpers
 
@@ -84,13 +80,11 @@ const users = await sql.any(
 )
 ```
 
-There are a lot more Tag Helpers available and documented in the Wiki, starting with [Wiki -> Table](https://github.com/Sharaal/sql-pg/wiki/Table).
-
-Also own Tag Helpers can be written easily to extend the possibilities the library provide. Details for these can be found also in the [Wiki -> Writing Tag Helpers](https://github.com/Sharaal/sql-pg/wiki/Writing-Tag-Helpers).
+There are a lot more Tag Helpers available like `.table`, `.column(s)`, `.value(s)`, `.valuesList`, `.assignments`, `.conditions`, `.limit`, `.offset`, `.pagination` and `.if`.
 
 ## More
 
-Nested Queries, Transaction, Migrations, Syntax Highlighting in Atom... All additional documentation can be found in the [Wiki](https://github.com/Sharaal/sql-pg/wiki).
+Available Tag Helpers, Nested Queries, Transaction, Writing Tag Helpers, Migrations, Syntax Highlighting in Atom... All additional documentation can be found in the [Wiki](https://github.com/Sharaal/sql-pg/wiki).
 
 ## Contact
 
