@@ -8,9 +8,9 @@ Complex queries can be written with normal SQL, including the values needs to be
 
 <table>
   <tr>
-    <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/master/docs/sql.png"><td>
-    <td>Variable "name"?<td>
-    <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/master/docs/sql-pg.png"><td>
+    <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/master/docs/sql.png"></td>
+    <td>Variable "name"?</td>
+    <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/master/docs/sql-pg.png"></td>
   </tr>
 </table>
 
