@@ -64,6 +64,9 @@
     "report-dir": "./coverage"
   },
   "standard": {
+    "ignore": [
+      "docs/*.js"
+    ],
     "env": [
       "mocha"
     ]

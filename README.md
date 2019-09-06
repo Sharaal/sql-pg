@@ -12,6 +12,11 @@ Complex queries can be written with normal SQL, including the values needs to be
     <td>Make the name variable?</td>
     <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/master/docs/sql-pg.png"></td>
   </tr>
+  <tr>
+    <td></td>
+    <td>Or even more simple?</td>
+    <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/master/docs/selection-method.png"></td>
+  </tr>
 </table>
 
 ## Features
