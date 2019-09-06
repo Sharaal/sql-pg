@@ -52,11 +52,11 @@ const path = require('path')
 
   debug('create table "migrations" if not exists')
   await sql.query(sql`
-    CREATE TABLE IF NOT EXISTS migrations (
+    CREATE TABLE IF NOT EXISTS "migrations" (
       ${columns.id},
       ${columns.created_at},
       ${columns.updated_at},
-      file VARCHAR(255) PRIMARY KEY
+      "file" VARCHAR(255) PRIMARY KEY
     )
   `)
   await sql.query(updatedAt('migrations'))
