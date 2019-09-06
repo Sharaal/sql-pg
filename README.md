@@ -48,7 +48,10 @@ Simple data manipulation can be done without writing any SQL Statements.
 E.g. some user data manipulation:
 
 ```javascript
-const id = await sql.insert('users', { name: 'Sharaal', email: 'sql-pg@sharaal.de' })
+const id = await sql.insert(
+  'users',
+  { name: 'Sharaal', email: 'sql-pg@sharaal.de' }
+)
 
 await sql.update('users', { validated: 1 }, { id })
 
