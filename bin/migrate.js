@@ -14,7 +14,7 @@ const path = require('path')
   debug('starting migrations')
   let client
   const clientPath = path.join(process.cwd(), 'pg.js')
-  if (fs.fileExistsSync(clientPath)) {
+  if (fs.existsSync(clientPath)) {
     debug('use the projects `pg.js` to connect to the database')
     client = require(clientPath)
   } else {
