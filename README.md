@@ -64,7 +64,7 @@ More complex data manipulation can be done with the SQL Tag.
 
 Often needed convenient methods to check and extract query results are available with the Selection Methods.
 
-E.g. select the inserted user:
+E.g. select all not validated users:
 
 ```javascript
 const users = await sql.any('users', ['name', 'email'], { validated: 0 })
