@@ -106,6 +106,28 @@ describe('sql.any', () => {
     )
   })
 
+  it('supports shorthands to select specific columns without conditions', async () => {
+    const expectedRows = []
+    const client = {
+      query: sinon.fake.returns(Promise.resolve({ rows: expectedRows }))
+    }
+
+    sql.client = client
+    const actualRows = await sql.any('table', ['column1', 'column2'])
+
+    assert.deepEqual(actualRows, expectedRows)
+
+    assert(client.query.calledOnce)
+
+    testSql(
+      client.query.getCall(0).args[0],
+      {
+        text: 'SELECT "column1", "column2" FROM "table"',
+        parameters: []
+      }
+    )
+  })
+
   it('select rows which are given back as return', async () => {
     const expectedRows = [{ column: 'value' }]
     const client = {
