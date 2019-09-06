@@ -62,7 +62,7 @@ const path = require('path')
   await sql.query(updatedAt('migrations'))
 
   debug('select already processed migrations:')
-  const processed = await sql.any('migrations', ['file'])
+  const processed = (await sql.any('migrations', ['file']))
     .map(({ file }) => file)
   debug('%o', processed)
 
