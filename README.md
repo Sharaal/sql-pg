@@ -67,7 +67,7 @@ Often needed convenient methods to check and extract query results are available
 E.g. select the inserted user:
 
 ```javascript
-const user = await sql.one('users', { id })
+const users = await sql.any('users', ['name', 'email'], { validated: 0 })
 ```
 
 Also the Selection Methods supports SQL Tag as parameter for more complex selections. Because they are highly inspired by `pg-promise`, there are the Selection Methods `any`/`manyOrNone`, `many`, `oneOrNone` and `one` available.
