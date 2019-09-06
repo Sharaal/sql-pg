@@ -24,11 +24,45 @@ const path = require('path')
   }
   await client.connect()
 
+  const sql = require('../')({ client })
+
+  debug('create columns helper for "id", "created_at" and "updated_at"')
+  const columns = {
+    id: sql`${sql.column('id')} SERIAL NOT NULL PRIMARY KEY`,
+    created_at: sql`${sql.column('created_at')} TIMESTAMPTZ NOT NULL DEFAULT NOW()`,
+    updated_at: sql`${sql.column('updated_at')} TIMESTAMPTZ NOT NULL DEFAULT NOW()`
+  }
+
+  debug('create trigger function and trigger assign helper for "updated_at"')
+  await sql.query(sql`
+    CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+    RETURNS TRIGGER AS $$
+    BEGIN
+      NEW.updated_at = NOW();
+      RETURN NEW;
+    END;
+    $$ LANGUAGE plpgsql;
+  `)
+  const updatedAt = table => sql`
+    CREATE TRIGGER ${sql.table(`set_timestamp_${table}`)}
+    BEFORE UPDATE ON ${sql.table(table)}
+    FOR EACH ROW
+    EXECUTE PROCEDURE trigger_set_timestamp();
+  `
+
   debug('create table "migrations" if not exists')
-  await client.query('CREATE TABLE IF NOT EXISTS migrations (file VARCHAR(255) PRIMARY KEY)')
+  await sql.query(sql`
+    CREATE TABLE IF NOT EXISTS migrations (
+      ${columns.id},
+      ${columns.created_at},
+      ${columns.updated_at},
+      file VARCHAR(255) PRIMARY KEY
+    )
+  `)
+  await sql.query(updatedAt('migrations'))
 
   debug('select already processed migrations:')
-  const processed = (await client.query('SELECT * FROM migrations')).rows
+  const processed = await sql.any('migrations', ['file'])
     .map(({ file }) => file)
   debug('%o', processed)
 
@@ -46,18 +80,17 @@ const path = require('path')
     for (const file of migrations) {
       debug('process migration file: "%s"', file)
       try {
-        await client.query('BEGIN')
-        if (file.endsWith('.js')) {
-          await require(path.join(directory, file))(client)
-        }
-        if (file.endsWith('.sql')) {
-          await client.query(fs.readFileSync(path.join(directory, file)).toString())
-        }
-        await client.query('INSERT INTO migrations (file) VALUES ($1)', [file])
-        await client.query('COMMIT')
+        await sql.transaction(async () => {
+          if (file.endsWith('.js')) {
+            await require(path.join(directory, file))(sql, { columns, updatedAt })
+          }
+          if (file.endsWith('.sql')) {
+            await client.query(fs.readFileSync(path.join(directory, file)).toString())
+          }
+          await sql.insert('migrations', { file })
+        })
         debug('file successfully processed')
       } catch (e) {
-        await client.query('ROLLBACK')
         debug('error: "%s"', e.message)
         throw e
       }
