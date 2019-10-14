@@ -2,6 +2,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/Sharaal/sql-pg/badge.svg?branch=master)](https://coveralls.io/github/Sharaal/sql-pg?branch=master)
 [![Greenkeeper badge](https://badges.greenkeeper.io/Sharaal/sql-pg.svg)](https://greenkeeper.io/)
 
+Latest Release: ..., Latest Major Release: ..., [All Releases](https://github.com/Sharaal/sql-pg/releases)
+
 # SQL-PG
 
 Complex queries can be written with normal SQL, including the values needs to be bound and prefixed with the sql tag.
