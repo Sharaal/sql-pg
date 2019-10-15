@@ -2,7 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/Sharaal/sql-pg/badge.svg?branch=master)](https://coveralls.io/github/Sharaal/sql-pg?branch=master)
 [![Greenkeeper badge](https://badges.greenkeeper.io/Sharaal/sql-pg.svg)](https://greenkeeper.io/)
 
-Latest Release: ..., Latest Major Release: ..., [All Releases](...)
+Latest Release: [v7.0.5](https://github.com/Sharaal/sql-pg/releases/tag/v7.0.5), Latest Major Release: [v7.0.0](https://github.com/Sharaal/sql-pg/releases/tag/v7.0.0), [All Releases](https://github.com/Sharaal/sql-pg/releases)
 
 # SQL-PG
 
