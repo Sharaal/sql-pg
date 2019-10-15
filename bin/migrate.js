@@ -56,7 +56,7 @@ const path = require('path')
       ${columns.id},
       ${columns.created_at},
       ${columns.updated_at},
-      "file" VARCHAR(255) PRIMARY KEY
+      "file" VARCHAR(255) UNIQUE
     )
   `)
   await sql.query(updatedAt('migrations'))
