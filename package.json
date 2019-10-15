@@ -22,7 +22,7 @@
     "lint": "standard",
     "lint:fix": "standard --fix",
     "test": "nyc mocha --require intelli-espower-loader --recursive './test/**/*.js'",
-    "version": "node bin/readme-releases.js && git add README.md"
+    "version": "npx readme-releases && git add README.md"
   },
   "devDependencies": {
     "espower-loader": "^1.2.2",
@@ -31,6 +31,7 @@
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
     "power-assert": "^1.6.1",
+    "readme-releases": "^1.0.1",
     "sinon": "^7.2.4",
     "standard": "^14.0.0"
   },
