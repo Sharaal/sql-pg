@@ -1,6 +1,6 @@
 {
   "name": "sql-pg",
-  "version": "7.0.3",
+  "version": "7.0.4",
   "description": "Complex queries can be written with normal SQL, including the values needs to be bound and prefixed with the `sql` tag.",
   "keywords": [
     "node-postgres",
@@ -31,7 +31,7 @@
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
     "power-assert": "^1.6.1",
-    "readme-releases": "^1.0.1",
+    "readme-releases": "^1.0.2",
     "sinon": "^7.2.4",
     "standard": "^14.0.0"
   },
