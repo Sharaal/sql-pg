@@ -1,8 +1,6 @@
 const assert = require('power-assert')
 const sinon = require('sinon')
 
-const { testSql } = require('../test')
-
 describe('sql.one', () => {
   let sql
   beforeEach(() => {
@@ -16,17 +14,17 @@ describe('sql.one', () => {
     }
 
     sql.client = client
-    const actualRow = await sql.one(sql`SELECT "*" FROM "table"`)
+    const actualRow = await sql.one(sql`SELECT * FROM "table"`)
 
     assert.deepEqual(actualRow, expectedRow)
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: 'SELECT "*" FROM "table"',
-        parameters: []
+        text: 'SELECT * FROM "table"',
+        values: []
       }
     )
   })
@@ -39,7 +37,7 @@ describe('sql.one', () => {
 
     sql.client = client
     try {
-      await sql.one(sql`SELECT "*" FROM "table"`)
+      await sql.one(sql`SELECT * FROM "table"`)
       assert(false)
     } catch (e) {
       assert.equal(e.message, 'Expects to have one row in the query result')
@@ -47,11 +45,11 @@ describe('sql.one', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: 'SELECT "*" FROM "table"',
-        parameters: []
+        text: 'SELECT * FROM "table"',
+        values: []
       }
     )
   })
@@ -64,7 +62,7 @@ describe('sql.one', () => {
 
     sql.client = client
     try {
-      await sql.one(sql`SELECT "*" FROM "table"`)
+      await sql.one(sql`SELECT * FROM "table"`)
       assert(false)
     } catch (e) {
       assert.equal(e.message, 'Expects to have not more than one row in the query result')
@@ -72,11 +70,11 @@ describe('sql.one', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: 'SELECT "*" FROM "table"',
-        parameters: []
+        text: 'SELECT * FROM "table"',
+        values: []
       }
     )
   })

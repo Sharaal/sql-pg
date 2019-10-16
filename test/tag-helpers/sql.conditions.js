@@ -10,7 +10,7 @@ describe('sql.conditions', () => {
           0: '"column1" = $1 AND "column2" = $2 AND "column3" = $3',
           5: '"column1" = $6 AND "column2" = $7 AND "column3" = $8'
         },
-        parameters: ['value1', 'value2', 'value3']
+        values: ['value1', 'value2', 'value3']
       }
     )
   })

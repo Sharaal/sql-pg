@@ -44,7 +44,9 @@ const path = require('path')
     $$ LANGUAGE plpgsql;
   `)
   const updatedAt = table => sql`
-    CREATE TRIGGER ${sql.table(`set_timestamp_${table}`)}
+    DROP TRIGGER IF EXISTS ${sql.identifier(`set_timestamp_${table}`)}
+      ON ${sql.table(table)};
+    CREATE TRIGGER ${sql.identifier(`set_timestamp_${table}`)}
     BEFORE UPDATE ON ${sql.table(table)}
     FOR EACH ROW
     EXECUTE PROCEDURE trigger_set_timestamp();

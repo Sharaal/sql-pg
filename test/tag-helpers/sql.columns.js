@@ -7,7 +7,7 @@ describe('sql.columns', () => {
       sql.columns(['column1', 'column2', 'column3']),
       {
         text: '"column1", "column2", "column3"',
-        parameters: []
+        values: []
       }
     )
   })
@@ -17,7 +17,7 @@ describe('sql.columns', () => {
       sql.columns(['column1"column1', 'column2"column2', 'column3"column3']),
       {
         text: '"column1""column1", "column2""column2", "column3""column3"',
-        parameters: []
+        values: []
       }
     )
   })
@@ -27,7 +27,7 @@ describe('sql.columns', () => {
       sql.columns({ column1: 'value1', column2: 'value2', column3: 'value3' }),
       {
         text: '"column1", "column2", "column3"',
-        parameters: []
+        values: []
       }
     )
   })

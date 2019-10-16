@@ -11,7 +11,7 @@ describe('sql.limit', () => {
       sql.limit(5),
       {
         text: 'LIMIT 5',
-        parameters: []
+        values: []
       }
     )
   })
@@ -21,7 +21,7 @@ describe('sql.limit', () => {
       sql.limit(150),
       {
         text: 'LIMIT 100',
-        parameters: []
+        values: []
       }
     )
   })
@@ -32,7 +32,7 @@ describe('sql.limit', () => {
       sql.limit(150),
       {
         text: 'LIMIT 150',
-        parameters: []
+        values: []
       }
     )
   })
@@ -42,7 +42,7 @@ describe('sql.limit', () => {
       sql.limit(150, { maxLimit: 500 }),
       {
         text: 'LIMIT 150',
-        parameters: []
+        values: []
       }
     )
   })
@@ -52,7 +52,7 @@ describe('sql.limit', () => {
       sql.limit(NaN),
       {
         text: 'LIMIT 10',
-        parameters: []
+        values: []
       }
     )
   })
@@ -63,7 +63,7 @@ describe('sql.limit', () => {
       sql.limit(NaN),
       {
         text: 'LIMIT 15',
-        parameters: []
+        values: []
       }
     )
   })
@@ -73,7 +73,7 @@ describe('sql.limit', () => {
       sql.limit(NaN, { fallbackLimit: 15 }),
       {
         text: 'LIMIT 15',
-        parameters: []
+        values: []
       }
     )
   })

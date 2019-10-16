@@ -11,7 +11,7 @@ describe('sql.table', () => {
       sql.table('table'),
       {
         text: '"table"',
-        parameters: []
+        values: []
       }
     )
   })
@@ -21,7 +21,7 @@ describe('sql.table', () => {
       sql.table(['schema', 'table']),
       {
         text: '"schema"."table"',
-        parameters: []
+        values: []
       }
     )
   })
@@ -32,7 +32,7 @@ describe('sql.table', () => {
       sql.table('table'),
       {
         text: '"schema"."table"',
-        parameters: []
+        values: []
       }
     )
   })
@@ -42,7 +42,7 @@ describe('sql.table', () => {
       sql.table('table"table'),
       {
         text: '"table""table"',
-        parameters: []
+        values: []
       }
     )
   })
@@ -52,7 +52,7 @@ describe('sql.table', () => {
       sql.table(['schema"schema', 'table"table']),
       {
         text: '"schema""schema"."table""table"',
-        parameters: []
+        values: []
       }
     )
   })
@@ -63,7 +63,7 @@ describe('sql.table', () => {
       sql.table('table"table'),
       {
         text: '"schema""schema"."table""table"',
-        parameters: []
+        values: []
       }
     )
   })

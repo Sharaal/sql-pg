@@ -4,20 +4,20 @@ const { testTagHelper } = require('../test')
 describe('sql.if', () => {
   it('use the then given value in a truly case', () => {
     testTagHelper(
-      sql.if(true, () => ({ text: 'true', parameters: [] })),
+      sql.if(true, () => ({ text: 'true', values: [] })),
       {
         text: 'true',
-        parameters: []
+        values: []
       }
     )
   })
 
   it('use the else default value in a falsy case', () => {
     testTagHelper(
-      sql.if(false, () => ({ text: 'true', parameters: [] })),
+      sql.if(false, () => ({ text: 'true', values: [] })),
       {
         text: '',
-        parameters: []
+        values: []
       }
     )
   })
@@ -26,12 +26,12 @@ describe('sql.if', () => {
     testTagHelper(
       sql.if(
         false,
-        () => ({ text: 'true', parameters: [] }),
-        () => ({ text: 'false', parameters: [] })
+        () => ({ text: 'true', values: [] }),
+        () => ({ text: 'false', values: [] })
       ),
       {
         text: 'false',
-        parameters: []
+        values: []
       }
     )
   })

@@ -10,7 +10,7 @@ describe('sql.values', () => {
           0: '$1, $2, $3',
           5: '$6, $7, $8'
         },
-        parameters: ['value1', 'value2', 'value3']
+        values: ['value1', 'value2', 'value3']
       }
     )
   })
@@ -23,7 +23,7 @@ describe('sql.values', () => {
           0: '$1, $2, $3',
           5: '$6, $7, $8'
         },
-        parameters: ['value1', 'value2', 'value3']
+        values: ['value1', 'value2', 'value3']
       }
     )
   })
@@ -39,7 +39,7 @@ describe('sql.values', () => {
           0: '$1, $2',
           5: '$6, $7'
         },
-        parameters: ['value1', 'value2']
+        values: ['value1', 'value2']
       }
     )
   })

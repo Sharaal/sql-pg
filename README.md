@@ -32,13 +32,20 @@ Complex queries can be written with normal SQL, including the values needs to be
 ## Installation
 
 ```bash
-npm install --save sql-pg
+npm install --save pg sql-pg
 ```
 
 ## Initialisation
 
 ```javascript
-const sql = require('sql-pg')({ client })
+(async () => {
+  const { Client } = require('pg')
+
+  const client = new Client({ connectionString: process.env.DATABASE_URL })
+  await client.connect()
+
+  const sql = require('sql-pg')({ client })
+})()
 ```
 
 ## Usage
@@ -96,7 +103,7 @@ const users = await sql.any(
 )
 ```
 
-There are a lot more Tag Helpers available like `.table`, `.column(s)`, `.value(s)`, `.valuesList`, `.assignments`, `.conditions`, `.limit`, `.offset`, `.pagination` and `.if`.
+There are a lot more Tag Helpers available like `.identifier`, `.table`, `.column(s)`, `.value(s)`, `.valuesList`, `.assignments`, `.conditions`, `.limit`, `.offset`, `.pagination` and `.if`.
 
 ## More
 

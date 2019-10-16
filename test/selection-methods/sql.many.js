@@ -1,8 +1,6 @@
 const assert = require('power-assert')
 const sinon = require('sinon')
 
-const { testSql } = require('../test')
-
 describe('sql.many', () => {
   let sql
   beforeEach(() => {
@@ -16,17 +14,17 @@ describe('sql.many', () => {
     }
 
     sql.client = client
-    const actualRows = await sql.many(sql`SELECT "*" FROM "table"`)
+    const actualRows = await sql.many(sql`SELECT * FROM "table"`)
 
     assert.deepEqual(actualRows, expectedRows)
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: 'SELECT "*" FROM "table"',
-        parameters: []
+        text: 'SELECT * FROM "table"',
+        values: []
       }
     )
   })
@@ -39,7 +37,7 @@ describe('sql.many', () => {
 
     sql.client = client
     try {
-      await sql.many(sql`SELECT "*" FROM "table"`)
+      await sql.many(sql`SELECT * FROM "table"`)
       assert(false)
     } catch (e) {
       assert.equal(e.message, 'Expects to have at least one row in the query result')
@@ -47,11 +45,11 @@ describe('sql.many', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: 'SELECT "*" FROM "table"',
-        parameters: []
+        text: 'SELECT * FROM "table"',
+        values: []
       }
     )
   })

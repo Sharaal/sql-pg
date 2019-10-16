@@ -1,8 +1,6 @@
 const assert = require('power-assert')
 const sinon = require('sinon')
 
-const { testSql } = require('../test')
-
 describe('sql.update', () => {
   let sql
   beforeEach(() => {
@@ -26,14 +24,11 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: {
-          0: 'UPDATE "table" SET "column1" = $1, "column2" = $2 WHERE "column3" = $3 AND "column4" = $4',
-          5: 'UPDATE "table" SET "column1" = $6, "column2" = $7 WHERE "column3" = $8 AND "column4" = $9'
-        },
-        parameters: ['value1', 'value2', 'value3', 'value4']
+        text: 'UPDATE "table" SET "column1" = $1, "column2" = $2 WHERE "column3" = $3 AND "column4" = $4',
+        values: ['value1', 'value2', 'value3', 'value4']
       }
     )
   })
@@ -54,14 +49,11 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: {
-          0: 'UPDATE "table" SET "column1" = $1, "column2" = $2',
-          5: 'UPDATE "table" SET "column1" = $6, "column2" = $7'
-        },
-        parameters: ['value1', 'value2']
+        text: 'UPDATE "table" SET "column1" = $1, "column2" = $2',
+        values: ['value1', 'value2']
       }
     )
   })
@@ -83,14 +75,11 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: {
-          0: 'UPDATE "schema"."table" SET "column1" = $1, "column2" = $2 WHERE "column3" = $3 AND "column4" = $4',
-          5: 'UPDATE "schema"."table" SET "column1" = $6, "column2" = $7 WHERE "column3" = $8 AND "column4" = $9'
-        },
-        parameters: ['value1', 'value2', 'value3', 'value4']
+        text: 'UPDATE "schema"."table" SET "column1" = $1, "column2" = $2 WHERE "column3" = $3 AND "column4" = $4',
+        values: ['value1', 'value2', 'value3', 'value4']
       }
     )
   })
@@ -110,11 +99,11 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
         text: 'UPDATE "table" SET "column" = \'value\'',
-        parameters: []
+        values: []
       }
     )
   })

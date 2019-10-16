@@ -2,7 +2,6 @@ const assert = require('power-assert')
 const sinon = require('sinon')
 
 const sql = require('../')()
-const { testSql } = require('./test')
 
 describe('sql.query', () => {
   beforeEach(() => {
@@ -15,15 +14,15 @@ describe('sql.query', () => {
     }
 
     sql.client = client
-    sql.query(sql`SELECT "*" FROM "table"`, 'param2', 'param3')
+    sql.query(sql`SELECT * FROM "table"`, 'param2', 'param3')
 
     assert.equal(client.query.callCount, 1)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: 'SELECT "*" FROM "table"',
-        parameters: []
+        text: 'SELECT * FROM "table"',
+        values: []
       }
     )
 
@@ -42,7 +41,7 @@ describe('sql.query', () => {
     }
 
     try {
-      sql.query('SELECT "*" FROM "table"')
+      sql.query('SELECT * FROM "table"')
       assert(false)
     } catch (e) {
       assert.equal(e.message, 'Missing assignment of the initialized pg client to "sql.client"')
@@ -58,7 +57,7 @@ describe('sql.query', () => {
 
     sql.client = client
     try {
-      sql.query('SELECT "*" FROM "table"')
+      sql.query('SELECT * FROM "table"')
       assert(false)
     } catch (e) {
       assert.equal(e.message, 'Only queries created with the sql tagged template literal are allowed')
