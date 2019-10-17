@@ -38,7 +38,7 @@ npm install --save pg sql-pg
 ## Initialisation
 
 ```javascript
-(async () => {
+;(async () => {
   const { Client } = require('pg')
 
   const client = new Client({ connectionString: process.env.DATABASE_URL })
