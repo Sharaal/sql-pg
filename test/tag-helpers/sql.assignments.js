@@ -10,7 +10,7 @@ describe('sql.assignments', () => {
           0: '"column1" = $1, "column2" = $2, "column3" = $3',
           5: '"column1" = $6, "column2" = $7, "column3" = $8'
         },
-        parameters: ['value1', 'value2', 'value3']
+        values: ['value1', 'value2', 'value3']
       }
     )
   })

@@ -1,8 +1,6 @@
 const assert = require('power-assert')
 const sinon = require('sinon')
 
-const { testSql } = require('../test')
-
 describe('sql.delete', () => {
   let sql
   beforeEach(() => {
@@ -25,14 +23,11 @@ describe('sql.delete', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: {
-          0: 'DELETE FROM "table" WHERE "column1" = $1 AND "column2" = $2 AND "column3" = $3',
-          5: 'DELETE FROM "table" WHERE "column1" = $6 AND "column2" = $7 AND "column3" = $8'
-        },
-        parameters: ['value1', 'value2', 'value3']
+        text: 'DELETE FROM "table" WHERE "column1" = $1 AND "column2" = $2 AND "column3" = $3',
+        values: ['value1', 'value2', 'value3']
       }
     )
   })
@@ -50,11 +45,11 @@ describe('sql.delete', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
         text: 'DELETE FROM "table"',
-        parameters: []
+        values: []
       }
     )
   })
@@ -75,14 +70,11 @@ describe('sql.delete', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: {
-          0: 'DELETE FROM "schema"."table" WHERE "column1" = $1 AND "column2" = $2 AND "column3" = $3',
-          5: 'DELETE FROM "schema"."table" WHERE "column1" = $6 AND "column2" = $7 AND "column3" = $8'
-        },
-        parameters: ['value1', 'value2', 'value3']
+        text: 'DELETE FROM "schema"."table" WHERE "column1" = $1 AND "column2" = $2 AND "column3" = $3',
+        values: ['value1', 'value2', 'value3']
       }
     )
   })
@@ -100,11 +92,11 @@ describe('sql.delete', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
         text: 'DELETE FROM "table"',
-        parameters: []
+        values: []
       }
     )
   })

@@ -1,8 +1,6 @@
 const assert = require('power-assert')
 const sinon = require('sinon')
 
-const { testSql } = require('../test')
-
 describe('sql.any', () => {
   let sql
   beforeEach(() => {
@@ -22,14 +20,11 @@ describe('sql.any', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: {
-          0: 'SELECT "*" FROM "table" WHERE "column" = $1',
-          5: 'SELECT "*" FROM "table" WHERE "column" = $6'
-        },
-        parameters: ['value']
+        text: 'SELECT * FROM "table" WHERE "column" = $1',
+        values: ['value']
       }
     )
   })
@@ -47,11 +42,11 @@ describe('sql.any', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: 'SELECT "*" FROM "table"',
-        parameters: []
+        text: 'SELECT * FROM "table"',
+        values: []
       }
     )
   })
@@ -69,14 +64,11 @@ describe('sql.any', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: {
-          0: 'SELECT "*" FROM "schema"."table" WHERE "column" = $1',
-          5: 'SELECT "*" FROM "schema"."table" WHERE "column" = $6'
-        },
-        parameters: ['value']
+        text: 'SELECT * FROM "schema"."table" WHERE "column" = $1',
+        values: ['value']
       }
     )
   })
@@ -94,14 +86,11 @@ describe('sql.any', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: {
-          0: 'SELECT "column1", "column2" FROM "table" WHERE "column3" = $1',
-          5: 'SELECT "column1", "column2" FROM "table" WHERE "column3" = $6'
-        },
-        parameters: ['value']
+        text: 'SELECT "column1", "column2" FROM "table" WHERE "column3" = $1',
+        values: ['value']
       }
     )
   })
@@ -119,11 +108,11 @@ describe('sql.any', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
         text: 'SELECT "column1", "column2" FROM "table"',
-        parameters: []
+        values: []
       }
     )
   })
@@ -135,17 +124,17 @@ describe('sql.any', () => {
     }
 
     sql.client = client
-    const actualRows = await sql.any(sql`SELECT "*" FROM "table"`)
+    const actualRows = await sql.any(sql`SELECT * FROM "table"`)
 
     assert.deepEqual(actualRows, expectedRows)
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: 'SELECT "*" FROM "table"',
-        parameters: []
+        text: 'SELECT * FROM "table"',
+        values: []
       }
     )
   })
@@ -157,17 +146,17 @@ describe('sql.any', () => {
     }
 
     sql.client = client
-    const actualRows = await sql.any(sql`SELECT "*" FROM "table"`)
+    const actualRows = await sql.any(sql`SELECT * FROM "table"`)
 
     assert.deepEqual(actualRows, expectedRows)
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: 'SELECT "*" FROM "table"',
-        parameters: []
+        text: 'SELECT * FROM "table"',
+        values: []
       }
     )
   })

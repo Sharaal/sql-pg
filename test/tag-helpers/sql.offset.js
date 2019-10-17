@@ -7,7 +7,7 @@ describe('sql.offset', () => {
       sql.offset(5),
       {
         text: 'OFFSET 5',
-        parameters: []
+        values: []
       }
     )
   })
@@ -17,7 +17,7 @@ describe('sql.offset', () => {
       sql.offset(NaN),
       {
         text: 'OFFSET 0',
-        parameters: []
+        values: []
       }
     )
   })

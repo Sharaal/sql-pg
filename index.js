@@ -8,24 +8,25 @@ module.exports = ({
 } = {}) => {
   const symbol = Symbol('sql-pg')
 
-  function sql (textFragments, ...valueFragments) {
-    const build = parameterPosition => {
-      const query = {
-        text: textFragments[0],
-        parameters: []
-      }
-      valueFragments.forEach((valueFragment, i) => {
-        if (typeof valueFragment !== 'function') {
-          valueFragment = sql.value(valueFragment)
+  const sql = (textFragments, ...valueFragments) =>
+    Object.assign(
+      (valuePosition = 0) => {
+        const query = {
+          text: textFragments[0],
+          values: []
         }
-        valueFragment = valueFragment(parameterPosition + query.parameters.length)
-        query.text += valueFragment.text + textFragments[i + 1]
-        query.parameters = query.parameters.concat(valueFragment.parameters)
-      })
-      return query
-    }
-    return Object.assign(build, build(0), { symbol })
-  }
+        valueFragments.forEach((valueFragment, i) => {
+          if (typeof valueFragment !== 'function') {
+            valueFragment = sql.value(valueFragment)
+          }
+          valueFragment = valueFragment(valuePosition + query.values.length)
+          query.text += valueFragment.text + textFragments[i + 1]
+          query.values = query.values.concat(valueFragment.values)
+        })
+        return query
+      },
+      { symbol }
+    )
 
   sql.client = client
 
@@ -33,10 +34,10 @@ module.exports = ({
     if (typeof sql.client !== 'object' || typeof sql.client.query !== 'function') {
       throw Error('Missing assignment of the initialized pg client to "sql.client"')
     }
-    const [query] = params
-    if (typeof query !== 'function' || query.symbol !== symbol) {
+    if (typeof params[0] !== 'function' || params[0].symbol !== symbol) {
       throw Error('Only queries created with the sql tagged template literal are allowed')
     }
+    params[0] = params[0]()
     return sql.client.query(...params)
   }
 
@@ -98,7 +99,7 @@ module.exports = ({
   sql.any = async (...params) => {
     if (typeof params[0] === 'string' || Array.isArray(params[0])) {
       const table = params[0]
-      let columns = ['*']
+      let columns
       if (Array.isArray(params[1])) {
         columns = params[1]
       }
@@ -109,7 +110,7 @@ module.exports = ({
       if (params[2]) {
         conditions = params[2]
       }
-      params = [sql`SELECT ${sql.columns(columns)} FROM ${sql.table(table)}${sql.if(conditions, sql` WHERE ${sql.conditions(conditions)}`)}`]
+      params = [sql`SELECT ${columns ? sql.columns(columns) : () => ({ text: '*', values: [] })} FROM ${sql.table(table)}${sql.if(conditions, sql` WHERE ${sql.conditions(conditions)}`)}`]
     }
     const [query] = params
     const result = await sql.query(query)
@@ -142,17 +143,18 @@ module.exports = ({
     return row
   }
 
-  function escapeIdentifier (identifier) {
-    return '"' + identifier.replace(/"/g, '""') + '"'
-  }
+  sql.identifier = identifier => () => ({
+    text: '"' + identifier.replace(/"/g, '""') + '"',
+    values: []
+  })
 
   sql.defaultSchema = defaultSchema
 
   sql.table = param => () => {
     const [schema, table] = Array.isArray(param) ? param : [sql.defaultSchema, param]
     return {
-      text: (schema ? escapeIdentifier(schema) + '.' : '') + escapeIdentifier(table),
-      parameters: []
+      text: (schema ? sql.identifier(schema)().text + '.' : '') + sql.identifier(table)().text,
+      values: []
     }
   }
 
@@ -161,8 +163,8 @@ module.exports = ({
       columns = Object.keys(columns)
     }
     return () => ({
-      text: columns.map(escapeIdentifier).join(', '),
-      parameters: []
+      text: columns.map(column => sql.identifier(column)().text).join(', '),
+      values: []
     })
   }
 
@@ -172,50 +174,50 @@ module.exports = ({
     if (!Array.isArray(values)) {
       values = columns.map(column => values[column])
     }
-    return parameterPosition => ({
-      text: Array.apply(null, { length: values.length }).map(() => '$' + (++parameterPosition)).join(', '),
-      parameters: values
+    return valuePosition => ({
+      text: Array.apply(null, { length: values.length }).map(() => '$' + (++valuePosition)).join(', '),
+      values
     })
   }
 
   sql.value = value => sql.values([value])
 
   sql.valuesList = (valuesList, { columns = Object.keys(valuesList[0]) } = {}) =>
-    parameterPosition => {
+    valuePosition => {
       const queries = []
       for (const values of valuesList) {
-        const query = sql.values(values, { columns })(parameterPosition)
+        const query = sql.values(values, { columns })(valuePosition)
         queries.push({
           text: '(' + query.text + ')',
-          parameters: query.parameters
+          values: query.values
         })
-        parameterPosition += query.parameters.length
+        valuePosition += query.values.length
       }
       return queries.reduce(
         (queryA, queryB) => ({
           text: queryA.text + (queryA.text ? ', ' : '') + queryB.text,
-          parameters: queryA.parameters.concat(queryB.parameters)
+          values: queryA.values.concat(queryB.values)
         }),
-        { text: '', parameters: [] }
+        { text: '', values: [] }
       )
     }
 
   function pairs (pairs = {}, separator) {
-    return parameterPosition => {
+    return valuePosition => {
       const queries = []
       for (const column of Object.keys(pairs)) {
-        const value = sql.value(pairs[column])(parameterPosition++)
+        const value = sql.value(pairs[column])(valuePosition++)
         queries.push({
-          text: escapeIdentifier(column) + ' = ' + value.text,
-          parameters: value.parameters
+          text: sql.identifier(column)().text + ' = ' + value.text,
+          values: value.values
         })
       }
       return queries.reduce(
         (queryA, queryB) => ({
           text: queryA.text + (queryA.text ? separator : '') + queryB.text,
-          parameters: queryA.parameters.concat(queryB.parameters)
+          values: queryA.values.concat(queryB.values)
         }),
-        { text: '', parameters: [] }
+        { text: '', values: [] }
       )
     }
   }
@@ -239,13 +241,13 @@ module.exports = ({
   sql.limit = (limit, { fallbackLimit = sql.defaultFallbackLimit, maxLimit = sql.defaultMaxLimit } = {}) =>
     () => ({
       text: 'LIMIT ' + Math.min(positiveNumber(limit, fallbackLimit), maxLimit),
-      parameters: []
+      values: []
     })
 
   sql.offset = offset =>
     () => ({
       text: 'OFFSET ' + positiveNumber(offset, 0),
-      parameters: []
+      values: []
     })
 
   sql.defaultPageSize = defaultPageSize
@@ -253,10 +255,10 @@ module.exports = ({
   sql.pagination = (page, { pageSize = sql.defaultPageSize } = {}) =>
     () => ({
       text: sql.limit(pageSize)().text + ' ' + sql.offset(page * pageSize)().text,
-      parameters: []
+      values: []
     })
 
-  sql.if = (condition, truly, falsy = () => ({ text: '', parameters: [] })) => condition ? truly : falsy
+  sql.if = (condition, truly, falsy = () => ({ text: '', values: [] })) => condition ? truly : falsy
 
   return sql
 }

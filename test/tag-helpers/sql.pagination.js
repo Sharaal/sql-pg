@@ -11,7 +11,7 @@ describe('sql.pagination', () => {
       sql.pagination(5),
       {
         text: 'LIMIT 10 OFFSET 50',
-        parameters: []
+        values: []
       }
     )
   })
@@ -21,7 +21,7 @@ describe('sql.pagination', () => {
       sql.pagination(NaN),
       {
         text: 'LIMIT 10 OFFSET 0',
-        parameters: []
+        values: []
       }
     )
   })
@@ -32,7 +32,7 @@ describe('sql.pagination', () => {
       sql.pagination(5),
       {
         text: 'LIMIT 15 OFFSET 75',
-        parameters: []
+        values: []
       }
     )
   })
@@ -42,7 +42,7 @@ describe('sql.pagination', () => {
       sql.pagination(5, { pageSize: 15 }),
       {
         text: 'LIMIT 15 OFFSET 75',
-        parameters: []
+        values: []
       }
     )
   })

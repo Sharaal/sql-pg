@@ -1,8 +1,6 @@
 const assert = require('power-assert')
 const sinon = require('sinon')
 
-const { testSql } = require('../test')
-
 describe('sql.update', () => {
   let sql
   beforeEach(() => {
@@ -25,14 +23,11 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: {
-          0: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "id"',
-          5: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($6, $7, $8) RETURNING "id"'
-        },
-        parameters: ['value1', 'value2', 'value3']
+        text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "id"',
+        values: ['value1', 'value2', 'value3']
       }
     )
   })
@@ -57,14 +52,11 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: {
-          0: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3), ($4, $5, $6), ($7, $8, $9) RETURNING "id"',
-          5: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($6, $7, $8), ($9, $10, $11), ($12, $13, $14) RETURNING "id"'
-        },
-        parameters: ['value11', 'value12', 'value13', 'value21', 'value22', 'value23', 'value31', 'value32', 'value33']
+        text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3), ($4, $5, $6), ($7, $8, $9) RETURNING "id"',
+        values: ['value11', 'value12', 'value13', 'value21', 'value22', 'value23', 'value31', 'value32', 'value33']
       }
     )
   })
@@ -87,14 +79,11 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: {
-          0: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "id"',
-          5: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($6, $7, $8) RETURNING "id"'
-        },
-        parameters: ['value1', 'value2', 'value3']
+        text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "id"',
+        values: ['value1', 'value2', 'value3']
       }
     )
   })
@@ -116,14 +105,11 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: {
-          0: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "column4"',
-          5: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($6, $7, $8) RETURNING "column4"'
-        },
-        parameters: ['value1', 'value2', 'value3']
+        text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "column4"',
+        values: ['value1', 'value2', 'value3']
       }
     )
   })
@@ -145,14 +131,11 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: {
-          0: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "column4"',
-          5: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($6, $7, $8) RETURNING "column4"'
-        },
-        parameters: ['value1', 'value2', 'value3']
+        text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "column4"',
+        values: ['value1', 'value2', 'value3']
       }
     )
   })
@@ -174,14 +157,11 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: {
-          0: 'INSERT INTO "table" ("column1", "column2") VALUES ($1, $2) RETURNING "id"',
-          5: 'INSERT INTO "table" ("column1", "column2") VALUES ($6, $7) RETURNING "id"'
-        },
-        parameters: ['value1', 'value2']
+        text: 'INSERT INTO "table" ("column1", "column2") VALUES ($1, $2) RETURNING "id"',
+        values: ['value1', 'value2']
       }
     )
   })
@@ -207,14 +187,11 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: {
-          0: 'INSERT INTO "table" ("column1", "column2") VALUES ($1, $2), ($3, $4), ($5, $6) RETURNING "id"',
-          5: 'INSERT INTO "table" ("column1", "column2") VALUES ($6, $7), ($8, $9), ($10, $11) RETURNING "id"'
-        },
-        parameters: ['value11', 'value12', 'value21', 'value22', 'value31', 'value32']
+        text: 'INSERT INTO "table" ("column1", "column2") VALUES ($1, $2), ($3, $4), ($5, $6) RETURNING "id"',
+        values: ['value11', 'value12', 'value21', 'value22', 'value31', 'value32']
       }
     )
   })
@@ -235,14 +212,11 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: {
-          0: 'INSERT INTO "schema"."table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "id"',
-          5: 'INSERT INTO "schema"."table" ("column1", "column2", "column3") VALUES ($6, $7, $8) RETURNING "id"'
-        },
-        parameters: ['value1', 'value2', 'value3']
+        text: 'INSERT INTO "schema"."table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "id"',
+        values: ['value1', 'value2', 'value3']
       }
     )
   })
@@ -262,11 +236,11 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
         text: 'INSERT INTO "table" SELECT * FROM "table"',
-        parameters: []
+        values: []
       }
     )
   })
@@ -287,11 +261,11 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
         text: 'INSERT INTO "table" SELECT * FROM "table"',
-        parameters: []
+        values: []
       }
     )
   })
@@ -312,11 +286,11 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    testSql(
+    assert.deepEqual(
       client.query.getCall(0).args[0],
       {
         text: 'INSERT INTO "table" SELECT * FROM "table"',
-        parameters: []
+        values: []
       }
     )
   })
