@@ -85,7 +85,7 @@ Also the Selection Methods supports SQL Tag as parameter for more complex select
 
 If it becomes more complex the SQL Tag and Tag Helpers are the way to go.
 
-They are as near as possible to native SQL queries to be readable and easy to write. All variables can be directly used and will be exchanged via placeholders and given to the database separately as parameters. For non native values like lists, for table/column names and conditions there are Tag Helpers.
+They are as near as possible to native SQL queries to be readable and easy to write. All variables can be directly used and will be exchanged via placeholders and given to the database separately as values. For non native values like lists, for table/column names and conditions there are Tag Helpers.
 
 E.g. list of not activated users filtered by name and with pagination:
 
