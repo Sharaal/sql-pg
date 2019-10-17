@@ -59,7 +59,7 @@ E.g. some user data manipulation:
 ```javascript
 const id = await sql.insert(
   'users',
-  { name: 'Sharaal', email: 'sql-pg@sharaal.de' }
+  { name: 'Sharaal', email: 'sql-pg@sharaal.de', passwordhash: '...' }
 )
 
 await sql.update('users', { validated: 1 }, { id })
