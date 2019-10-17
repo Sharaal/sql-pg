@@ -5,11 +5,11 @@ const { testSql } = require('./test')
 describe('sql', () => {
   let sql
   beforeEach(() => {
-    sql = require('../')()
+    sql = require('../../')()
   })
 
   it('use the given client and default values', () => {
-    sql = require('../')({
+    sql = require('../../')({
       client: 'client',
       defaultSerialColumn: 'defaultSerialColumn',
       defaultSchema: 'defaultSchema',

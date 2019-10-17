@@ -3,7 +3,7 @@ const { testTagHelper } = require('../test')
 describe('sql.limit', () => {
   let sql
   beforeEach(() => {
-    sql = require('../../')()
+    sql = require('../../../')()
   })
 
   it('use the given positive number', () => {

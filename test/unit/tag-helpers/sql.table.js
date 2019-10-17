@@ -3,7 +3,7 @@ const { testTagHelper } = require('../test')
 describe('sql.table', () => {
   let sql
   beforeEach(() => {
-    sql = require('../../')()
+    sql = require('../../../')()
   })
 
   it('escapes the given table', () => {

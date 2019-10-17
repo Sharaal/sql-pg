@@ -4,7 +4,7 @@ const sinon = require('sinon')
 describe('sql.many', () => {
   let sql
   beforeEach(() => {
-    sql = require('../../')()
+    sql = require('../../../')()
   })
 
   it('select rows which are given back as return if there are some', async () => {
