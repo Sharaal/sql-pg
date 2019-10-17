@@ -4,7 +4,7 @@ const sinon = require('sinon')
 describe('sql.any', () => {
   let sql
   beforeEach(() => {
-    sql = require('../../')()
+    sql = require('../../../')()
   })
 
   it('supports shorthands to select all columns', async () => {

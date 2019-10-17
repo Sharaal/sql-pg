@@ -1,22 +1,23 @@
 const assert = require('power-assert')
 const sinon = require('sinon')
 
-describe('sql.delete', () => {
+describe('sql.update', () => {
   let sql
   beforeEach(() => {
-    sql = require('../../')()
+    sql = require('../../../')()
   })
 
-  it('delete rows with the shorthand', async () => {
+  it('update rows with the shorthand', async () => {
     const expectedRowCount = 5
     const client = {
       query: sinon.fake.returns(Promise.resolve({ rowCount: expectedRowCount }))
     }
 
     sql.client = client
-    const actualRowCount = await sql.delete(
+    const actualRowCount = await sql.update(
       'table',
-      { column1: 'value1', column2: 'value2', column3: 'value3' }
+      { column1: 'value1', column2: 'value2' },
+      { column3: 'value3', column4: 'value4' }
     )
 
     assert.equal(actualRowCount, expectedRowCount)
@@ -26,20 +27,23 @@ describe('sql.delete', () => {
     assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: 'DELETE FROM "table" WHERE "column1" = $1 AND "column2" = $2 AND "column3" = $3',
-        values: ['value1', 'value2', 'value3']
+        text: 'UPDATE "table" SET "column1" = $1, "column2" = $2 WHERE "column3" = $3 AND "column4" = $4',
+        values: ['value1', 'value2', 'value3', 'value4']
       }
     )
   })
 
-  it('delete rows with the shorthand without any conditions', async () => {
+  it('update rows with the shorthand without any conditions', async () => {
     const expectedRowCount = 5
     const client = {
       query: sinon.fake.returns(Promise.resolve({ rowCount: expectedRowCount }))
     }
 
     sql.client = client
-    const actualRowCount = await sql.delete('table')
+    const actualRowCount = await sql.update(
+      'table',
+      { column1: 'value1', column2: 'value2' }
+    )
 
     assert.equal(actualRowCount, expectedRowCount)
 
@@ -48,22 +52,23 @@ describe('sql.delete', () => {
     assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: 'DELETE FROM "table"',
-        values: []
+        text: 'UPDATE "table" SET "column1" = $1, "column2" = $2',
+        values: ['value1', 'value2']
       }
     )
   })
 
-  it('delete rows with the shorthand from a table with schema', async () => {
+  it('update rows with the shorthand in a table with schema', async () => {
     const expectedRowCount = 5
     const client = {
       query: sinon.fake.returns(Promise.resolve({ rowCount: expectedRowCount }))
     }
 
     sql.client = client
-    const actualRowCount = await sql.delete(
+    const actualRowCount = await sql.update(
       ['schema', 'table'],
-      { column1: 'value1', column2: 'value2', column3: 'value3' }
+      { column1: 'value1', column2: 'value2' },
+      { column3: 'value3', column4: 'value4' }
     )
 
     assert.equal(actualRowCount, expectedRowCount)
@@ -73,20 +78,22 @@ describe('sql.delete', () => {
     assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: 'DELETE FROM "schema"."table" WHERE "column1" = $1 AND "column2" = $2 AND "column3" = $3',
-        values: ['value1', 'value2', 'value3']
+        text: 'UPDATE "schema"."table" SET "column1" = $1, "column2" = $2 WHERE "column3" = $3 AND "column4" = $4',
+        values: ['value1', 'value2', 'value3', 'value4']
       }
     )
   })
 
-  it('delete rows with SQL Tag', async () => {
+  it('update rows with SQL Tag', async () => {
     const expectedRowCount = 5
     const client = {
       query: sinon.fake.returns(Promise.resolve({ rowCount: expectedRowCount }))
     }
 
     sql.client = client
-    const actualRowCount = await sql.delete(sql`DELETE FROM "table"`)
+    const actualRowCount = await sql.update(
+      sql`UPDATE "table" SET "column" = 'value'`
+    )
 
     assert.equal(actualRowCount, expectedRowCount)
 
@@ -95,7 +102,7 @@ describe('sql.delete', () => {
     assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: 'DELETE FROM "table"',
+        text: 'UPDATE "table" SET "column" = \'value\'',
         values: []
       }
     )

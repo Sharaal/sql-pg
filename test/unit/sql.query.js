@@ -1,7 +1,7 @@
 const assert = require('power-assert')
 const sinon = require('sinon')
 
-const sql = require('../')()
+const sql = require('../../')()
 
 describe('sql.query', () => {
   beforeEach(() => {

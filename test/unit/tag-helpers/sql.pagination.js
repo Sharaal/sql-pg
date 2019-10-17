@@ -3,7 +3,7 @@ const { testTagHelper } = require('../test')
 describe('sql.pagination', () => {
   let sql
   beforeEach(() => {
-    sql = require('../../')()
+    sql = require('../../../')()
   })
 
   it('use the given page and normal default pageSize to set limit and offset', () => {

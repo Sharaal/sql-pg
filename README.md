@@ -38,7 +38,7 @@ npm install --save pg sql-pg
 ## Initialisation
 
 ```javascript
-(async () => {
+;(async () => {
   const { Client } = require('pg')
 
   const client = new Client({ connectionString: process.env.DATABASE_URL })
@@ -59,7 +59,7 @@ E.g. some user data manipulation:
 ```javascript
 const id = await sql.insert(
   'users',
-  { name: 'Sharaal', email: 'sql-pg@sharaal.de' }
+  { name: 'Sharaal', email: 'sql-pg@sharaal.de', passwordhash: '...' }
 )
 
 await sql.update('users', { validated: 1 }, { id })

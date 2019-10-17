@@ -1,10 +1,10 @@
 const assert = require('power-assert')
 const sinon = require('sinon')
 
-describe('sql.one', () => {
+describe('sql.oneOrNone', () => {
   let sql
   beforeEach(() => {
-    sql = require('../../')()
+    sql = require('../../../')()
   })
 
   it('select one row which is given back as return', async () => {
@@ -14,7 +14,7 @@ describe('sql.one', () => {
     }
 
     sql.client = client
-    const actualRow = await sql.one(sql`SELECT * FROM "table"`)
+    const actualRow = await sql.oneOrNone(sql`SELECT * FROM "table"`)
 
     assert.deepEqual(actualRow, expectedRow)
 
@@ -29,19 +29,16 @@ describe('sql.one', () => {
     )
   })
 
-  it('throw an exception if a there is none row in the result', async () => {
+  it('select one row which is given back as return also if there is no row in the results', async () => {
     const expectedRow = undefined
     const client = {
       query: sinon.fake.returns(Promise.resolve({ rows: [expectedRow] }))
     }
 
     sql.client = client
-    try {
-      await sql.one(sql`SELECT * FROM "table"`)
-      assert(false)
-    } catch (e) {
-      assert.equal(e.message, 'Expects to have one row in the query result')
-    }
+    const actualRow = await sql.oneOrNone(sql`SELECT * FROM "table"`)
+
+    assert.equal(actualRow, expectedRow)
 
     assert(client.query.calledOnce)
 
@@ -62,7 +59,7 @@ describe('sql.one', () => {
 
     sql.client = client
     try {
-      await sql.one(sql`SELECT * FROM "table"`)
+      await sql.oneOrNone(sql`SELECT * FROM "table"`)
       assert(false)
     } catch (e) {
       assert.equal(e.message, 'Expects to have not more than one row in the query result')

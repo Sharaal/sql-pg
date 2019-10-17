@@ -4,7 +4,7 @@ const sinon = require('sinon')
 describe('sql.update', () => {
   let sql
   beforeEach(() => {
-    sql = require('../../')()
+    sql = require('../../../')()
   })
 
   it('insert single row', async () => {
