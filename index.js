@@ -202,7 +202,7 @@ module.exports = ({
       )
     }
 
-  function pairs (pairs = {}, separator) {
+  function pairs (pairs, separator) {
     return valuePosition => {
       const queries = []
       for (const column of Object.keys(pairs)) {
