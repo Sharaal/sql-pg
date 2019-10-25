@@ -208,7 +208,7 @@ module.exports = ({
       for (const column of Object.keys(pairs)) {
         const value = sql.value(pairs[column])(valuePosition++)
         queries.push({
-          text: sql.identifier(column)().text + ' = ' + value.text,
+          text: sql.column(column)().text + ' = ' + value.text,
           values: value.values
         })
       }
