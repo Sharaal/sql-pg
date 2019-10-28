@@ -29,7 +29,7 @@ describe('sql.one', () => {
     )
   })
 
-  it('throw an exception if a there is none row in the result', async () => {
+  it('throw an exception if there is none row in the result', async () => {
     const expectedRow = undefined
     const client = {
       query: sinon.fake.returns(Promise.resolve({ rows: [expectedRow] }))
@@ -54,7 +54,7 @@ describe('sql.one', () => {
     )
   })
 
-  it('throw an exception if a there is more than one row in the result', async () => {
+  it('throw an exception if there is more than one row in the result', async () => {
     const expectedRows = [{ column: 'value' }, { column: 'value' }]
     const client = {
       query: sinon.fake.returns(Promise.resolve({ rows: expectedRows }))

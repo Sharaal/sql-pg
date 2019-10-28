@@ -29,7 +29,7 @@ describe('sql.many', () => {
     )
   })
 
-  it('throw an exception if a there are none rows in the result', async () => {
+  it('throw an exception if there are none rows in the result', async () => {
     const expectedRows = []
     const client = {
       query: sinon.fake.returns(Promise.resolve({ rows: expectedRows }))
