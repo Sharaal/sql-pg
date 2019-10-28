@@ -25,7 +25,7 @@ describe('sql', () => {
     assert.equal(sql.defaultPageSize, 'defaultPageSize')
   })
 
-  it('return build function with text and parameter attribute assigned', () => {
+  it('return function returning with the actual text and values assigned object', () => {
     testSql(
       sql`SELECT * FROM "table"`,
       {
@@ -35,7 +35,7 @@ describe('sql', () => {
     )
   })
 
-  it('exchange primitive parameter', () => {
+  it('exchange primitive values', () => {
     const value1 = 'value1'
     const value2 = 'value2'
     const value3 = 'value3'
