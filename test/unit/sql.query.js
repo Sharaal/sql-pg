@@ -36,18 +36,12 @@ describe('sql.query', () => {
   })
 
   it('throw an exception "sql.query()" is used without assign a client', async () => {
-    const client = {
-      query: sinon.fake()
-    }
-
     try {
       sql.query('SELECT * FROM "table"')
       assert(false)
     } catch (e) {
       assert.equal(e.message, 'Missing assignment of the initialized pg client to "sql.client"')
     }
-
-    assert.equal(client.query.callCount, 0)
   })
 
   it('throw an exception if a string is used as query', async () => {
