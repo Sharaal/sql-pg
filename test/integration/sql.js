@@ -11,11 +11,11 @@ describe('sql', () => {
     client = require('../../pg')
     await client.connect()
     sql = require('../../')({ client })
-    await sql.delete('users')
+    await sql.deleteAll('users')
   })
 
   after(async () => {
-    await sql.delete('users')
+    await sql.deleteAll('users')
     await client.end()
   })
 

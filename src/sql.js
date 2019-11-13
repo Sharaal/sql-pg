@@ -26,8 +26,10 @@ module.exports = (options = {}) => {
 
   const extensions = [
     './manipulation-methods/sql.delete.js',
+    './manipulation-methods/sql.deleteAll.js',
     './manipulation-methods/sql.insert.js',
     './manipulation-methods/sql.update.js',
+    './manipulation-methods/sql.updateAll.js',
     './selection-methods/sql.any.js',
     './selection-methods/sql.many.js',
     './selection-methods/sql.manyOrNone.js',

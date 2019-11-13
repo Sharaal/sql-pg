@@ -32,26 +32,20 @@ describe('sql.delete', () => {
     )
   })
 
-  it('delete rows with the shorthand without any conditions', async () => {
-    const expectedRowCount = 5
+  it('delete rows with the shorthand without any conditions throws exception', async () => {
     const client = {
-      query: sinon.fake.returns(Promise.resolve({ rowCount: expectedRowCount }))
+      query: sinon.fake()
     }
 
     sql.client = client
-    const actualRowCount = await sql.delete('table')
+    try {
+      await sql.delete('table')
+      assert(false)
+    } catch (e) {
+      assert.equal(e.message, 'Expects to have conditions for the delete')
+    }
 
-    assert.equal(actualRowCount, expectedRowCount)
-
-    assert(client.query.calledOnce)
-
-    assert.deepEqual(
-      client.query.getCall(0).args[0],
-      {
-        text: 'DELETE FROM "table"',
-        values: []
-      }
-    )
+    assert.equal(client.query.callCount, 0)
   })
 
   it('delete rows with the shorthand from a table with schema', async () => {

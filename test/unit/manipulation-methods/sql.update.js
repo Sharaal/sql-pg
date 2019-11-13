@@ -33,29 +33,23 @@ describe('sql.update', () => {
     )
   })
 
-  it('update rows with the shorthand without any conditions', async () => {
-    const expectedRowCount = 5
+  it('update rows with the shorthand without any conditions throws exception', async () => {
     const client = {
-      query: sinon.fake.returns(Promise.resolve({ rowCount: expectedRowCount }))
+      query: sinon.fake()
     }
 
     sql.client = client
-    const actualRowCount = await sql.update(
-      'table',
-      { column1: 'value1', column2: 'value2' }
-    )
+    try {
+      await sql.update(
+        'table',
+        { column1: 'value1', column2: 'value2' }
+      )
+      assert(false)
+    } catch (e) {
+      assert.equal(e.message, 'Expects to have conditions for the update')
+    }
 
-    assert.equal(actualRowCount, expectedRowCount)
-
-    assert(client.query.calledOnce)
-
-    assert.deepEqual(
-      client.query.getCall(0).args[0],
-      {
-        text: 'UPDATE "table" SET "column1" = $1, "column2" = $2',
-        values: ['value1', 'value2']
-      }
-    )
+    assert.equal(client.query.callCount, 0)
   })
 
   it('update rows with the shorthand in a table with schema', async () => {
@@ -92,7 +86,7 @@ describe('sql.update', () => {
 
     sql.client = client
     const actualRowCount = await sql.update(
-      sql`UPDATE "table" SET "column" = 'value'`
+      sql`UPDATE "table" SET "columnA" = 'valueA' WHERE "columnB" = 'valueB'`
     )
 
     assert.equal(actualRowCount, expectedRowCount)
@@ -102,7 +96,7 @@ describe('sql.update', () => {
     assert.deepEqual(
       client.query.getCall(0).args[0],
       {
-        text: 'UPDATE "table" SET "column" = \'value\'',
+        text: 'UPDATE "table" SET "columnA" = \'valueA\' WHERE "columnB" = \'valueB\'',
         values: []
       }
     )
