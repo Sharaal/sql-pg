@@ -47,6 +47,7 @@
   },
   "files": [
     "bin/migrate.js",
+    "src/**/*.js",
     "index.js",
     "LICENSE",
     "package.json",
