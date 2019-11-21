@@ -1,4 +1,4 @@
-const assert = require('power-assert')
+const assert = require('power-assert').strict
 
 function sleep (ms) {
   return new Promise(resolve => setTimeout(resolve, ms))

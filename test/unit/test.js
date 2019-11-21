@@ -1,4 +1,4 @@
-const assert = require('power-assert')
+const assert = require('power-assert').strict
 
 function testSql (actual, expected) {
   assert.equal(typeof actual.symbol, 'symbol')

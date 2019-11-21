@@ -1,4 +1,4 @@
-const assert = require('power-assert')
+const assert = require('power-assert').strict
 const sinon = require('sinon')
 
 describe('sql.update', () => {
