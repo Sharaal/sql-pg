@@ -103,7 +103,7 @@ const users = await sql.any(
 )
 ```
 
-There are a lot more Tag Helpers available like `.identifier`, `.table`, `.column(s)`, `.value(s)`, `.valuesList`, `.assignments`, `.conditions`, `.limit`, `.offset`, `.pagination` and `.if`.
+There are a lot more Tag Helpers available like `.identifier`, `.table`, `.column(s)`, `.value(s)`, `.valuesList`, `.assignments`, `.conditions`, `.limit`, `.offset`, `.pagination`, `.if`, `.jsonColumnObject` and `.jsonColumnText`.
 
 ## More
 

@@ -41,6 +41,8 @@ module.exports = (options = {}) => {
     './tag-helpers/sql.conditions.js',
     './tag-helpers/sql.identifier.js',
     './tag-helpers/sql.if.js',
+    './tag-helpers/sql.jsonColumnObject.js',
+    './tag-helpers/sql.jsonColumnText.js',
     './tag-helpers/sql.limit.js',
     './tag-helpers/sql.offset.js',
     './tag-helpers/sql.pagination.js',
