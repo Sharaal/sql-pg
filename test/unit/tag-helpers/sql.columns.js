@@ -31,4 +31,14 @@ describe('sql.columns', () => {
       }
     )
   })
+
+  it('use the tag helper if given as column', () => {
+    testTagHelper(
+      sql.columns(['column1', () => ({ text: '"column2"' }), 'column3']),
+      {
+        text: '"column1", "column2", "column3"',
+        values: []
+      }
+    )
+  })
 })

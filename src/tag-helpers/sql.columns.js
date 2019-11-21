@@ -4,7 +4,14 @@ module.exports = sql => {
       columns = Object.keys(columns)
     }
     return () => ({
-      text: columns.map(column => sql.identifier(column)().text).join(', '),
+      text: columns
+        .map(column => {
+          if (typeof column !== 'function') {
+            column = sql.identifier(column)
+          }
+          return column().text
+        })
+        .join(', '),
       values: []
     })
   }
