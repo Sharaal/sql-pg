@@ -23,7 +23,7 @@ describe('sql.updateAll', () => {
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'UPDATE "table" SET "column1" = $1, "column2" = $2',

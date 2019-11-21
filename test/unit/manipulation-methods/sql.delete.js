@@ -23,7 +23,7 @@ describe('sql.delete', () => {
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'DELETE FROM "table" WHERE "column1" = $1 AND "column2" = $2 AND "column3" = $3',
@@ -64,7 +64,7 @@ describe('sql.delete', () => {
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'DELETE FROM "schema"."table" WHERE "column1" = $1 AND "column2" = $2 AND "column3" = $3',
@@ -86,7 +86,7 @@ describe('sql.delete', () => {
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'DELETE FROM "table"',

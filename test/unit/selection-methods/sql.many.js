@@ -16,11 +16,11 @@ describe('sql.many', () => {
     sql.client = client
     const actualRows = await sql.many(sql`SELECT * FROM "table"`)
 
-    assert.deepEqual(actualRows, expectedRows)
+    assert.deepStrictEqual(actualRows, expectedRows)
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'SELECT * FROM "table"',
@@ -45,7 +45,7 @@ describe('sql.many', () => {
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'SELECT * FROM "table"',

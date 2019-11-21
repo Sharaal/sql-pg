@@ -24,7 +24,7 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'UPDATE "table" SET "column1" = $1, "column2" = $2 WHERE "column3" = $3 AND "column4" = $4',
@@ -69,7 +69,7 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'UPDATE "schema"."table" SET "column1" = $1, "column2" = $2 WHERE "column3" = $3 AND "column4" = $4',
@@ -93,7 +93,7 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'UPDATE "table" SET "columnA" = \'valueA\' WHERE "columnB" = \'valueB\'',

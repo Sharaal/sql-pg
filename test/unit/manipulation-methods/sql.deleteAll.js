@@ -20,7 +20,7 @@ describe('sql.deleteAll', () => {
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'DELETE FROM "table"',

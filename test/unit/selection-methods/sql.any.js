@@ -16,11 +16,11 @@ describe('sql.any', () => {
     sql.client = client
     const actualRows = await sql.any('table', { column: 'value' })
 
-    assert.deepEqual(actualRows, expectedRows)
+    assert.deepStrictEqual(actualRows, expectedRows)
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'SELECT * FROM "table" WHERE "column" = $1',
@@ -38,11 +38,11 @@ describe('sql.any', () => {
     sql.client = client
     const actualRows = await sql.any('table')
 
-    assert.deepEqual(actualRows, expectedRows)
+    assert.deepStrictEqual(actualRows, expectedRows)
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'SELECT * FROM "table"',
@@ -60,11 +60,11 @@ describe('sql.any', () => {
     sql.client = client
     const actualRows = await sql.any(['schema', 'table'], { column: 'value' })
 
-    assert.deepEqual(actualRows, expectedRows)
+    assert.deepStrictEqual(actualRows, expectedRows)
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'SELECT * FROM "schema"."table" WHERE "column" = $1',
@@ -82,11 +82,11 @@ describe('sql.any', () => {
     sql.client = client
     const actualRows = await sql.any('table', ['column1', 'column2'], { column3: 'value' })
 
-    assert.deepEqual(actualRows, expectedRows)
+    assert.deepStrictEqual(actualRows, expectedRows)
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'SELECT "column1", "column2" FROM "table" WHERE "column3" = $1',
@@ -104,11 +104,11 @@ describe('sql.any', () => {
     sql.client = client
     const actualRows = await sql.any('table', ['column1', 'column2'])
 
-    assert.deepEqual(actualRows, expectedRows)
+    assert.deepStrictEqual(actualRows, expectedRows)
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'SELECT "column1", "column2" FROM "table"',
@@ -126,11 +126,11 @@ describe('sql.any', () => {
     sql.client = client
     const actualRows = await sql.any(sql`SELECT * FROM "table"`)
 
-    assert.deepEqual(actualRows, expectedRows)
+    assert.deepStrictEqual(actualRows, expectedRows)
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'SELECT * FROM "table"',
@@ -148,11 +148,11 @@ describe('sql.any', () => {
     sql.client = client
     const actualRows = await sql.any(sql`SELECT * FROM "table"`)
 
-    assert.deepEqual(actualRows, expectedRows)
+    assert.deepStrictEqual(actualRows, expectedRows)
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'SELECT * FROM "table"',

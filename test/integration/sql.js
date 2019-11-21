@@ -21,7 +21,7 @@ describe('sql', () => {
 
   it('should basically work to send queries to the database', async () => {
     const users = await sql.any('users')
-    assert.deepEqual(users, [])
+    assert.deepStrictEqual(users, [])
   })
 
   it('should work to insert, update, select and delete data', async () => {
@@ -33,7 +33,7 @@ describe('sql', () => {
     const insertedUsers = await sql.any('users')
     assert.equal(insertedUsers.length, 1)
     const insertedUser = insertedUsers[0]
-    assert.deepEqual(
+    assert.deepStrictEqual(
       {
         id: insertedUser.id,
         name: insertedUser.name,
@@ -60,7 +60,7 @@ describe('sql', () => {
     const updatedUsers = await sql.any('users')
     assert.equal(updatedUsers.length, 1)
     const updatedUser = updatedUsers[0]
-    assert.deepEqual(
+    assert.deepStrictEqual(
       {
         id: updatedUser.id,
         name: updatedUser.name,

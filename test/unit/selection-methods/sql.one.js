@@ -16,11 +16,11 @@ describe('sql.one', () => {
     sql.client = client
     const actualRow = await sql.one(sql`SELECT * FROM "table"`)
 
-    assert.deepEqual(actualRow, expectedRow)
+    assert.deepStrictEqual(actualRow, expectedRow)
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'SELECT * FROM "table"',
@@ -45,7 +45,7 @@ describe('sql.one', () => {
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'SELECT * FROM "table"',
@@ -70,7 +70,7 @@ describe('sql.one', () => {
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'SELECT * FROM "table"',

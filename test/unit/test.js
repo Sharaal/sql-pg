@@ -21,7 +21,7 @@ function test (actual, expected) {
   for (let valuePosition of Object.keys(expected.text)) {
     valuePosition = parseInt(valuePosition, 10)
     const valuePositionActual = actual(valuePosition)
-    assert.deepEqual(
+    assert.deepStrictEqual(
       { text: valuePositionActual.text, values: valuePositionActual.values },
       { text: expected.text[valuePosition], values: expected.values }
     )

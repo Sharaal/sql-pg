@@ -23,7 +23,7 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "id"',
@@ -48,11 +48,11 @@ describe('sql.update', () => {
       ]
     )
 
-    assert.deepEqual(actualIds, expectedIds)
+    assert.deepStrictEqual(actualIds, expectedIds)
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3), ($4, $5, $6), ($7, $8, $9) RETURNING "id"',
@@ -75,11 +75,11 @@ describe('sql.update', () => {
       ]
     )
 
-    assert.deepEqual(actualIds, expectedIds)
+    assert.deepStrictEqual(actualIds, expectedIds)
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "id"',
@@ -105,7 +105,7 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "column4"',
@@ -131,7 +131,7 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'INSERT INTO "table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "column4"',
@@ -157,7 +157,7 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'INSERT INTO "table" ("column1", "column2") VALUES ($1, $2) RETURNING "id"',
@@ -183,11 +183,11 @@ describe('sql.update', () => {
       { columns: ['column1', 'column2'] }
     )
 
-    assert.deepEqual(actualIds, expectedIds)
+    assert.deepStrictEqual(actualIds, expectedIds)
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'INSERT INTO "table" ("column1", "column2") VALUES ($1, $2), ($3, $4), ($5, $6) RETURNING "id"',
@@ -212,7 +212,7 @@ describe('sql.update', () => {
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'INSERT INTO "schema"."table" ("column1", "column2", "column3") VALUES ($1, $2, $3) RETURNING "id"',
@@ -232,11 +232,11 @@ describe('sql.update', () => {
       sql`INSERT INTO "table" SELECT * FROM "table"`
     )
 
-    assert.deepEqual(actualIds, expectedIds)
+    assert.deepStrictEqual(actualIds, expectedIds)
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'INSERT INTO "table" SELECT * FROM "table"',
@@ -257,11 +257,11 @@ describe('sql.update', () => {
       sql`INSERT INTO "table" SELECT * FROM "table"`
     )
 
-    assert.deepEqual(actualIds, expectedIds)
+    assert.deepStrictEqual(actualIds, expectedIds)
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'INSERT INTO "table" SELECT * FROM "table"',
@@ -282,11 +282,11 @@ describe('sql.update', () => {
       { serialColumn: 'column' }
     )
 
-    assert.deepEqual(actualIds, expectedIds)
+    assert.deepStrictEqual(actualIds, expectedIds)
 
     assert(client.query.calledOnce)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'INSERT INTO "table" SELECT * FROM "table"',

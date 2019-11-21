@@ -20,7 +20,7 @@ describe('sql.transaction', () => {
 
     assert.equal(client.query.callCount, 3)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'BEGIN',
@@ -28,7 +28,7 @@ describe('sql.transaction', () => {
       }
     )
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(1).args[0],
       {
         text: 'SELECT * FROM "table"',
@@ -36,7 +36,7 @@ describe('sql.transaction', () => {
       }
     )
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(2).args[0],
       {
         text: 'COMMIT',
@@ -63,7 +63,7 @@ describe('sql.transaction', () => {
 
     assert.equal(client.query.callCount, 3)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'BEGIN',
@@ -71,7 +71,7 @@ describe('sql.transaction', () => {
       }
     )
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(1).args[0],
       {
         text: 'SELECT * FROM "table"',
@@ -79,7 +79,7 @@ describe('sql.transaction', () => {
       }
     )
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(2).args[0],
       {
         text: 'ROLLBACK',

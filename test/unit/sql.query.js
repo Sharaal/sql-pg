@@ -18,7 +18,7 @@ describe('sql.query', () => {
 
     assert.equal(client.query.callCount, 1)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       client.query.getCall(0).args[0],
       {
         text: 'SELECT * FROM "table"',
@@ -28,11 +28,11 @@ describe('sql.query', () => {
 
     const actualArg1 = client.query.getCall(0).args[1]
     const expectedArg1 = 'param2'
-    assert.deepEqual(actualArg1, expectedArg1)
+    assert.deepStrictEqual(actualArg1, expectedArg1)
 
     const actualArg2 = client.query.getCall(0).args[2]
     const expectedArg2 = 'param3'
-    assert.deepEqual(actualArg2, expectedArg2)
+    assert.deepStrictEqual(actualArg2, expectedArg2)
   })
 
   it('throw an exception "sql.query()" is used without assign a client', async () => {
