@@ -32,7 +32,7 @@
     "husky": "^3.0.0",
     "intelli-espower-loader": "^1.0.1",
     "mocha": "^6.1.4",
-    "nyc": "^14.1.1",
+    "nyc": "^15.0.0",
     "pg": "^7.12.1",
     "power-assert": "^1.6.1",
     "readme-releases": "^1.0.2",
