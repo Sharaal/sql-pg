@@ -36,7 +36,7 @@
     "pg": "^8.0.0",
     "power-assert": "^1.6.1",
     "readme-releases": "^1.0.2",
-    "sinon": "^8.0.0",
+    "sinon": "^9.0.0",
     "standard": "^14.0.0"
   },
   "peerDependencies": {
