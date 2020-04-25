@@ -37,14 +37,28 @@ npm install --save pg sql-pg
 
 ## Initialisation
 
+Create a `sql.js` file in your project directory:
+
 ```javascript
-;(async () => {
+module.exports = async () => {
   const { Client } = require('pg')
 
   const client = new Client({ connectionString: process.env.DATABASE_URL })
   await client.connect()
 
   const sql = require('sql-pg')({ client })
+  
+  return { client, sql }
+}
+```
+
+Use it in your project:
+
+```javascript
+;(async () => {
+  const path = require('path')
+
+  const { sql } = await require(path.join(process.cwd(), 'sql.js'))()
 })()
 ```
 

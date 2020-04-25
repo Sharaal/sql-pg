@@ -8,9 +8,9 @@ describe('sql', () => {
   let client
   let sql
   before(async () => {
-    client = require('../../pg')
-    await client.connect()
-    sql = require('../../')({ client })
+    const init = await require('../../sql')()
+    client = init.client
+    sql = init.sql
     await sql.deleteAll('users')
   })
 
