@@ -7,6 +7,14 @@ try {
   debug = console.log
 }
 
+try {
+  debug('try to use the `.env` file via `dotenv-safe`')
+  require('dotenv-safe').config()
+} catch (e) {
+  debug('package `dotenv-safe` or file `.env` not found')
+  debug = console.log
+}
+
 const fs = require('fs')
 const path = require('path')
 

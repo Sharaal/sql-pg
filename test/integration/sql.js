@@ -1,3 +1,5 @@
+require('dotenv-safe').config()
+
 const assert = require('power-assert').strict
 
 function sleep (ms) {
