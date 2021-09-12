@@ -24,7 +24,7 @@
     "prepare": "husky install",
     "test": "npm run test:unit && npm run test:integration && npm run test:package",
     "test:integration": "node ./bin/migrate && mocha --require intelli-espower-loader --recursive './test/integration/**/*.js'",
-    "test:package": "npm pack && tar -xzf *.tgz -C ./ && cp .env.example package/.env.example && cp .env package/.env && cp -r test package/test && cd package && mkdir -p migrations && npm i && npm run test:unit && npm run test:integration",
+    "test:package": "npm pack && tar -xzf *.tgz -C ./ && cp .env.example package/.env.example && cp .env package/.env && cp -r test package/test && cd package && mkdir -p migrations && npm i --ignore-scripts && npm run test:unit && npm run test:integration",
     "test:unit": "nyc mocha --require intelli-espower-loader --recursive './test/unit/**/*.js'",
     "version": "npx readme-releases && git add README.md"
   },
