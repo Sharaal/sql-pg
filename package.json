@@ -44,6 +44,14 @@
     "dotenv-safe": "^8.2.0",
     "pg": "^8.7.1"
   },
+  "peerDependenciesMeta": {
+    "debug": {
+      "optional": true
+    },
+    "dotenv-safe": {
+      "optional": true
+    }
+  },
   "directories": {
     "test": "test"
   },
