@@ -35,15 +35,6 @@ describe('sql.query', () => {
     assert.deepStrictEqual(actualArg2, expectedArg2)
   })
 
-  it('throw an exception "sql.query()" is used without assign a client', async () => {
-    try {
-      sql.query('SELECT * FROM "table"')
-      assert(false)
-    } catch (e) {
-      assert.equal(e.message, 'Missing assignment of the initialized pg client to "sql.client"')
-    }
-  })
-
   it('throw an exception if a string is used as query', async () => {
     const client = {
       query: sinon.fake()

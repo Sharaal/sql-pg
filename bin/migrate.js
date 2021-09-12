@@ -13,8 +13,20 @@ const path = require('path')
 ;(async () => {
   debug('starting migrations')
 
-  debug('use the projects `sql.js` to connect to the database')
-  const { client, sql } = await require(path.join(process.cwd(), 'sql.js'))()
+  let client, sql
+  const filePath = path.join(process.cwd(), 'sql.js')
+  if (fs.existsSync(filePath)) {
+    debug('use the projects `sql.js` to connect to the database')
+    const init = await require(filePath)()
+    client = init.client
+    sql = init.sql
+  } else {
+    debug('use default `process.env.DATABASE_URL` to connect to the database')
+    const { Client } = require('pg')
+    client = new Client({ connectionString: process.env.DATABASE_URL })
+    client.connect()
+    sql = require('../')({ client })
+  }
 
   debug('create columns helper for "id", "created_at" and "updated_at"')
   const columns = {

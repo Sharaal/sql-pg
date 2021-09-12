@@ -5,18 +5,15 @@ function sleep (ms) {
 }
 
 describe('sql', () => {
-  let client
   let sql
   before(async () => {
-    const init = await require('../../sql')()
-    client = init.client
-    sql = init.sql
+    sql = require('../../src/sql')()
     await sql.deleteAll('users')
   })
 
   after(async () => {
     await sql.deleteAll('users')
-    await client.end()
+    await sql.client.end()
   })
 
   it('should basically work to send queries to the database', async () => {
