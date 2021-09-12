@@ -1,5 +1,5 @@
 [![Build Status](https://app.travis-ci.com/Sharaal/sql-pg.svg?branch=main)](https://app.travis-ci.com/Sharaal/sql-pg)
-[![Coverage Status](https://coveralls.io/repos/github/Sharaal/sql-pg/badge.svg?branch=master)](https://coveralls.io/github/Sharaal/sql-pg?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Sharaal/sql-pg/badge.svg?branch=main)](https://coveralls.io/github/Sharaal/sql-pg?branch=main)
 
 Latest Release: [v10.3.0](https://github.com/Sharaal/sql-pg/releases/tag/v10.3.0), Latest Major Release: [v10.0.0](https://github.com/Sharaal/sql-pg/releases/tag/v10.0.0), [All Releases](https://github.com/Sharaal/sql-pg/releases)
 
@@ -9,14 +9,14 @@ Complex queries can be written with normal SQL, including the values needs to be
 
 <table>
   <tr>
-    <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/master/docs/sql.png"></td>
+    <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/main/docs/sql.png"></td>
     <td>Make the name variable?</td>
-    <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/master/docs/sql-pg.png"></td>
+    <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/main/docs/sql-pg.png"></td>
   </tr>
   <tr>
     <td></td>
     <td>Or even more simple?</td>
-    <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/master/docs/selection-method.png"></td>
+    <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/main/docs/selection-method.png"></td>
   </tr>
 </table>
 
