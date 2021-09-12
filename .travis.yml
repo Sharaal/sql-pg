@@ -7,6 +7,9 @@ node_js:
 services:
   - postgresql
 
+install:
+  - npm i --ignore-scripts
+
 after_script:
   - npm i -g coveralls
   - npx nyc report --reporter=text-lcov | coveralls
