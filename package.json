@@ -16,7 +16,8 @@
     "access": "public"
   },
   "bin": {
-    "migrate": "./bin/migrate.js"
+    "migrate": "./bin/migrate.js",
+    "migrate:make": "./bin/migrate_make.js"
   },
   "scripts": {
     "lint": "standard",
@@ -70,6 +71,9 @@
     "include": [
       "bin/",
       "src/"
+    ],
+    "exclude": [
+      "bin/templates/"
     ],
     "all": true,
     "reporter": [
