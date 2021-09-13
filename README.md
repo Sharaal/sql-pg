@@ -10,7 +10,7 @@ Complex queries can be written with normal SQL, including the values needs to be
 <table>
   <tr>
     <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/main/docs/sql.png"></td>
-    <td>Make the name variable?</td>
+    <td>Make the id variable?</td>
     <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/main/docs/sql-pg.png"></td>
   </tr>
   <tr>
