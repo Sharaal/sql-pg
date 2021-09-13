@@ -58,8 +58,8 @@
     "test": "test"
   },
   "files": [
-    "bin/migrate.js",
-    "src/**/*.js",
+    "bin/",
+    "src/",
     "index.js",
     "LICENSE",
     "package.json",
@@ -67,7 +67,10 @@
     "SECURITY.md"
   ],
   "nyc": {
-    "include": "index.js",
+    "include": [
+      "bin/",
+      "src/"
+    ],
     "all": true,
     "reporter": [
       "text",
