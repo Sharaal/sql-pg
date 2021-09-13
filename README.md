@@ -1,7 +1,7 @@
 [![Build Status](https://app.travis-ci.com/Sharaal/sql-pg.svg?branch=main)](https://app.travis-ci.com/Sharaal/sql-pg)
 [![Coverage Status](https://coveralls.io/repos/github/Sharaal/sql-pg/badge.svg?branch=main)](https://coveralls.io/github/Sharaal/sql-pg?branch=main)
 
-Latest Release: [v10.4.0](https://github.com/Sharaal/sql-pg/releases/tag/v10.4.0), Latest Major Release: [v10.0.0](https://github.com/Sharaal/sql-pg/releases/tag/v10.0.0), [All Releases](https://github.com/Sharaal/sql-pg/releases)
+Latest Release: [v10.4.1](https://github.com/Sharaal/sql-pg/releases/tag/v10.4.1), Latest Major Release: [v10.0.0](https://github.com/Sharaal/sql-pg/releases/tag/v10.0.0), [All Releases](https://github.com/Sharaal/sql-pg/releases)
 
 # SQL-PG
 
