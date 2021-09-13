@@ -17,7 +17,7 @@
   },
   "bin": {
     "migrate": "./bin/migrate.js",
-    "migrate:make": "./bin/migrate_make.js"
+    "migrate_make": "./bin/migrate_make.js"
   },
   "scripts": {
     "lint": "standard",
