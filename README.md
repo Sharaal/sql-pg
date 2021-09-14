@@ -42,7 +42,7 @@ Use it in your project:
 const sql = require('sql-pg')()
 ```
 
-The connection use per default the env var `DATABASE_URL`.
+The connection use per default the env var `DATABASE_URL`. It will only establish a database connection if manipulation/selection methods are used. Alternatively it's possible to provide a `sql.js` to customize the database connecting and `sql` object initializing.
 
 ## Usage
 
