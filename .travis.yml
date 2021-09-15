@@ -10,6 +10,9 @@ services:
 install:
   - npm i --ignore-scripts
 
+before_script:
+  - cp .env.example .env
+
 after_script:
   - npm i -g coveralls
   - npx nyc report --reporter=text-lcov | coveralls
