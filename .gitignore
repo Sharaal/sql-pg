@@ -1,8 +1,9 @@
 /.nyc_output
 /coverage
 /node_modules
-/npm-debug.log*
 /package
+.DS_Store
+/.env
+/npm-debug.log*
 /package-lock.json
 /sql-pg-*.tgz
-/volumes
